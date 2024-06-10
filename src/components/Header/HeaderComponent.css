@@ -1,0 +1,67 @@
+/* src/components/headerstyle.css */
+.header {
+    background-color: #282c34;
+    top: 0;
+    padding: 20px;
+    z-index: 1000;
+    color: white;
+
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navList {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navItem {
+    margin-left: 20px;
+}
+
+.navItem a, .logo a {
+    color: white;
+    text-decoration: none; /* Supprime le soulignement */
+    font-weight: bold;
+}
+
+.navItem a:hover, .logo a:hover {
+    text-decoration: underline;  /* Ajoute un soulignement au survol */
+}
+
+.menuIcon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Styles pour petits écrans */
+@media (max-width: 768px) {
+    .navList {
+        flex-direction: column;
+        align-items: flex-start;
+        display: none;
+        width: 100%;
+        background-color: #282c34;
+    }
+    
+    .navList.open {
+        display: flex;
+    }
+
+    .navItem {
+        margin: 10px 0;
+    }
+
+    .menuIcon {
+        display: block;
+    }
+}

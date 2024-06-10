@@ -1,0 +1,16 @@
+/* AdminDetailUserComponent.css */
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+h5 {
+    margin-top: 1.5rem;
+    font-weight: bold;
+}

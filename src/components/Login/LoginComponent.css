@@ -1,0 +1,76 @@
+/* src/components/loginPageStyle.css */
+.login-container {
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 150px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login-button {
+    padding: 10px;
+    background-color: #282c34;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-button:hover {
+    background-color: #444;
+}
+
+/* Styles réactifs */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 10px;
+    }
+
+    .login-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 5px;
+    }
+
+    .login-button {
+        font-size: 12px;
+        padding: 6px;
+    }
+}

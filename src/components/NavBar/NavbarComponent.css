@@ -1,0 +1,16 @@
+
+.nav-bar{
+    display:flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 1rem;
+    width: 500px;
+   
+}
+
+.nav-content{  
+    position: relative;
+    height: 20px;
+    /*background-color: bisque;*/
+    margin-bottom: 10px;
+}

@@ -1,0 +1,32 @@
+/* src/components/blogPageStyle.css */
+.blog-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    height: calc(100vh - 160px); /* Hauteur totale de l'écran moins la hauteur du Header et Footer */
+}
+
+.blog-container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: left;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.blog-post {
+    margin-bottom: 20px;
+}
+
+.blog-date {
+    color: gray;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}

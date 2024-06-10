@@ -1,0 +1,241 @@
+/* General styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+section {
+    padding: 60px 20px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    background-color: #f04d22;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #d93b1b;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.hero-text {
+    margin-bottom: 20px;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 500px;
+}
+
+/* About Section */
+.about-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+.about-text {
+    margin-bottom: 20px;
+}
+
+.about-image img {
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Format Section */
+.format-section {
+    background-color: #f4f4f4;
+}
+
+.format-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .format-cards {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    /* .card {
+        width: 30%;
+        margin-bottom: 0;
+    } */
+}
+
+/* Our Clubs Section */
+.clubs-section {
+    background-color: #333;
+    color: #fff;
+}
+
+.clubs-slider img {
+    width: 100%;
+    height: auto;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    background-color: #f4f4f4;
+}
+
+.testimonials {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.testimonial {
+    width: 80%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.testimonial img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+@media (min-width: 768px) {
+    .testimonials {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .testimonial {
+        width: 30%;
+        margin-bottom: 0;
+    }
+}
+
+/* Contact Section */
+.contact-section {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.contact-section form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-section input,
+.contact-section textarea {
+    width: 80%;
+    max-width: 500px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.contact-section button {
+    width: 50%;
+    max-width: 200px;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    .hero-section {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .hero-text {
+        flex: 1;
+        padding-right: 20px;
+    }
+
+    .hero-image {
+        flex: 1;
+    }
+
+    .about-section {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .about-text {
+        flex: 1;
+        padding-right: 20px;
+    }
+
+    .about-image {
+        flex: 1;
+    }
+}
+
+.headers-home-page {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* S'assurer qu'il est au-dessus des autres éléments */
+    background: #fff;
+    /* Utilisez une couleur de fond selon votre design */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optionnel, ajoute une ombre sous le header */
+}
+
+.footer-home-page {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    /* S'assurer qu'il est au-dessus des autres éléments */
+    background: #fff;
+    /* Utilisez une couleur de fond selon votre design */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    /* Optionnel, ajoute une ombre au-dessus du footer */
+}
+
+.main-home-page {
+    padding-top: 70px;
+    /* Ajustez selon la hauteur de votre header */
+    padding-bottom: 70px;
+    /* Ajustez selon la hauteur de votre footer */
+    min-height: 100vh;
+    /* Cela garantit que le contenu prend au moins la hauteur de la fenêtre */
+    margin-top: 60px;
+    /* S'assurer qu'il commence en dessous du header */
+}
