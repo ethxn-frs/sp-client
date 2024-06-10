@@ -1,17 +1,20 @@
+// src/components/AdminEditClubComponent.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Form, Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminClubComponent.css';
 
-function AdminCreateClubComponent() {
+function AdminEditClubComponent() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [club, setClub] = useState({
+        id: id,
         name: '',
         address: '',
         email: '',
-        sports: []
+        sports: [],
+        image: null,
     });
     const [sports, setSports] = useState([]);
     const [selectedSport, setSelectedSport] = useState({});
@@ -54,10 +57,6 @@ function AdminCreateClubComponent() {
         }));
     };
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
-
     const handleInputSport = (event) => {
         const sport = JSON.parse(event.target.value);
         setSelectedSport(sport);
@@ -80,31 +79,35 @@ function AdminCreateClubComponent() {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `http://localhost:4000/clubs/${id}` : 'http://localhost:4000/clubs';
             const formData = new FormData();
+            formData.append('id', id);
             formData.append('name', club.name);
             formData.append('address', club.address);
             formData.append('email', club.email);
-            formData.append('sports', JSON.stringify(club.sports));
+            formData.append('sports', JSON.stringify(club.sports.map(sport => sport.id))); // Only send sport IDs
             if (file) {
                 formData.append('image', file);
             }
 
-            const response = await fetch(url, {
-                method,
+            const response = await fetch(`http://localhost:4000/clubs/${id}`, {
+                method: 'PUT',
                 body: formData,
             });
+
             if (!response.ok) {
-                throw new Error('Erreur lors de la sauvegarde du club');
+                throw new Error('Erreur lors de la mise à jour du club');
             }
             navigate('/admin/clubs');
         } catch (error) {
-            console.error('Erreur lors de la sauvegarde du club:', error);
-            alert('Erreur lors de la sauvegarde du club.');
+            console.error('Erreur lors de la mise à jour du club:', error);
+            alert('Erreur lors de la mise à jour du club.');
         }
     };
 
@@ -114,10 +117,10 @@ function AdminCreateClubComponent() {
                 <Col md={8}>
                     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
                         <Card.Header className="text-center bg-primary text-white">
-                            <Card.Title className="mb-0">{id ? 'Modifier le Club' : 'Ajouter un Club'}</Card.Title>
+                            <Card.Title className="mb-0">Modifier le Club</Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <Form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit} encType="multipart/form-data">
                                 <Form.Group controlId="formName">
                                     <Form.Label>Nom</Form.Label>
                                     <Form.Control
@@ -154,7 +157,6 @@ function AdminCreateClubComponent() {
                                         as="select"
                                         value={JSON.stringify(selectedSport)}
                                         onChange={handleInputSport}
-                                        required
                                     >
                                         <option value="" disabled>Sélectionner un sport</option>
                                         {sports.map(sport => (
@@ -178,18 +180,28 @@ function AdminCreateClubComponent() {
                                     ))}
                                 </ListGroup>
                                 <Form.Group controlId="formFile" className="mt-3">
-                                    <Form.Label>Photo de profil</Form.Label>
+                                    <Form.Label>Photo du club</Form.Label>
                                     <Form.Control
                                         type="file"
                                         name="image"
                                         onChange={handleFileChange}
                                     />
+                                    {club.image && (
+                                        <div className="mt-3">
+                                            <img
+                                                src={club.image.path}
+                                                alt={club.name}
+                                                className="img-fluid rounded"
+                                                style={{ maxHeight: '200px' }}
+                                            />
+                                        </div>
+                                    )}
                                 </Form.Group>
-                                <Button variant="secondary" className="mt-3 ms-3" onClick={() => navigate('/admin/clubs')}>
+                                <Button variant="secondary" className="mt-3" onClick={() => navigate('/admin/clubs')}>
                                     Annuler
                                 </Button>
-                                <Button type="submit" variant="success" className="mt-3">
-                                    Créer
+                                <Button type="submit" variant="success" className="mt-3 ms-3">
+                                    Mettre à jour
                                 </Button>
                             </Form>
                         </Card.Body>
@@ -200,4 +212,4 @@ function AdminCreateClubComponent() {
     );
 }
 
-export default AdminCreateClubComponent;
+export default AdminEditClubComponent;

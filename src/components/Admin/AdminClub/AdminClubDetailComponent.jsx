@@ -1,7 +1,7 @@
 // src/components/AdminDetailClubComponent.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Table, Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
+import { Button, Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminClubComponent.css';
 
@@ -39,7 +39,16 @@ function AdminDetailClubComponent() {
                         </Card.Header>
                         <Card.Body>
                             <Row>
-                                <Col xs={12}>
+                                <Col xs={12} md={4}>
+                                    {club.image && (
+                                        <img 
+                                            src={club.image.path} 
+                                            alt={club.name} 
+                                            className="img-fluid rounded mb-3"
+                                        />
+                                    )}
+                                </Col>
+                                <Col xs={12} md={8}>
                                     <Card.Text>
                                         <strong>Nom:</strong> {club.name}
                                     </Card.Text>

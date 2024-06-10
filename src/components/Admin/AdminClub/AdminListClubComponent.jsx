@@ -32,7 +32,7 @@ function AdminListClubComponent() {
                             <Card.Title className="mb-0">Liste des Clubs</Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <Button variant="primary" onClick={() => navigate('/admin/clubs/new')}>
+                            <Button variant="primary" onClick={() => navigate('/admin/clubs/create')}>
                                 Ajouter un Club
                             </Button>
                             <Table striped bordered hover className="mt-3">

@@ -38,6 +38,7 @@ import BlogComponent from './components/Blog/BlogComponent';
 import DonationComponent from './components/Donate/DonationComponent';
 import LogoutComponent from './components/Logout/LogoutComponent';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
+import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
               <Route path="admin/clubs" element={<AdminListClubComponent />} />
               <Route path="admin/clubs/create" element={<AdminCreateClubComponent />} />
               <Route path="admin/clubs/:id" element={<AdminDetailClubComponent />} />
+              <Route path="admin/clubs/:id/edit" element={<AdminEditClubComponent />} />
               <Route path="admin/users" element={<AdminListUserComponent />} />
               <Route path="admin/users/:id" element={<AdminDetailUserComponent />} />
               <Route path="admin/users/create" element={<AdminCreateUserComponent />} />
