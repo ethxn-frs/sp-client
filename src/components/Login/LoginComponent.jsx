@@ -36,13 +36,19 @@ function LoginComponent() {
 
             const result = await response.json();
 
-            localStorage.setItem('token', result.token);
-            localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
 
-            if (!result.user.firstConnection) {
-                navigate('/login/first-connection');
-            } else if (result.user.firstConnection) {
-                navigate('/admin/home')
+                if (!result.user.firstConnection) {
+                    navigate('/login/first-connection');
+                } else {
+                    navigate('/admin/home');
+                }
+            } else {
+                // Si A2F est activé, redirige vers la page de vérification du code A2F
+                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+                navigate('/login/a2f');
             }
 
         } catch (error) {

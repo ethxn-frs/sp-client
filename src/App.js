@@ -40,6 +40,7 @@ import LogoutComponent from './components/Logout/LogoutComponent';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
+import A2FVerificationComponent from './components/A2FVerification/A2FVerificationComponent';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeComponent />} />
             <Route path="/login" element={<LoginComponent />} />
+            <Route path="/login/a2f" element={<A2FVerificationComponent />} />
             <Route path="/contact" element={<ContactComponent />} />
             <Route path="/aboutus" element={<AboutUsComponent />} />
             <Route path="/blog" element={<BlogComponent />} />
