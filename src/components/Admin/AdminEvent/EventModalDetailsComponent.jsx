@@ -2,29 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 
-
 const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete }) => {
-
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState(children);
+    const [formData, setFormData] = useState(children || {});
 
     const [participants, setParticipants] = useState([]);
     const [clubs, setClubs] = useState([]);
     const [trainingCenters, setTrainingCenters] = useState([]);
 
-
-    /**
-     * on récupère la liste des users, clubs et centre de formations
-     * chaque liste est un objet
-     */
     const [participantsOptions, setParticipantsOptions] = useState([]);
     const [clubsOptions, setClubsOptions] = useState([]);
     const [trainingCentersOptions, setTrainingCentersOptions] = useState([]);
 
-
     const handleEditClick = () => {
         setIsEditing(true);
     };
+
     const [error, setError] = useState('');
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -32,7 +25,6 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
         let newEventData = { ...formData, [name]: value };
 
         if (name === 'start' || name === 'end') {
-
             const startDateValid = Date.parse(newEventData.startDate);
             const endDateValid = Date.parse(newEventData.endDate);
 
@@ -56,17 +48,17 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
     };
 
     const handleSaveClick = () => {
-        formData.participants = participants
-        formData.clubs = clubs
-        formData.trainingCenters = trainingCenters
-        formData.Id = children.id
-        console.log("formData", formData)
+        formData.participants = participants;
+        formData.clubs = clubs;
+        formData.trainingCenters = trainingCenters;
+        formData.Id = children?.id || formData.Id;
+        console.log("formData", formData);
         onSave(formData);
         setIsEditing(false);
     };
 
     const handleDeleteClick = () => {
-        onDelete(children.id);
+        onDelete(children?.id);
     };
 
     const formatDate = (dateString) => {
@@ -74,11 +66,6 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
         return date.toLocaleString();
     };
 
-    /**
-     * cette fonction fait appelle à trois api 
-     * 
-     * @returns trois objets des clubs,participants, et centre de formation
-     */
     const getAllData = async () => {
         try {
             const [clubResponse, participantsResponse, trainingCentersResponse] = await Promise.all([
@@ -107,9 +94,9 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
             ]);
 
             return {
-                clubs: clubData.club,
-                participants: participantsData.user,
-                trainingCenters: trainingCentersData.formation
+                clubs: clubData.club || [],
+                participants: participantsData.user || [],
+                trainingCenters: trainingCentersData.formation || []
             };
         } catch (error) {
             console.error('Erreur lors de la récupération des données:', error);
@@ -120,8 +107,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
     const fetchOptions = async () => {
         const data = await getAllData();
         if (data) {
-
-            console.log("data", data)
+            console.log("data", data);
             setParticipantsOptions(data.participants);
             setClubsOptions(data.clubs);
             setTrainingCentersOptions(data.trainingCenters);
@@ -129,34 +115,24 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
     };
 
     useEffect(() => {
-        fetchOptions()
+        fetchOptions();
     }, []);
 
-    /**
-    * ici nous récupérons une list d'option {clé, valeur } afin de pourvoir 
-    * l'afficher dans un selecteur
-    */
-    const optionsclube = clubsOptions.map(club => ({
+    const optionsclube = (clubsOptions || []).map(club => ({
         value: JSON.stringify(club),
         label: club.Name
     }));
 
-    const optionsusers = participantsOptions.map(participant => ({
+    const optionsusers = (participantsOptions || []).map(participant => ({
         value: JSON.stringify(participant),
         label: participant.firstname + ' ' + participant.lastname
     }));
 
-    const optionsformation = trainingCentersOptions.map(formationcenter => ({
+    const optionsformation = (trainingCentersOptions || []).map(formationcenter => ({
         value: JSON.stringify(formationcenter),
         label: formationcenter.Name
     }));
 
-    /**
-    * cette fonction est utiliser pour affecter les valeurs des participants sélectionner 
-    * dans le select.
-    * il est de même pour handleChangeclub,handleChangeformation et handleChange
-    * @param {*} selectedOptions 
-    */
     const handleChangeuser = (selectedOptions) => {
         const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
         console.log("handleChangeuser", values);
@@ -172,7 +148,6 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
     const handleChangeformation = (selectedOptions) => {
         const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
         console.log("handleChangeformation", values);
-
         setTrainingCenters(values);
     };
 
@@ -190,7 +165,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="text"
                                     name="title"
-                                    value={formData.title}
+                                    value={formData.title || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -199,7 +174,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="text"
                                     name="type"
-                                    value={formData.type}
+                                    value={formData.type || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -208,7 +183,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="text"
                                     name="lieu"
-                                    value={formData.lieu}
+                                    value={formData.lieu || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -217,7 +192,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="datetime-local"
                                     name="start"
-                                    value={formData.start}
+                                    value={formData.start || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -227,7 +202,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="datetime-local"
                                     name="end"
-                                    value={formData.end}
+                                    value={formData.end || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -237,7 +212,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                     className="mb-3"
                                     type="test"
                                     name='activity'
-                                    value={formData.activity}
+                                    value={formData.activity || ''}
                                     onChange={handleInputChange}
                                     required
                                     placeholder="type d'activté"
@@ -248,7 +223,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     className="mb-3"
                                     type="test"
-                                    value={formData.recurrence}
+                                    value={formData.recurrence || ''}
                                     onChange={handleInputChange}
                                     required
                                     name='recurrence'
@@ -260,7 +235,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     className="mb-3"
                                     type="test"
-                                    value={formData.statut}
+                                    value={formData.statut || ''}
                                     onChange={handleInputChange}
                                     required
                                     name='statut'
@@ -273,7 +248,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                 <Form.Control
                                     type="number"
                                     name="capacity"
-                                    value={formData.capacity}
+                                    value={formData.capacity || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -284,7 +259,7 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                                     as="textarea"
                                     rows={3}
                                     name="description"
-                                    value={formData.description}
+                                    value={formData.description || ''}
                                     onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -332,13 +307,11 @@ const EventModalDetails = ({ isOpen, onRequestClose, onSave, children, onDelete 
                         </Form>
                     ) : (
                         <div>
-                            <h1>{children.title}</h1>
-                            <p>Type : {children.type}</p>
-                            <p>Lieu : {children.lieu}</p>
-                            {/* <p>Date et heure de début : {formatDate(children.start)}</p>
-                            <p>Date et heure de fin : {formatDate(children.end)}</p> */}
-                            <p>Capacité : {children.capacity}</p>
-                            <p>Description : {children.description}</p>
+                            <h1>{children?.title}</h1>
+                            <p>Type : {children?.type}</p>
+                            <p>Lieu : {children?.lieu}</p>
+                            <p>Capacité : {children?.capacity}</p>
+                            <p>Description : {children?.description}</p>
                             <Button variant="secondary" onClick={handleEditClick}>
                                 Modifier
                             </Button>

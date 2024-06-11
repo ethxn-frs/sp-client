@@ -84,6 +84,7 @@ function AdminCreatePlanningComponent() {
         body: JSON.stringify(newEvent),
       });
       await fetchEvents();
+      await navigate('/planning/create')
     } catch (error) {
       console.error('Error updating event:', error);
     } finally {

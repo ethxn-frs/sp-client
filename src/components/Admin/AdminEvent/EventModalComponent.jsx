@@ -313,7 +313,7 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
                             onChange={handleChange}
                             required
                             name='type'
-                            placeholder="tupe d'évènement"
+                            placeholder="type d'évènement"
                         />
 
                         <Form.Control

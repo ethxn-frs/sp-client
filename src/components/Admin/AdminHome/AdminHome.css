@@ -1,0 +1,27 @@
+.admin-card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-card .card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.admin-card .card-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.admin-card .list-group-item {
+    font-size: 0.9rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+button.btn-block {
+    width: 100%;
+}

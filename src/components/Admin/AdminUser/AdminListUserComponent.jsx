@@ -45,8 +45,8 @@ function AdminListUserComponent() {
     const handleDelete = async (id) => {
         if (window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
             try {
-                const response = await fetch(`http://localhost:4000/users/${id}`, {
-                    method: 'DELETE',
+                const response = await fetch(`http://localhost:4000/users/${id}/delete  `, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     }
