@@ -11,7 +11,7 @@ const AdminCreatePoolComponent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const userId = 2;
+        const userId = 1;
 
         try {
             const response = await fetch('http://localhost:4000/sondages', {

@@ -11,7 +11,7 @@ function AdminCreateClubComponent() {
         name: '',
         address: '',
         email: '',
-        sports: []
+        sports: []  // Will hold the selected sport IDs
     });
     const [sports, setSports] = useState([]);
     const [selectedSport, setSelectedSport] = useState({});
@@ -34,7 +34,10 @@ function AdminCreateClubComponent() {
                 try {
                     const response = await fetch(`http://localhost:4000/clubs/${id}`);
                     const data = await response.json();
-                    setClub(data);
+                    setClub({
+                        ...data,
+                        sports: data.sports.map(sport => sport.id) // Extracting sport IDs
+                    });
                 } catch (error) {
                     console.error('Erreur lors de la récupération du club:', error);
                     alert('Erreur lors de la récupération du club.');
@@ -64,10 +67,10 @@ function AdminCreateClubComponent() {
     };
 
     const handleAddSport = () => {
-        if (selectedSport && !club.sports.some(sport => sport.id === selectedSport.id)) {
+        if (selectedSport && !club.sports.includes(selectedSport.id)) {
             setClub(prevState => ({
                 ...prevState,
-                sports: [...prevState.sports, selectedSport]
+                sports: [...prevState.sports, selectedSport.id] // Adding sport ID
             }));
             setSelectedSport({});
         }
@@ -76,7 +79,7 @@ function AdminCreateClubComponent() {
     const handleRemoveSport = (id) => {
         setClub(prevState => ({
             ...prevState,
-            sports: prevState.sports.filter(sport => sport.id !== id)
+            sports: prevState.sports.filter(sportId => sportId !== id) // Removing sport ID
         }));
     };
 
@@ -89,7 +92,7 @@ function AdminCreateClubComponent() {
             formData.append('name', club.name);
             formData.append('address', club.address);
             formData.append('email', club.email);
-            formData.append('sports', JSON.stringify(club.sports));
+            formData.append('sports', JSON.stringify(club.sports)); // Converting sports IDs array to JSON string
             if (file) {
                 formData.append('image', file);
             }
@@ -117,7 +120,7 @@ function AdminCreateClubComponent() {
                             <Card.Title className="mb-0">{id ? 'Modifier le Club' : 'Ajouter un Club'}</Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <Form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit} encType="multipart/form-data">
                                 <Form.Group controlId="formName">
                                     <Form.Label>Nom</Form.Label>
                                     <Form.Control
@@ -168,14 +171,17 @@ function AdminCreateClubComponent() {
                                     Ajouter le sport
                                 </Button>
                                 <ListGroup className="mt-3">
-                                    {club.sports.map(sport => (
-                                        <ListGroup.Item key={sport.id}>
-                                            {sport.name}
-                                            <Button variant="danger" size="sm" className="float-end" onClick={() => handleRemoveSport(sport.id)}>
-                                                Supprimer
-                                            </Button>
-                                        </ListGroup.Item>
-                                    ))}
+                                    {club.sports.map(sportId => {
+                                        const sport = sports.find(s => s.id === sportId);
+                                        return (
+                                            <ListGroup.Item key={sportId}>
+                                                {sport?.name}
+                                                <Button variant="danger" size="sm" className="float-end" onClick={() => handleRemoveSport(sportId)}>
+                                                    Supprimer
+                                                </Button>
+                                            </ListGroup.Item>
+                                        );
+                                    })}
                                 </ListGroup>
                                 <Form.Group controlId="formFile" className="mt-3">
                                     <Form.Label>Photo de profil</Form.Label>
@@ -189,7 +195,7 @@ function AdminCreateClubComponent() {
                                     Annuler
                                 </Button>
                                 <Button type="submit" variant="success" className="mt-3">
-                                    Créer
+                                    {id ? 'Mettre à jour' : 'Créer'}
                                 </Button>
                             </Form>
                         </Card.Body>

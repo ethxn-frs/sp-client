@@ -29,6 +29,10 @@ function AdminDetailPlayerComponent() {
     }
 
     const renderStats = (stats) => {
+        if (!stats) {
+            return <ListGroup.Item>Aucune statistique disponible.</ListGroup.Item>;
+        }
+
         return Object.entries(stats).map(([key, value]) => (
             <ListGroup.Item key={key} className="d-flex justify-content-between align-items-center">
                 <span className="stat-key">{key}</span>
@@ -66,10 +70,10 @@ function AdminDetailPlayerComponent() {
                                         <strong>Sport:</strong> {player.sport.name}
                                     </Card.Text>
                                     <Card.Text>
-                                        <strong>Taille:</strong> {player.height} cm
+                                        <strong>Taille:</strong> {player.height ? `${player.height} cm` : 'N/A'}
                                     </Card.Text>
                                     <Card.Text>
-                                        <strong>Poids:</strong> {player.weight} kg
+                                        <strong>Poids:</strong> {player.weight ? `${player.weight} kg` : 'N/A'}
                                     </Card.Text>
                                 </Col>
                             </Row>

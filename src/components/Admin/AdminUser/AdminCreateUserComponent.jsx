@@ -59,11 +59,11 @@ function AdminCreateUserComponent() {
                 const response = await fetch('http://localhost:4000/clubs');
                 const data = await response.json();
                 setClubs(data.clubs);
-            } else if (roleId === 4) {
+            } else if (roleId === 3) {
                 const response = await fetch('http://localhost:4000/formations-centers');
                 const data = await response.json();
                 setFormationCenters(data.formationsCenters);
-            } else if (roleId === 3) {
+            } else if (roleId === 4) {
                 const response = await fetch('http://localhost:4000/players');
                 const data = await response.json();
                 setPlayers(data.players);
@@ -139,7 +139,7 @@ function AdminCreateUserComponent() {
                         </Form.Control>
                     </Form.Group>
                 );
-            case 4:
+            case 3:
                 return (
                     <Form.Group controlId="formFormationCenter" className="mt-3">
                         <Form.Label>Centre de Formation</Form.Label>
@@ -159,7 +159,7 @@ function AdminCreateUserComponent() {
                         </Form.Control>
                     </Form.Group>
                 );
-            case 3:
+            case 4:
                 return (
                     <Form.Group controlId="formPlayer" className="mt-3">
                         <Form.Label>Joueur</Form.Label>

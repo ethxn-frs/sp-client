@@ -31,7 +31,7 @@ function AdminDetailClubComponent() {
 
     return (
         <Container className="mt-5">
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-center">
                 <Col md={10}>
                     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
                         <Card.Header className="text-center bg-primary text-white">
@@ -39,16 +39,16 @@ function AdminDetailClubComponent() {
                         </Card.Header>
                         <Card.Body>
                             <Row>
-                                <Col xs={12} md={4}>
-                                    {club.image && (
+                                {club.image && (
+                                    <Col xs={12} md={4}>
                                         <img 
                                             src={club.image.path} 
                                             alt={club.name} 
                                             className="img-fluid rounded mb-3"
                                         />
-                                    )}
-                                </Col>
-                                <Col xs={12} md={8}>
+                                    </Col>
+                                )}
+                                <Col xs={12} >
                                     <Card.Text>
                                         <strong>Nom:</strong> {club.name}
                                     </Card.Text>

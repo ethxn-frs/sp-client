@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo, Fragment, } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -6,193 +6,130 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import EventModalDetails from '../AdminEvent/EventModalDetailsComponent';
 import EventFormModal from '../AdminEvent/EventModalComponent';
 
-
 const localizer = momentLocalizer(moment);
 
-
 function AdminCreatePlanningComponent() {
-
-  const [slotInfo, setSlotInfo] = useState({ start: null, end: null }); // pour stocker les infos du créneau sélectionné
-
-  const [myEvents, setEvents] = useState()
+  const [events, setEvents] = useState([]);
+  const [slotInfo, setSlotInfo] = useState({ start: null, end: null });
+  const [modalContent, setModalContent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showDetailModal, setShowDetailsModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
-
-  // on récupère les évènements de l'api
-  const [data, getEventData] = useState([]);
-
-  // prends un bouléen qui permet de déclancher ou pas l'ouverture du modal
-  const [showModal, setShowModal] = useState(false); // modal de création
-  const [showDetailModal, setShowDetailsModal] = useState(false); // modal de modification
-
-
-  // permet d'envoyer des données par défaut au modal 
-  const [modalContent, setModalContent] = useState("");
-
-  //fonction d'appel pour le modal
-  const handleShowModal = (slotInfo) => {
-    setSlotInfo(slotInfo);
-    setShowModal(true);
-  };
-
-  const handleDetailsShowModal = (item) => {
-    setModalContent(item)
-    setShowDetailsModal(true)
-  }
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setShowDetailsModal(false)
-    setSlotInfo({ start: null, end: null });
-  };
-
-
-  const getallevent = async () => {
+  const fetchEvents = async () => {
+    setLoading(true);
+    setErrorMessage('');  // Clear any previous error message
     try {
       const response = await fetch('http://localhost:4000/events', {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (!response.ok) {
-        throw new Error(`Échec de la récupération des utilisateurs: ${response.status} (${response.statusText})`);
+        throw new Error(`Error fetching events: ${response.status} (${response.statusText})`);
       }
 
       const event = await response.json();
-      console.log("event.events", event.events)
-      return event.events;
+      const transformedEvents = event.events.map(ev => ({
+        id: ev.id,
+        title: ev.title,
+        start: new Date(ev.startDate),
+        end: new Date(ev.endDate),
+        description: ev.description,
+        lieu: ev.lieu,
+        type: ev.type,
+        recurrence: ev.recurrence,
+        capacity: ev.capacity,
+        participants: ev.participants,
+        clubs: ev.clubs,
+        trainingCenters: ev.trainingCenters,
+      }));
+      setEvents(transformedEvents);
     } catch (error) {
-      console.error('Erreur lors de la récupération des rôles:', error);
-      alert("Erreur lors de la récupération des utilisateurs. Veuillez réessayer.");
-
-      return null;  // Retourne null pour indiquer un échec
+      console.error('Error fetching events:', error);
+      setErrorMessage('Error fetching events. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleSelectSlot = useCallback(
-    ({ start, end }) => {
-      handleShowModal({ start, end });
-    },
-    []
-  );
-
-  const handleSaveEvent = async (newEvent) => {
-    console.log("newEvent", newEvent)
-    try {
-      const response = await fetch(`http://localhost:4000/events/${newEvent.Id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newEvent)
-      });
-
-      if (!response.ok) {
-        throw new Error(`Échec de la récupération des utilisateurs: ${response.status} (${response.statusText})`);
-      }
-
-      const UPdateEvent = await response.json();
-
-    } catch (error) {
-      console.log(error)
-      return
-    }
-    setShowDetailsModal(false);
-    window.alert("Modification réusir")
-  };
-
-  // cette fonction permet d'afficher les détails de l'évènement
-  const handleSelectEvent = useCallback(
-    (event) => {
-      console.log("eventh", event)
-      handleDetailsShowModal(event)
-    },
-    []
-  );
-
-  const { defaultDate, scrollToTime } = useMemo(
-    () => ({
-      defaultDate: new Date(2023, 5, 12),
-      scrollToTime: new Date(1970, 1, 1, 6),
-    }),
-    []
-  );
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const event = await getallevent();
-      if (event) {
-        const transformedEvents = event.map(ev => ({
-          id: ev.Id,
-          title: ev.title,
-          start: new Date(ev.startDate),
-          end: new Date(ev.endDate),
-          description: ev.description,
-          lieu: ev.lieu,
-          type: ev.type,
-          recurrence: ev.recurrence,
-          capacity: ev.capacity,
-          participants: ev.participants,
-          clubs: ev.clubs,
-          trainingCenters: ev.trainingCenters
-        }));
-        getEventData(transformedEvents);
-      }
-    };
-
     fetchEvents();
   }, []);
 
-  const EventComponent = ({ event }) => (
-    <span>
-      <strong>{event.title}</strong>
-      {event.desc && ':  ' + event.desc}
-    </span>
-  );
+  const handleSelectSlot = useCallback(({ start, end }) => {
+    setSlotInfo({ start, end });
+    setShowModal(true);
+  }, []);
+
+  const handleSelectEvent = useCallback((event) => {
+    setModalContent(event);
+    setShowDetailsModal(true);
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowDetailsModal(false);
+    setSlotInfo({ start: null, end: null });
+  };
+
+  const handleSaveEvent = async (newEvent) => {
+    try {
+      const response = await fetch(`http://localhost:4000/events/${newEvent.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newEvent),
+      });
+      await fetchEvents();
+    } catch (error) {
+      console.error('Error updating event:', error);
+    } finally {
+      handleCloseModal();
+    }
+  };
 
   const handleDelete = async (eventId) => {
-    console.log('Event deleted with ID:', eventId);
     try {
       const response = await fetch(`http://localhost:4000/events/${eventId}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (!response.ok) {
-        throw new Error(`Échec de la récupération des utilisateurs: ${response.status} (${response.statusText})`);
+        throw new Error(`Error deleting event: ${response.status} (${response.statusText})`);
       }
 
-      const event = await response.json();
-
+      await fetchEvents();
     } catch (error) {
-      console.log(error)
-      return
+      console.error('Error deleting event:', error);
+    } finally {
+      handleCloseModal();
     }
-    window.alert("suppression réusir")
-    setShowDetailsModal(false);
-    navigate(0); // Naviguer vers la même route pour rafraîchir
   };
 
-  return (
+  const { defaultDate, scrollToTime } = useMemo(() => ({
+    defaultDate: new Date(),
+    scrollToTime: new Date(1970, 1, 1, 6),
+  }), []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
     <div className='projet-register-container-schuelder'>
       <h2>Planning</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <Fragment>
         <Calendar
           localizer={localizer}
-          events={data}
+          events={events}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 500, margin: '50px' }}
-          components={{
-            event: EventComponent,
-          }}
-
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleSelectSlot}
           selectable
@@ -202,17 +139,18 @@ function AdminCreatePlanningComponent() {
       <EventFormModal
         isOpen={showModal}
         onRequestClose={handleCloseModal}
-        //onSave={handleSaveEvent}
         defaultStart={slotInfo.start}
         defaultEnd={slotInfo.end}
       />
-      <EventModalDetails
-        isOpen={showDetailModal}
-        children={modalContent}
-        onRequestClose={handleCloseModal}
-        onSave={handleSaveEvent}
-        onDelete={handleDelete}
-      />
+      {modalContent && (
+        <EventModalDetails
+          isOpen={showDetailModal}
+          event={modalContent}
+          onRequestClose={handleCloseModal}
+          onSave={handleSaveEvent}
+          onDelete={handleDelete}
+        />
+      )}
     </div>
   );
 }

@@ -62,10 +62,6 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 }),
-                fetch('http://localhost:4000/users/account', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                }),
                 fetch('http://localhost:4000/formations-centers', {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
@@ -89,7 +85,6 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
             };
         } catch (error) {
             console.error('Erreur lors de la récupération des données:', error);
-            alert('Erreur lors de la récupération des données. Veuillez réessayer.');
             return null;
         }
     };

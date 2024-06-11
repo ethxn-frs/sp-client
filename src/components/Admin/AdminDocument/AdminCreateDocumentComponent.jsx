@@ -39,7 +39,7 @@ function AdminCreateDocument() {
                             <Card.Title>Insérer un document</Card.Title>
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Form.Group controlId="formFile">
-                                    <Form.Label>Sélectionner votre document</Form.Label>
+                                    <Form.Label>Sélectionner votre document </Form.Label>
                                     <Form.Control
                                         type="file"
                                         {...register('file', { required: true })}

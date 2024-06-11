@@ -39,6 +39,7 @@ import DonationComponent from './components/Donate/DonationComponent';
 import LogoutComponent from './components/Logout/LogoutComponent';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
+import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             <Route path="/aboutus" element={<AboutUsComponent />} />
             <Route path="/blog" element={<BlogComponent />} />
             <Route path="/don" element={<DonationComponent />} />
+            <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />

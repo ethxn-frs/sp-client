@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginComponent.css'
+import './LoginComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
 
@@ -14,7 +14,7 @@ function LoginComponent() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    //Soumettre la Connexion 
+    // Soumettre la Connexion 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -25,7 +25,7 @@ function LoginComponent() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: email,
+                    login: email,
                     password: password
                 })
             });
@@ -37,20 +37,12 @@ function LoginComponent() {
             const result = await response.json();
 
             localStorage.setItem('token', result.token);
-            localStorage.setItem('userId', result.userId);
+            localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
 
-            if (result && result.roles) {
-
-                const isAdmin = result.roles.some(role => role.Role === 'admin');
-                if (isAdmin) {
-                    navigate('/admin/home');
-                } else {
-                    navigate('/');
-                }
-            }
-            else {
-                console.log("n'est pas admin")
-                navigate('/');
+            if (!result.user.firstConnection) {
+                navigate('/login/first-connection');
+            } else if (result.user.firstConnection) {
+                navigate('/admin/home')
             }
 
         } catch (error) {

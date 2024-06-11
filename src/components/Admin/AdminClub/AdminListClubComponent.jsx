@@ -23,6 +23,22 @@ function AdminListClubComponent() {
         fetchClubs();
     }, []);
 
+    const deleteClub = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:4000/clubs/${id}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                setClubs(clubs.filter(club => club.id !== id));
+            } else {
+                throw new Error('Erreur lors de la suppression du club');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du club:', error);
+            alert('Erreur lors de la suppression du club.');
+        }
+    };
+
     return (
         <Container className="mt-5">
             <Row className="justify-content-md-center">
@@ -69,7 +85,7 @@ function AdminListClubComponent() {
                                                 </Button>
                                                 <Button
                                                     variant="danger"
-                                                    onClick={() => navigate(`/admin/clubs/${club.id}/delete`)}
+                                                    onClick={() => deleteClub(club.id)}
                                                 >
                                                     Supprimer
                                                 </Button>

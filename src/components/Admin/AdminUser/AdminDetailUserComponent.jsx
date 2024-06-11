@@ -11,6 +11,7 @@ function AdminDetailUserComponent() {
     const [entity, setEntity] = useState(null);
 
     useEffect(() => {
+        console.log(id);
         const fetchUser = async () => {
             try {
                 const response = await fetch(`http://localhost:4000/users/${id}`);
@@ -29,11 +30,11 @@ function AdminDetailUserComponent() {
         const fetchEntity = async (user) => {
             try {
                 let response, data;
-                if (user.role.role === 'CLUB') {
+                if (user.role?.role === 'CLUB') {
                     response = await fetch(`http://localhost:4000/clubs/${user.club.id}`);
-                } else if (user.role.role === 'FORMATIONCENTER') {
+                } else if (user.role?.role === 'FORMATIONCENTER') {
                     response = await fetch(`http://localhost:4000/formations-centers/${user.formationCenter.id}`);
-                } else if (user.role.role === 'PLAYER') {
+                } else if (user.role?.role === 'PLAYER') {
                     response = await fetch(`http://localhost:4000/players/${user.player.id}`);
                 }
 
@@ -71,13 +72,13 @@ function AdminDetailUserComponent() {
                                     <Card.Text><strong>Adresse:</strong> {user.address}</Card.Text>
                                     <Card.Text><strong>Date de naissance:</strong> {new Date(user.birthDate).toLocaleDateString()}</Card.Text>
                                     <Card.Text><strong>Date d'ancienneté:</strong> {new Date(user.createDate).toLocaleDateString()}</Card.Text>
-                                    <Card.Text><strong>Rôle:</strong> {user.role.role}</Card.Text>
+                                    {user.role && <Card.Text><strong>Rôle:</strong> {user.role.role}</Card.Text>}
                                 </Col>
                             </Row>
                             {entity && (
                                 <>
                                     <hr />
-                                    {user.role.role === 'CLUB' && (
+                                    {user.role?.role === 'CLUB' && (
                                         <>
                                             <h5>Club Associé</h5>
                                             <Card.Text><strong>Nom:</strong> {entity.name}</Card.Text>
@@ -86,7 +87,7 @@ function AdminDetailUserComponent() {
                                             <Button variant="info" onClick={() => navigate(`/admin/clubs/${entity.id}`)}>Voir Club</Button>
                                         </>
                                     )}
-                                    {user.role.role === 'FORMATIONCENTER' && (
+                                    {user.role?.role === 'FORMATIONCENTER' && (
                                         <>
                                             <h5>Centre de Formation Associé</h5>
                                             <Card.Text><strong>Nom:</strong> {entity.name}</Card.Text>
@@ -95,11 +96,11 @@ function AdminDetailUserComponent() {
                                             <Button variant="info" onClick={() => navigate(`/admin/formations-centers/${entity.id}`)}>Voir Centre de Formation</Button>
                                         </>
                                     )}
-                                    {user.role.role === 'PLAYER' && (
+                                    {user.role?.role === 'PLAYER' && (
                                         <>
                                             <h5>Joueur Associé</h5>
                                             <Card.Text><strong>Nom:</strong> {entity.firstName} {entity.lastName}</Card.Text>
-                                            <Card.Text><strong>Position:</strong> {entity.position}</Card.Text>
+                                            {entity.position && <Card.Text><strong>Position:</strong> {entity.position}</Card.Text>}
                                             <Button variant="info" onClick={() => navigate(`/admin/players/${entity.id}`)}>Voir Joueur</Button>
                                         </>
                                     )}

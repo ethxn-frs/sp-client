@@ -16,7 +16,7 @@ function AdminHeaderComponent() {
                     <p>Utilisateur non connecté</p>
                 )}
                 <SubMenu label="Tableau de bord">
-                    <MenuItem component={<Link to="/admin" />}>default</MenuItem>
+                    <MenuItem component={<Link to="/admin" />}>Accueil</MenuItem>
                     <MenuItem component={<Link to="/admin/analyse" />}>Analyse</MenuItem>
                 </SubMenu>
                 <MenuItem component={<Link to="/admin/planning/create" />}>
