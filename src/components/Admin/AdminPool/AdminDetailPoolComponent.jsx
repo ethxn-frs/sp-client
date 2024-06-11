@@ -4,8 +4,6 @@ import { Button, Table } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { max } from 'moment';
-import { height } from '@fortawesome/free-brands-svg-icons/fa42Group';
 
 Chart.register(CategoryScale, LinearScale, BarElement);
 

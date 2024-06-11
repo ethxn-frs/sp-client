@@ -1,4 +1,6 @@
 import { Doughnut,Line, Bar} from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
+
 
 const data = {
     labels: ['red','Blue','Orange','Yellow'],
@@ -23,7 +25,7 @@ function AdminAnalyseComponent(){
                 </div>
             </div>
 
-            <div className='Card-double'>
+           <div className='Card-double'>
                 <div className='Card-small-double'>
                     <Doughnut data={data} />
                 </div>
@@ -31,7 +33,7 @@ function AdminAnalyseComponent(){
                     <Bar data={data}/>
                 </div>
             </div>
-            <div className='Card-double'>
+              <div className='Card-double'>
                 <div className='Card-small-double'>
                     <Doughnut data={data} />
                 </div>
