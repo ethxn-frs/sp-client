@@ -40,6 +40,7 @@ import LogoutComponent from './components/Logout/LogoutComponent';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
+import MarketPlaceComponent from './components/MarketPlace/MarkePlaceComponent';
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
             <Route path="/blog" element={<BlogComponent />} />
             <Route path="/don" element={<DonationComponent />} />
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
-
+            <Route path='/marketplace' element={<MarketPlaceComponent/>}/>
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />
               <Route path="admin/logout" element={<LogoutComponent />} />
