@@ -21,7 +21,6 @@ function AdminListUserComponent() {
             }
 
             const users = await response.json();
-            console.log("users", users.user);
             return users.user;
         } catch (error) {
             console.error('Erreur lors de la récupération des rôles:', error);
