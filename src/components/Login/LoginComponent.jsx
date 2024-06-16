@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './LoginComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
@@ -13,8 +14,8 @@ function LoginComponent() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    // Soumettre la Connexion 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -30,11 +31,13 @@ function LoginComponent() {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error('Échec de la connexion');
-            }
-
             const result = await response.json();
+
+            if (!response.ok) {
+                setErrorMessage(result.message || 'Échec de la connexion');
+                Swal.fire('Erreur', result.message || 'Échec de la connexion', 'error');
+                return;
+            }
 
             if (result.token) {
                 localStorage.setItem('token', result.token);
@@ -52,7 +55,8 @@ function LoginComponent() {
             }
 
         } catch (error) {
-            alert("Erreur lors de la connexion.");
+            setErrorMessage("Erreur lors de la connexion.");
+            Swal.fire('Erreur', "Erreur lors de la connexion.", 'error');
         }
     };
 
@@ -81,6 +85,7 @@ function LoginComponent() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
                     </div>
                     <button type="submit" className="login-button">Log In</button>
                 </form>

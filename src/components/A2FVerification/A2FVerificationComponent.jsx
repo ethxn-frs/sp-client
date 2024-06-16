@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './A2FVerificationComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
@@ -34,14 +35,51 @@ function A2FVerificationComponent() {
             navigate('/admin/home');
 
         } catch (error) {
-            alert("Erreur lors de la vérification du code A2F.");
+            Swal.fire({
+                title: 'Erreur',
+                text: "Erreur lors de la vérification du code A2F.",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
+    const handleRegenerateCode = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/users/${user.id}/regenerate-a2f`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Erreur lors de la régénération du code A2F');
+            }
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Un nouveau code a été envoyé à votre adresse e-mail.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message || 'Erreur lors de la régénération du code A2F.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
     return (
         <div>
             <HeaderComponent />
-            <div className="verification-container">
+            <div className="verification-container mb-5">
                 <h2>Vérification A2F</h2>
                 <form onSubmit={handleSubmit} className="verification-form">
                     <div className="form-group">
@@ -56,6 +94,12 @@ function A2FVerificationComponent() {
                     </div>
                     <button type="submit" className="verification-button">Vérifier</button>
                 </form>
+                <button
+                    onClick={handleRegenerateCode}
+                    className="regenerate-button mt-5"
+                >
+                    Renvoyer le code
+                </button>
             </div>
             <FooterComponent />
         </div>

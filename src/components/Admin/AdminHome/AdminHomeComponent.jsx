@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './AdminHome.css';
+import UserInfoAlertComponent from '../AdminUser/AdminUserInfoAlertComponent';
 
 function AdminHome() {
     const [stats, setStats] = useState({});
     const [recentUsers, setRecentUsers] = useState([]);
     const [recentEvents, setRecentEvents] = useState([]);
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
     useEffect(() => {
         fetchStats();
@@ -34,6 +37,7 @@ function AdminHome() {
 
     return (
         <Container fluid className="mt-5 d-flex flex-column align-items-center justify-content-center   ">
+            <UserInfoAlertComponent user={user} /> 
             <Row className="mb-4 w-100">
                 <Col>
                     <h1 className="text-center">Dashboard Admin</h1>

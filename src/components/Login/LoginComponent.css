@@ -1,4 +1,3 @@
-/* src/components/loginPageStyle.css */
 .login-container {
     width: 90%;
     max-width: 400px;
@@ -50,6 +49,11 @@ input {
 
 .login-button:hover {
     background-color: #444;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
 }
 
 /* Styles réactifs */

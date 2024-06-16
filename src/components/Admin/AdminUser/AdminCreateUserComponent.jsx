@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminCreateUserComponent() {
@@ -40,7 +41,7 @@ function AdminCreateUserComponent() {
             setRoles(data.roles);
         } catch (error) {
             console.error('Erreur lors de la récupération des rôles:', error);
-            alert('Erreur lors de la récupération des rôles.');
+            Swal.fire('Erreur', 'Erreur lors de la récupération des rôles.', 'error');
         }
     };
 
@@ -70,7 +71,7 @@ function AdminCreateUserComponent() {
             }
         } catch (error) {
             console.error('Erreur lors de la récupération des entités:', error);
-            alert('Erreur lors de la récupération des entités.');
+            Swal.fire('Erreur', 'Erreur lors de la récupération des entités.', 'error');
         }
     };
 
@@ -106,14 +107,15 @@ function AdminCreateUserComponent() {
                 method: 'POST',
                 body: formData,
             });
+            const result = await response.json();
             if (!response.ok) {
-                throw new Error('Erreur lors de la création de l\'utilisateur');
+                throw new Error(result.message || 'Erreur lors de la création de l\'utilisateur');
             }
-            alert('Utilisateur créé avec succès!');
+            Swal.fire('Succès', 'Utilisateur créé avec succès!', 'success');
             navigate('/admin/users');
         } catch (error) {
             console.error('Erreur lors de la création de l\'utilisateur:', error);
-            alert('Erreur lors de la création de l\'utilisateur.');
+            Swal.fire('Erreur', error.message || 'Erreur lors de la création de l\'utilisateur.', 'error');
         }
     };
 
@@ -187,8 +189,8 @@ function AdminCreateUserComponent() {
     return (
         <Container className="mt-5">
             <Row className="justify-content-center">
-                <Col>
-                    <Card className=" p-3 mb-5 bg-white rounded">
+                <Col xs={12} md={10} lg={8}>
+                    <Card className="p-4 shadow-sm">
                         <Card.Header className="text-center bg-primary text-white">
                             <Card.Title className="mb-0">Créer un Utilisateur</Card.Title>
                         </Card.Header>
@@ -279,12 +281,14 @@ function AdminCreateUserComponent() {
                                         onChange={handleFileChange}
                                     />
                                 </Form.Group>
-                                <Button variant="primary" type="submit" className="mt-3">
-                                    Créer
-                                </Button>
-                                <Button variant="secondary" className="mt-3 ms-3" onClick={() => navigate('/admin/users')}>
-                                    Annuler
-                                </Button>
+                                <div className="d-flex justify-content-between mt-4">
+                                    <Button variant="primary" type="submit">
+                                        Créer
+                                    </Button>
+                                    <Button variant="secondary" onClick={() => navigate('/admin/users')}>
+                                        Annuler
+                                    </Button>
+                                </div>
                             </Form>
                         </Card.Body>
                     </Card>
@@ -295,4 +299,3 @@ function AdminCreateUserComponent() {
 }
 
 export default AdminCreateUserComponent;
-

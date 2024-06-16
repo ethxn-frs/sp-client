@@ -41,6 +41,7 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
 import A2FVerificationComponent from './components/A2FVerification/A2FVerificationComponent';
+import AdminCreateNewsletterComponent from './components/Admin/AdminNewsletter/AdminCreateNewsletterComponent';
 
 function App() {
   return (
@@ -90,6 +91,8 @@ function App() {
               <Route path="admin/users/create" element={<AdminCreateUserComponent />} />
               <Route path="admin/documents" element={<AdminListDocumentComponent />} />
               <Route path="admin/documents/create" element={<AdminCreateDocument />} />
+              <Route path="admin/newsletter/create" element={<AdminCreateNewsletterComponent />} />
+
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>
             <Route path="/logout" element={<LogoutComponent />} />

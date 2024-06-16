@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminListUserComponent() {
@@ -24,8 +25,7 @@ function AdminListUserComponent() {
             return users.user;
         } catch (error) {
             console.error('Erreur lors de la récupération des rôles:', error);
-            alert("Erreur lors de la récupération des utilisateurs. Veuillez réessayer.");
-
+            Swal.fire('Erreur', "Erreur lors de la récupération des utilisateurs. Veuillez réessayer.", 'error');
             return null;
         }
     };
@@ -42,25 +42,39 @@ function AdminListUserComponent() {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
-            try {
-                const response = await fetch(`http://localhost:4000/users/${id}/delete  `, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
+        Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous ne pourrez pas revenir en arrière!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, supprimer!',
+            cancelButtonText: 'Annuler'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`http://localhost:4000/users/${id}/delete`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.message || 'Erreur lors de la suppression de l\'utilisateur');
                     }
-                });
 
-                if (!response.ok) {
-                    throw new Error(`Échec de la suppression de l'utilisateur: ${response.status} (${response.statusText})`);
+                    setData(data.filter(item => item.id !== id));
+                    Swal.fire('Supprimé!', 'Utilisateur supprimé avec succès!', 'success');
+                } catch (error) {
+                    console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+                    Swal.fire('Erreur', error.message || "Erreur lors de la suppression de l'utilisateur. Veuillez réessayer.", 'error');
                 }
-
-                setData(data.filter(item => item.id !== id));
-            } catch (error) {
-                console.error('Erreur lors de la suppression de l\'utilisateur:', error);
-                alert("Erreur lors de la suppression de l'utilisateur. Veuillez réessayer.");
             }
-        }
+        });
     };
 
     const handleDetail = (id) => {

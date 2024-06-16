@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 function AdminEditSportComponent() {
     const { id } = useParams();
@@ -14,8 +15,7 @@ function AdminEditSportComponent() {
                 const data = await response.json();
                 setSport(data);
             } catch (error) {
-                console.error('Erreur lors de la récupération du sport:', error);
-                alert('Erreur lors de la récupération du sport.');
+                Swal.fire('Erreur', 'Erreur lors de la récupération du sport.', 'error');
             }
         };
         fetchSport();
@@ -29,18 +29,24 @@ function AdminEditSportComponent() {
     const handleSaveChanges = async (e) => {
         e.preventDefault();
         try {
-            await fetch(`http://localhost:4000/sports/${id}`, {
+            const response = await fetch(`http://localhost:4000/sports/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(sport),
             });
-            alert('Sport mis à jour avec succès.');
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Erreur lors de la modification du sport');
+            }
+
+            Swal.fire('Succès', 'Sport mis à jour avec succès.', 'success');
             navigate('/admin/sports');
         } catch (error) {
-            console.error('Erreur lors de la modification du sport:', error);
-            alert('Erreur lors de la modification du sport.');
+            Swal.fire('Erreur', error.message || 'Erreur lors de la modification du sport.', 'error');
         }
     };
 

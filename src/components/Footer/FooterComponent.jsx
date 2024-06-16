@@ -11,6 +11,7 @@ const FooterComponent = () => {
 
 const styles = {
     footer: {
+        position: 'sticky',
         backgroundColor: '#282c34',
         padding: '10px',
         color: 'white',
