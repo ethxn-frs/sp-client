@@ -11,6 +11,7 @@ function AdminCreateDocument() {
         const formData = new FormData();
         formData.append('file', data.file[0]);
 
+        console.log("formData",formData)
         try {
             const response = await fetch('http://localhost:4000/documents', {
                 method: 'POST',
