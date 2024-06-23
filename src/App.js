@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom
 import AdminHomeComponent from './components/Admin/AdminHome/AdminHomeComponent';
 import AdminListFormationCenterComponent from './components/Admin/AdminFormationCenter/AdminListFormationCenterComponent';
 import AdminCreateFormationCenterComponent from './components/Admin/AdminFormationCenter/AdminCreateFormationCenterComponent';
-import AdminListPlanningComponent from './components/Admin/AdminPlanning/AdminListPlanningComponent';
 import AdminCreatePlanningComponent from './components/Admin/AdminPlanning/AdminCreatePlanningComponent';
 import AdminCreatePlayerComponent from './components/Admin/AdminPlayer/AdminCreatePlayerComponent';
 import AdminListPlayerComponent from './components/Admin/AdminPlayer/AdminListPlayerComponent';
@@ -42,6 +41,8 @@ import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubCo
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
 import A2FVerificationComponent from './components/A2FVerification/A2FVerificationComponent';
 import AdminCreateNewsletterComponent from './components/Admin/AdminNewsletter/AdminCreateNewsletterComponent';
+import ClubHomeComponent from './components/Club/ClubHomeComponent';
+import AdminInvitationComponent from './components/Admin/AdminInvitation/AdminInvitationComponent';
 
 function App() {
   return (
@@ -58,6 +59,8 @@ function App() {
             <Route path="/don" element={<DonationComponent />} />
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
+            <Route path="/club" element={<ClubHomeComponent />} />
+
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />
               <Route path="admin/logout" element={<LogoutComponent />} />
@@ -66,8 +69,7 @@ function App() {
               <Route path="admin/formations-centers/:id/edit" element={<AdminEditFormationCenterComponent />} />
               <Route path="admin/formations-centers/create" element={<AdminCreateFormationCenterComponent />} />
               <Route path="admin/formations-centers/:id" element={<AdminDetailFormationCenterComponent />} />
-              <Route path="admin/planning" element={<AdminListPlanningComponent />} />
-              <Route path="admin/planning/create" element={<AdminCreatePlanningComponent />} />
+              <Route path="admin/events/planning" element={<AdminCreatePlanningComponent />} />
               <Route path="admin/players" element={<AdminListPlayerComponent />} />
               <Route path="admin/players/create" element={<AdminCreatePlayerComponent />} />
               <Route path="admin/pools" element={<AdminListPoolComponent />} />
@@ -92,6 +94,7 @@ function App() {
               <Route path="admin/documents" element={<AdminListDocumentComponent />} />
               <Route path="admin/documents/create" element={<AdminCreateDocument />} />
               <Route path="admin/newsletter/create" element={<AdminCreateNewsletterComponent />} />
+              <Route path="admin/events/invitations" element={<AdminInvitationComponent />} />
 
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>

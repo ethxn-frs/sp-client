@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './FirstConnectionComponent.css'
+import './FirstConnectionComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
 
@@ -35,7 +35,11 @@ function FirstConnectionComponent() {
             }
 
             alert('Mot de passe mis à jour avec succès');
-            navigate('/admin/home');
+            if (user.role === 'ADMIN_CLUB') {
+                navigate('/club/home');
+            } else {
+                navigate('/admin/home');
+            }
         } catch (error) {
             alert("Erreur lors de la mise à jour du mot de passe.");
         }

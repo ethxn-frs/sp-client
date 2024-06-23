@@ -32,7 +32,11 @@ function A2FVerificationComponent() {
             const result = await response.json();
 
             localStorage.setItem('token', result.token);
-            navigate('/admin/home');
+            if (user.role === 'ADMIN_CLUB') {
+                navigate('/club/home');
+            } else {
+                navigate('/admin/home');
+            }
 
         } catch (error) {
             Swal.fire({

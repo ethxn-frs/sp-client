@@ -19,7 +19,7 @@ const HeaderComponent = ({ isAuthenticated, handleLogout }) => {
                     <a href="/contact" className="navItem">Contact</a>
                     {isAuthenticated ? (
                         <>
-                            <a href="#logout" className="navItem" onClick={handleLogout}>Log out</a>
+                            <a href="/logout" className="navItem" onClick={handleLogout}>Log out</a>
                         </>
                     ) : (
                         <a href="/login" className="navItem">Log in</a>

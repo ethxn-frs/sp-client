@@ -7,11 +7,6 @@ import HeaderComponent from '../Header/HeaderComponent';
 
 function LoginComponent() {
     const navigate = useNavigate();
-    const [loginData, setLoginData] = useState({
-        Email: '',
-        Password: ''
-    });
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -46,7 +41,11 @@ function LoginComponent() {
                 if (!result.user.firstConnection) {
                     navigate('/login/first-connection');
                 } else {
-                    navigate('/admin/home');
+                    if (result.user.role === 'ADMIN_CLUB') {
+                        navigate('/club/home');
+                    } else {
+                        navigate('/admin/home');
+                    }
                 }
             } else {
                 // Si A2F est activé, redirige vers la page de vérification du code A2F

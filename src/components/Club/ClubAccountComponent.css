@@ -1,0 +1,14 @@
+
+.club-account {
+    font-family: 'Roboto', sans-serif;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.shadow-sm {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}

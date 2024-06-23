@@ -109,7 +109,7 @@ function AdminHome() {
                             <Card.Title>Actions</Card.Title>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
-                                    <Link to="/admin/planning/create">Voir les événements</Link>
+                                    <Link to="/admin/events/planning">Voir les événements</Link>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Link to="/admin/users">Voir les utilisateurs</Link>

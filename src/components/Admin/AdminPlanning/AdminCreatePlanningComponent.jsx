@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'reac
 import { useNavigate } from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import { Button } from 'react-bootstrap';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import EventModalDetails from '../AdminEvent/EventModalDetailsComponent';
 import EventFormModal from '../AdminEvent/EventModalComponent';
@@ -84,7 +85,7 @@ function AdminCreatePlanningComponent() {
         body: JSON.stringify(newEvent),
       });
       await fetchEvents();
-      await navigate('/planning/create')
+      await navigate('/planning/create');
     } catch (error) {
       console.error('Error updating event:', error);
     } finally {
@@ -123,6 +124,9 @@ function AdminCreatePlanningComponent() {
   return (
     <div className='projet-register-container-schuelder'>
       <h2>Planning</h2>
+      <Button variant="primary" onClick={() => navigate('/admin/events/invitations')} className="mb-3">
+        Voir mes invitations
+      </Button>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       <Fragment>
         <Calendar
@@ -148,7 +152,6 @@ function AdminCreatePlanningComponent() {
           isOpen={showDetailModal}
           event={modalContent}
           onRequestClose={handleCloseModal}
-          onSave={handleSaveEvent}
           onDelete={handleDelete}
         />
       )}
