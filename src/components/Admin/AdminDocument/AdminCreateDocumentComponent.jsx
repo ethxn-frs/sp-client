@@ -8,6 +8,7 @@ function AdminCreateDocument() {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
+        console.log("data.file[0]",data.file[0])
         const formData = new FormData();
         formData.append('file', data.file[0]);
 

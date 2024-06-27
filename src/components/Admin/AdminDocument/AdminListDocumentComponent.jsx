@@ -22,6 +22,7 @@ function AdminListDocumentComponent() {
                 throw new Error(`Échec de la récupération des documents: ${response.status} (${response.statusText})`);
             }
 
+            console.log("responseget",response)
             const data = await response.json();
             setDocuments(data.documents);
         } catch (error) {
@@ -43,6 +44,7 @@ function AdminListDocumentComponent() {
                 throw new Error(`Échec du téléchargement du document: ${response.status} (${response.statusText})`);
             }
 
+            console.log("response",response)
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
