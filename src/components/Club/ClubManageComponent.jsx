@@ -4,17 +4,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './ClubManageComponent.css';
 import ClubInviteUserComponent from './ClubInviteUserComponent';
 import Swal from 'sweetalert2';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
 
 const ClubManageComponent = () => {
     const userStorage = JSON.parse(localStorage.getItem('user'));
-    const clubId = userStorage.club.id;
     const userId = userStorage.id;
+    const [clubId, setClubId] = useState(null);
     const [club, setClub] = useState(null);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showInviteUserModal, setShowInviteUserModal] = useState(false);
     const [showEditClubModal, setShowEditClubModal] = useState(false);
+    const [showPaypal, setShowPaypal] = useState(false);
+    const [amount, setAmount] = useState(0);
     const [editClubFormData, setEditClubFormData] = useState({
         id: clubId,
         name: '',
@@ -23,53 +27,90 @@ const ClubManageComponent = () => {
         image: null
     });
 
+    const subscriptionStatus = {
+        clubFee: {
+            amount: 10,
+            dueDate: '2025-01-01',
+            status: 'unpaid'
+        },
+        userFee: {
+            amount: 1,
+            dueDate: '2025-01-01',
+            status: 'unpaid'
+        }
+    };
+
     useEffect(() => {
-        const fetchClub = async () => {
+        const fetchClubId = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/clubs/${clubId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
+                const response = await fetch(`http://localhost:4000/users/${userStorage.id}/club`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
                 });
+
                 if (!response.ok) {
-                    throw new Error('Failed to fetch club');
+                    throw new Error(`Error fetching club ID: ${response.status} (${response.statusText})`);
                 }
-                const data = await response.json();
-                setClub(data);
-                setEditClubFormData({
-                    name: data.name,
-                    address: data.address,
-                    email: data.email,
-                    image: null
-                });
+
+                const clubResponse = await response.json();
+                setClubId(clubResponse.id);
             } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+                console.error('Error fetching club ID:', error);
             }
         };
 
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch(`http://localhost:4000/clubs/${clubId}/users`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch users');
-                }
-                const data = await response.json();
-                setUsers(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
+        fetchClubId();
+    }, [userStorage.id]);
 
-        fetchClub();
-        fetchUsers();
+    useEffect(() => {
+        if (clubId) {
+            const fetchClub = async () => {
+                try {
+                    const response = await fetch(`http://localhost:4000/clubs/${clubId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch club');
+                    }
+                    const data = await response.json();
+                    setClub(data);
+                    setEditClubFormData({
+                        name: data.name,
+                        address: data.address,
+                        email: data.email,
+                        image: null
+                    });
+                } catch (error) {
+                    setError(error.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const fetchUsers = async () => {
+                try {
+                    const response = await fetch(`http://localhost:4000/clubs/${clubId}/users`, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch users');
+                    }
+                    const data = await response.json();
+                    setUsers(data);
+                } catch (error) {
+                    setError(error.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchClub();
+            fetchUsers();
+        }
     }, [clubId]);
 
     const handleDeleteUser = async (userId) => {
@@ -165,6 +206,17 @@ const ClubManageComponent = () => {
         }
     };
 
+    const initialOptions = {
+        "client-id": "AZM-xhZvk9RPx-koGNixiPRRv_BdF3aTvmrw9hxorpC7ewPymOgJJel1hwh4bDTujpCRT__lro3P6KtD",
+        currency: "EUR",
+        intent: "capture"
+    };
+
+    const handlePayClick = (amount) => {
+        setAmount(amount);
+        setShowPaypal(true);
+    };
+
     if (loading) {
         return <Spinner animation="border" />;
     }
@@ -187,9 +239,14 @@ const ClubManageComponent = () => {
                                             roundedCircle
                                             className="profile-img mb-3"
                                         />
-                                        <Button variant="secondary" onClick={() => setShowEditClubModal(true)}>
-                                            Modifier le Club
-                                        </Button>
+                                        <Row>
+                                            <Button variant="secondary" onClick={() => setShowEditClubModal(true)}>
+                                                ⚙️
+                                            </Button>
+                                            <Button variant="warning" onClick={() => setShowEditClubModal(true)}>
+                                                🗂️
+                                            </Button>
+                                        </Row>
                                     </Col>
                                     <Col md={8}>
                                         <h3 className="text-primary">{club.name}</h3>
@@ -244,6 +301,30 @@ const ClubManageComponent = () => {
                             </Table>
                         </Card.Body>
                     </Card>
+
+                    <Card className="shadow-sm mb-4">
+                        <Card.Body>
+                            <h4 className="text-primary">Cotisation du Club</h4>
+                            <Row>
+                                <Col xs={6}>
+                                    <p><strong>Montant:</strong> 10 EUR</p>
+                                    <p><strong>Date limite de paiement:</strong> 01/01/2025</p>
+                                </Col>
+                                <Col xs={6}>
+                                    <p><strong>Status:</strong> {subscriptionStatus.clubFee.status === 'paid' ? <span className="text-success">Payé</span> : <span className="text-danger">Non payé</span>}</p>
+                                    {subscriptionStatus.clubFee.status !== 'paid' && (
+                                        <Button onClick={() => handlePayClick(subscriptionStatus.clubFee.amount)} variant="primary">Payer</Button>
+                                    )}
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+
+                    {showPaypal && (
+                        <PayPalScriptProvider options={initialOptions}>
+                            <PaypalPaymentComponent amount={amount} />
+                        </PayPalScriptProvider>
+                    )}
                 </Col>
             </Row>
             <ClubInviteUserComponent

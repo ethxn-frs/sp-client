@@ -127,6 +127,9 @@ function AdminCreatePlanningComponent() {
       <Button variant="primary" onClick={() => navigate('/admin/events/invitations')} className="mb-3">
         Voir mes invitations
       </Button>
+      <Button variant="primary" onClick={() => navigate('/admin/events/proposals')} className="mb-3">
+        Voir les propositions
+      </Button>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       <Fragment>
         <Calendar

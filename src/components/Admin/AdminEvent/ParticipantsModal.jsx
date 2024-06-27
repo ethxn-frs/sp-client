@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Table, Spinner } from 'react-bootstrap';
+import { Modal, Button, Table } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
 const ParticipantsModal = ({ isOpen, onRequestClose, eventId }) => {
@@ -40,11 +40,7 @@ const ParticipantsModal = ({ isOpen, onRequestClose, eventId }) => {
                 return '⏳';
         }
     };
-
-    if (loading) {
-        return <Spinner animation="border" />;
-    }
-
+    
     if (error) {
         Swal.fire('Erreur', error, 'error');
         return null;

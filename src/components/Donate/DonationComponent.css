@@ -9,6 +9,14 @@
     text-align: center;
 }
 
+.donation-text {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+}
+
+
 /* Styles for the form container */
 .donation-form-container {
     margin-bottom: 20px;

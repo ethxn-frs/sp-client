@@ -85,6 +85,7 @@ function A2FVerificationComponent() {
             <HeaderComponent />
             <div className="verification-container mb-5">
                 <h2>Vérification A2F</h2>
+                <p>Un code A2F a été envoyé sur votre adresse mail associée. Vous avez 15 minutes pour entrer le code. Si vous ne recevez pas le code, vous pouvez le renvoyer.</p>
                 <form onSubmit={handleSubmit} className="verification-form">
                     <div className="form-group">
                         <label htmlFor="code">Code A2F</label>
