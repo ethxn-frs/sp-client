@@ -90,6 +90,35 @@ const AdminToolsComponent = () => {
         }
     };
 
+    const handleReindexDatabase = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/admin/tools/reindex-database', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to reindex database');
+            }
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Réindexation de la base de données effectuée avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
     if (loading) {
         return <Spinner animation="border" />;
     }
@@ -160,6 +189,14 @@ const AdminToolsComponent = () => {
                                         <td>
                                             <Button variant="primary" onClick={handleGenerateCards}>
                                                 Générer les cartes
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Réindexation de la base de données</td>
+                                        <td>
+                                            <Button variant="primary" onClick={handleReindexDatabase}>
+                                                Réindexer la base de données
                                             </Button>
                                         </td>
                                     </tr>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+import { Button, Card, Container, Row, Col, Table, Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminUserComponent.css';
 
@@ -9,9 +10,10 @@ function AdminDetailUserComponent() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [entity, setEntity] = useState(null);
+    const [emails, setEmails] = useState([]);
+    const [loadingEmails, setLoadingEmails] = useState(true);
 
     useEffect(() => {
-        console.log(id);
         const fetchUser = async () => {
             try {
                 const response = await fetch(`http://localhost:4000/users/${id}`);
@@ -21,9 +23,15 @@ function AdminDetailUserComponent() {
                 const data = await response.json();
                 setUser(data);
                 fetchEntity(data);
+                fetchUserEmails(data.id);
             } catch (error) {
                 console.error('Erreur lors de la récupération de l\'utilisateur:', error);
-                alert('Erreur lors de la récupération de l\'utilisateur.');
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération de l\'utilisateur.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         };
 
@@ -44,7 +52,38 @@ function AdminDetailUserComponent() {
                 }
             } catch (error) {
                 console.error('Erreur lors de la récupération de l\'entité:', error);
-                alert('Erreur lors de la récupération de l\'entité.');
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération de l\'entité.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        };
+
+        const fetchUserEmails = async (userId) => {
+            try {
+                const response = await fetch(`http://localhost:4000/users/${userId}/emails`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`Échec de la récupération des emails: ${response.status} (${response.statusText})`);
+                }
+                const data = await response.json();
+                console.log(data);
+                setEmails(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des emails:', error);
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération des emails.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            } finally {
+                setLoadingEmails(false);
             }
         };
 
@@ -52,7 +91,7 @@ function AdminDetailUserComponent() {
     }, [id]);
 
     if (!user) {
-        return <div>Loading...</div>;
+        return <Spinner animation="border" />;
     }
 
     return (
@@ -105,6 +144,30 @@ function AdminDetailUserComponent() {
                                         </>
                                     )}
                                 </>
+                            )}
+                            <hr />
+                            <h5>Emails envoyés</h5>
+                            {loadingEmails ? (
+                                <Spinner animation="border" />
+                            ) : (
+                                <Table striped bordered hover responsive>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Statut</th>
+                                            <th>Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {emails.map(email => (
+                                            <tr key={email.id}>
+                                                <td>{email.id}</td>
+                                                <td>{email.status}</td>
+                                                <td>{email.type}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
                             )}
                         </Card.Body>
                         <Card.Footer className="text-center">
