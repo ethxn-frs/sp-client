@@ -67,6 +67,9 @@ function AdminHeaderComponent() {
                 <SubMenu label="TRANSACTIONS">
                     <MenuItem component={<Link to="/admin/transactions" />}>Voir les transactions</MenuItem>
                 </SubMenu>
+                <SubMenu label="TOOLS">
+                    <MenuItem component={<Link to="/admin/tools" />}>Acceder aux tools</MenuItem>
+                </SubMenu>
                 <SubMenu label="SPORTS">
                     <MenuItem component={<Link to="/admin/sports/create" />}>Créer un sport</MenuItem>
                     <MenuItem component={<Link to="/admin/sports" />}>Liste des sports</MenuItem>

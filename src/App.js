@@ -45,6 +45,7 @@ import ClubHomeComponent from './components/Club/ClubHomeComponent';
 import AdminInvitationComponent from './components/Admin/AdminInvitation/AdminInvitationComponent';
 import AdminListEventProposalComponent from './components/Admin/AdminEventProposal/AdminListEventProposalComponent';
 import AdminListTransactionsComponent from './components/Admin/AdminTransaction/AdminListTransactionsComponent';
+import AdminToolsComponent from './components/Admin/AdminTools/AdminToolsComponent';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
               <Route path="admin" element={<AdminHomeComponent />} />
               <Route path="admin/logout" element={<LogoutComponent />} />
               <Route path="admin/analyse" element={<AdminAnalyseComponent />} />
+              <Route path="admin/tools" element={<AdminToolsComponent />} />
 
               <Route path="admin/formations-centers" element={<AdminListFormationCenterComponent />} />
               <Route path="admin/formations-centers/:id/edit" element={<AdminEditFormationCenterComponent />} />

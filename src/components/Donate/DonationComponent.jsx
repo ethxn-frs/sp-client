@@ -20,7 +20,7 @@ function DonationComponent() {
 
     useEffect(() => {
         console.log(amount);
-    }, [amount]); // Ce useEffect s'exécute à chaque fois que `amount` change
+    }, [amount]);
 
     return (
         <div>
@@ -42,7 +42,11 @@ function DonationComponent() {
                     />
                 </div>
                 <PayPalScriptProvider options={initialOptions}>
-                    <PaypalPaymentComponent amount={amount} disabled={!amount || amount <= 0} />
+                    <PaypalPaymentComponent 
+                        amount={amount} 
+                        type={'DONATION'} 
+                        disabled={!amount || amount <= 0} 
+                    />
                 </PayPalScriptProvider>
             </div>
             <FooterComponent />

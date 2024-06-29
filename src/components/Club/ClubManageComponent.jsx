@@ -19,6 +19,7 @@ const ClubManageComponent = () => {
     const [showEditClubModal, setShowEditClubModal] = useState(false);
     const [showPaypal, setShowPaypal] = useState(false);
     const [amount, setAmount] = useState(0);
+    const [cotisation, setCotisation] = useState(null); // New state for cotisation
     const [editClubFormData, setEditClubFormData] = useState({
         id: clubId,
         name: '',
@@ -26,19 +27,6 @@ const ClubManageComponent = () => {
         email: '',
         image: null
     });
-
-    const subscriptionStatus = {
-        clubFee: {
-            amount: 10,
-            dueDate: '2025-01-01',
-            status: 'unpaid'
-        },
-        userFee: {
-            amount: 1,
-            dueDate: '2025-01-01',
-            status: 'unpaid'
-        }
-    };
 
     useEffect(() => {
         const fetchClubId = async () => {
@@ -108,8 +96,26 @@ const ClubManageComponent = () => {
                 }
             };
 
+            const fetchCotisation = async () => {
+                try {
+                    const response = await fetch(`http://localhost:4000/clubs/${clubId}/cotisations`, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch cotisation');
+                    }
+                    const data = await response.json();
+                    setCotisation(data);
+                } catch (error) {
+                    setError(error.message);
+                }
+            };
+
             fetchClub();
             fetchUsers();
+            fetchCotisation();
         }
     }, [clubId]);
 
@@ -157,8 +163,7 @@ const ClubManageComponent = () => {
         const { name, value, files } = e.target;
         if (name === 'image') {
             setEditClubFormData({ ...editClubFormData, image: files[0] });
-        }
-        else {
+        } else {
             setEditClubFormData({ ...editClubFormData, [name]: value });
         }
     };
@@ -215,6 +220,26 @@ const ClubManageComponent = () => {
     const handlePayClick = (amount) => {
         setAmount(amount);
         setShowPaypal(true);
+    };
+
+    const handlePaymentSuccess = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/cotisations/${cotisation.id}/paid`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update cotisation status');
+            }
+            const updatedCotisation = await response.json();
+            setCotisation(updatedCotisation);
+            setShowPaypal(false);
+            Swal.fire('Paiement réussi!', 'Votre cotisation a été mise à jour.', 'success');
+        } catch (error) {
+            Swal.fire('Erreur!', error.message, 'error');
+        }
     };
 
     if (loading) {
@@ -307,13 +332,13 @@ const ClubManageComponent = () => {
                             <h4 className="text-primary">Cotisation du Club</h4>
                             <Row>
                                 <Col xs={6}>
-                                    <p><strong>Montant:</strong> 10 EUR</p>
-                                    <p><strong>Date limite de paiement:</strong> 01/01/2025</p>
+                                    <p><strong>Montant:</strong> {cotisation ? `${cotisation.amount} EUR` : 'Chargement...'}</p>
+                                    <p><strong>Date limite de paiement:</strong> {cotisation ? new Date(cotisation.dueDate).toLocaleDateString() : 'Chargement...'}</p>
                                 </Col>
                                 <Col xs={6}>
-                                    <p><strong>Status:</strong> {subscriptionStatus.clubFee.status === 'paid' ? <span className="text-success">Payé</span> : <span className="text-danger">Non payé</span>}</p>
-                                    {subscriptionStatus.clubFee.status !== 'paid' && (
-                                        <Button onClick={() => handlePayClick(subscriptionStatus.clubFee.amount)} variant="primary">Payer</Button>
+                                    <p><strong>Status:</strong> {cotisation ? (cotisation.status === 'paid' ? <span className="text-success">Payé</span> : <span className="text-danger">Non payé</span>) : 'Chargement...'}</p>
+                                    {cotisation && cotisation.status !== 'paid' && (
+                                        <Button onClick={() => handlePayClick(cotisation.amount)} variant="primary">Payer</Button>
                                     )}
                                 </Col>
                             </Row>
@@ -322,7 +347,12 @@ const ClubManageComponent = () => {
 
                     {showPaypal && (
                         <PayPalScriptProvider options={initialOptions}>
-                            <PaypalPaymentComponent amount={amount} />
+                            <PaypalPaymentComponent 
+                                amount={amount} 
+                                type={'COTISATION'} 
+                                cotisationId={cotisation ? cotisation.id : null} 
+                                onPaymentSuccess={handlePaymentSuccess} 
+                            />
                         </PayPalScriptProvider>
                     )}
                 </Col>

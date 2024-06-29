@@ -2,7 +2,7 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 import Swal from 'sweetalert2';
 import React, { useEffect } from 'react';
 
-const PaypalPaymentComponent = ({ amount }) => {
+const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }) => {
     useEffect(() => {
         console.log("Updated amount in PaypalPaymentComponent: ", amount);
     }, [amount]);
@@ -14,14 +14,14 @@ const PaypalPaymentComponent = ({ amount }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ amount: amount }),
+                body: JSON.stringify({ amount: amount, type: type }), // Ajouter le type
             });
 
             const order = await response.json();
             return order.id;
         } catch (error) {
             console.error("Error creating PayPal order:", error);
-            alert("There was an error creating the PayPal order. Please try again.");
+            Swal.fire("Erreur", "Il y a eu une erreur lors de la création de la commande PayPal. Veuillez réessayer.", "error");
         }
     };
 
@@ -32,20 +32,21 @@ const PaypalPaymentComponent = ({ amount }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ orderID: data.orderID }),
+                body: JSON.stringify({ orderID: data.orderID, cotisationId }), // Ajouter cotisationId si présent
             });
 
             const details = await response.json();
             Swal.fire({
-                title: 'Merci pour votre don!',
-                text: `Transaction complétée par ${details.payer.name.given_name}. Vous faites vivre l'association !`,
+                title: 'Merci pour votre paiement!',
+                text: `Transaction complétée par ${details.payer.name.given_name}.`,
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
+                if (onPaymentSuccess) onPaymentSuccess();
             });
         } catch (error) {
             console.error("Error capturing PayPal order:", error);
-            alert("There was an error capturing the PayPal order. Please try again.");
+            Swal.fire("Erreur", "Il y a eu une erreur lors de la capture de la commande PayPal. Veuillez réessayer.", "error");
         }
     };
 
