@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ function AdminCreatePlayerComponent() {
         firstName: '',
         lastName: '',
         birthDate: '',
+        email: '',
         formationCenterId: '',
         sportId: '',
     });
@@ -23,7 +25,12 @@ function AdminCreatePlayerComponent() {
                 setFormationCenters(data.formationsCenters);
             } catch (error) {
                 console.error('Erreur lors de la récupération des centres de formation:', error);
-                alert("Erreur lors de la récupération des centres de formation.");
+                Swal.fire({
+                    title: 'Erreur',
+                    text: "Erreur lors de la récupération des centres de formation.",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         };
 
@@ -34,7 +41,12 @@ function AdminCreatePlayerComponent() {
                 setSports(data.sports);
             } catch (error) {
                 console.error('Erreur lors de la récupération des sports:', error);
-                alert("Erreur lors de la récupération des sports.");
+                Swal.fire({
+                    title: 'Erreur',
+                    text: "Erreur lors de la récupération des sports.",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         };
 
@@ -65,11 +77,22 @@ function AdminCreatePlayerComponent() {
                 throw new Error('Échec de la création du joueur');
             }
 
-            alert('Joueur créé avec succès!');
-            navigate('/admin/players')
+            Swal.fire({
+                title: 'Succès',
+                text: 'Joueur créé avec succès!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate('/admin/players');
+            });
         } catch (error) {
             console.error('Erreur lors de la création du joueur:', error);
-            alert('Erreur lors de la création du joueur.');
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Erreur lors de la création du joueur.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -110,6 +133,18 @@ function AdminCreatePlayerComponent() {
                                 name="birthDate"
                                 value={playerData.birthDate}
                                 onChange={handleInputChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formEmail" className="mt-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={playerData.email}
+                                onChange={handleInputChange}
+                                placeholder="Email"
                                 required
                             />
                         </Form.Group>

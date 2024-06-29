@@ -90,6 +90,37 @@ function AdminDetailUserComponent() {
         fetchUser();
     }, [id]);
 
+    const handleDeactivateUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/users/${id}/delete`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la désactivation de l\'utilisateur');
+            }
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Utilisateur désactivé avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate('/admin/users');
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
     if (!user) {
         return <Spinner animation="border" />;
     }
@@ -171,7 +202,10 @@ function AdminDetailUserComponent() {
                             )}
                         </Card.Body>
                         <Card.Footer className="text-center">
-                            <Button variant="secondary" className="mt-3" onClick={() => navigate('/admin/users')}>
+                            <Button variant="danger" className="mt-3" onClick={handleDeactivateUser}>
+                                Désactiver l'utilisateur
+                            </Button>
+                            <Button variant="secondary" className="mt-3 ml-2" onClick={() => navigate('/admin/users')}>
                                 Retour à la liste
                             </Button>
                         </Card.Footer>
