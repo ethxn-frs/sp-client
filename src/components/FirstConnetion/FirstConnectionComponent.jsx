@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './FirstConnectionComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
@@ -13,7 +14,12 @@ function FirstConnectionComponent() {
         event.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            alert('Les mots de passe ne correspondent pas');
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Les mots de passe ne correspondent pas',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -34,14 +40,25 @@ function FirstConnectionComponent() {
                 throw new Error('Erreur lors de la mise à jour du mot de passe');
             }
 
-            alert('Mot de passe mis à jour avec succès');
-            if (user.role === 'ADMIN_CLUB') {
-                navigate('/club/home');
-            } else {
-                navigate('/admin/home');
-            }
+            Swal.fire({
+                title: 'Succès',
+                text: 'Mot de passe mis à jour avec succès',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                if (user.role === 'ADMIN_CLUB') {
+                    navigate('/club/home');
+                } else {
+                    navigate('/admin/home');
+                }
+            });
         } catch (error) {
-            alert("Erreur lors de la mise à jour du mot de passe.");
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Erreur lors de la mise à jour du mot de passe.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
