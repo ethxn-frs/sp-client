@@ -6,6 +6,7 @@ import ChangePasswordModal from '../Admin/AdminUser/ChangePasswordModal';
 import EditProfileModal from '../Admin/AdminUser/EditProfileModal';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
+import UserInfoAlertComponent from '../Admin/AdminUser/AdminUserInfoAlertComponent';
 import './ClubAccountComponent.css';
 import CotisationWarning from './CotisationWarning';
 
@@ -125,6 +126,7 @@ const ClubAccountComponent = ({ setActiveTab }) => {
 
     return (
         <Container className="mt-5 club-account">
+            <UserInfoAlertComponent user={user} />
             {cotisation && cotisation.status !== 'paid' && (
                 <CotisationWarning daysLeft={calculateDaysLeft(cotisation.dueDate)} />
             )}
