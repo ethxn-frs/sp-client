@@ -1,14 +1,15 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import Swal from 'sweetalert2';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }) => {
     useEffect(() => {
         console.log("Updated amount in PaypalPaymentComponent: ", amount);
     }, [amount]);
 
-    const createOrder = async (data, actions) => {
+    const createOrder = useCallback(async (data, actions) => {
         try {
+            console.log(amount)
             const response = await fetch("http://localhost:4000/transactions/create-paypal-order", {
                 method: "POST",
                 headers: {
@@ -23,7 +24,7 @@ const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }
             console.error("Error creating PayPal order:", error);
             Swal.fire("Erreur", "Il y a eu une erreur lors de la création de la commande PayPal. Veuillez réessayer.", "error");
         }
-    };
+    }, [amount]);
 
     const onApprove = async (data, actions) => {
         try {
@@ -51,7 +52,9 @@ const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }
     };
 
     return (
+
         <PayPalButtons
+            key={amount}
             createOrder={createOrder}
             onApprove={onApprove}
         />

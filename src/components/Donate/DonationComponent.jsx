@@ -18,9 +18,8 @@ function DonationComponent() {
         setAmount(parseFloat(e.target.value));
     };
 
-    useEffect(() => {
-        console.log(amount);
-    }, [amount]);
+    console.log(amount);    
+
 
     return (
         <div>
@@ -39,13 +38,13 @@ function DonationComponent() {
                         value={amount || ''}
                         onChange={handleAmountChange}
                         placeholder="Entrez le montant en EUR"
+                        min="1"
                     />
                 </div>
                 <PayPalScriptProvider options={initialOptions}>
                     <PaypalPaymentComponent 
                         amount={amount} 
                         type={'DONATION'} 
-                        disabled={!amount || amount <= 0} 
                     />
                 </PayPalScriptProvider>
             </div>

@@ -9,6 +9,8 @@ import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
 import UserInfoAlertComponent from '../Admin/AdminUser/AdminUserInfoAlertComponent';
 import './ClubAccountComponent.css';
 import CotisationWarning from './CotisationWarning';
+import DocumentsModal from '../Document/DocumentsModal';
+
 
 const ClubAccountComponent = ({ setActiveTab }) => {
     const [user, setUser] = useState(null);
@@ -17,6 +19,7 @@ const ClubAccountComponent = ({ setActiveTab }) => {
     const [cotisation, setCotisation] = useState(null);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
     const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false); // State to manage the documents modal
     const [showPaypal, setShowPaypal] = useState(false);
     const [amount, setAmount] = useState(0);
 
@@ -148,6 +151,7 @@ const ClubAccountComponent = ({ setActiveTab }) => {
                                         <Dropdown.Menu>
                                             <Dropdown.Item onClick={() => setShowEditProfileModal(true)}>Modifier le Profil</Dropdown.Item>
                                             <Dropdown.Item href="mailto:sportvision.infos@gmail.com">Besoin d'aide ?</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => setShowDocumentsModal(true)}>Accéder à ses documents</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Col>
@@ -220,6 +224,11 @@ const ClubAccountComponent = ({ setActiveTab }) => {
                 show={showEditProfileModal}
                 handleClose={() => setShowEditProfileModal(false)}
                 user={user}
+            />
+            <DocumentsModal
+                show={showDocumentsModal}
+                handleClose={() => setShowDocumentsModal(false)}
+                userId={userId}
             />
         </Container>
     );
