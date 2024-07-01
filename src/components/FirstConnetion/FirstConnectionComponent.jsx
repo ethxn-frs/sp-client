@@ -46,10 +46,15 @@ function FirstConnectionComponent() {
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
-                if (user.role === 'ADMIN_CLUB') {
-                    navigate('/club/home');
-                } else {
-                    navigate('/admin/home');
+                const role = user.role.role;
+                if (role === 'ADMIN') {
+                    navigate('/admin');
+                } else if (role === 'CLUB' || role === 'ADMIN_CLUB') {
+                    navigate('/club');
+                } else if (role === 'ADMIN_FORMATIONCENTER' || role === 'FORMATIONCENTER') {
+                    navigate('/training-center');
+                } else if (role === 'PLAYER') {
+                    navigate('/player');
                 }
             });
         } catch (error) {

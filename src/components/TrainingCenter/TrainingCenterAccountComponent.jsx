@@ -7,19 +7,17 @@ import EditProfileModal from '../Admin/AdminUser/EditProfileModal';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
 import UserInfoAlertComponent from '../Admin/AdminUser/AdminUserInfoAlertComponent';
-import './ClubAccountComponent.css';
 import CotisationWarning from '../Cotisation/CotisationWarning';
 import DocumentsModal from '../Document/DocumentsModal';
 
-
-const ClubAccountComponent = ({ setActiveTab }) => {
+const TrainingCenterAccountComponent = ({ setActiveTab }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [cotisation, setCotisation] = useState(null);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
     const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-    const [showDocumentsModal, setShowDocumentsModal] = useState(false); // State to manage the documents modal
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false); 
     const [showPaypal, setShowPaypal] = useState(false);
     const [amount, setAmount] = useState(0);
 
@@ -166,10 +164,10 @@ const ClubAccountComponent = ({ setActiveTab }) => {
                                             <p><strong>Date de création:</strong> {new Date(user.createDate).toLocaleDateString()}</p>
                                         </Col>
                                         <Col xs={6}>
-                                            <p><strong>Nom du Club:</strong> {user.club.name}</p>
-                                            <p><strong>Adresse du Club:</strong> {user.club.address}</p>
-                                            <p><strong>Email du Club:</strong> {user.club.email}</p>
-                                            <p><strong>Date de création du Club:</strong> {new Date(user.club.creationDate).toLocaleDateString()}</p>
+                                            <p><strong>Nom du Centre de Formation:</strong> {user.formationCenter.name}</p>
+                                            <p><strong>Adresse du Centre de Formation:</strong> {user.formationCenter.address}</p>
+                                            <p><strong>Email du Centre de Formation:</strong> {user.formationCenter.email}</p>
+                                            <p><strong>Date de création du Centre de Formation:</strong> {new Date(user.formationCenter.creationDate).toLocaleDateString()}</p>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -205,10 +203,9 @@ const ClubAccountComponent = ({ setActiveTab }) => {
                         <Col>
                             <h4>Actions disponibles</h4>
                             <ListGroup>
-                                <ListGroup.Item action onClick={() => setActiveTab('Événements')}>Gérer les événements du club</ListGroup.Item>
-                                <ListGroup.Item action onClick={() => setActiveTab('Club')}>Gérer le club</ListGroup.Item>
-                                <ListGroup.Item action onClick={() => setActiveTab('MarketPlace')}>MarketPlace</ListGroup.Item>
-                                <ListGroup.Item action onClick={() => setActiveTab('MarketPlace')}>Voir mes documents</ListGroup.Item>
+                                <ListGroup.Item action onClick={() => setActiveTab('Événements')}>Gérer les événements du centre de formation</ListGroup.Item>
+                                <ListGroup.Item action onClick={() => setActiveTab('Centre de Formation')}>Gérer le centre de formation</ListGroup.Item>
+                                <ListGroup.Item action onClick={() => setActiveTab('Mes Joueurs')}>Mes Joueurs</ListGroup.Item>
                                 <ListGroup.Item action onClick={() => setShowChangePasswordModal(true)}>Changer le mot de passe</ListGroup.Item>
                             </ListGroup>
                         </Col>
@@ -234,4 +231,4 @@ const ClubAccountComponent = ({ setActiveTab }) => {
     );
 };
 
-export default ClubAccountComponent;
+export default TrainingCenterAccountComponent;

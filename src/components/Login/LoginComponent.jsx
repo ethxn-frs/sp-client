@@ -41,10 +41,15 @@ function LoginComponent() {
                 if (!result.user.firstConnection) {
                     navigate('/login/first-connection');
                 } else {
-                    if (result.user.role === 'ADMIN_CLUB') {
-                        navigate('/club/home');
-                    } else {
-                        navigate('/admin/home');
+                    const role = result.user.role.role;
+                    if (role === 'ADMIN') {
+                        navigate('/admin');
+                    } else if (role === 'CLUB' || role === 'ADMIN_CLUB') {
+                        navigate('/club');
+                    } else if (role === 'ADMIN_FORMATIONCENTER' || role === 'FORMATIONCENTER') {
+                        navigate('/training-center');
+                    } else if (role === 'PLAYER') {
+                        navigate('/player');
                     }
                 }
             } else {

@@ -42,23 +42,30 @@ const DocumentsModal = ({ show, handleClose, userId }) => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
+    
+            if (!response.ok) {
+                throw new Error('Erreur lors du téléchargement du document.');
+            }
+    
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${documentId}.pdf`;
+            a.download = `document_${documentId}.png`;
             document.body.appendChild(a);
             a.click();
             a.remove();
+            window.URL.revokeObjectURL(url); // Clean up
         } catch (error) {
             Swal.fire({
                 title: 'Erreur',
-                text: 'Erreur lors du téléchargement du document.',
+                text: error.message,
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
         }
     };
+    
 
     return (
         <Modal show={show} onHide={handleClose} size="lg">

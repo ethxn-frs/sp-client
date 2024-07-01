@@ -46,6 +46,8 @@ import AdminInvitationComponent from './components/Admin/AdminInvitation/AdminIn
 import AdminListEventProposalComponent from './components/Admin/AdminEventProposal/AdminListEventProposalComponent';
 import AdminListTransactionsComponent from './components/Admin/AdminTransaction/AdminListTransactionsComponent';
 import AdminToolsComponent from './components/Admin/AdminTools/AdminToolsComponent';
+import TrainingCenterHomeComponent from './components/TrainingCenter/TrainingCenterHomeComponent';
+import AdminListPlayerProposalComponent from './components/Admin/AdminPlayerProposal/AdminListPlayerProposalComponent';
 
 function App() {
   return (
@@ -63,6 +65,7 @@ function App() {
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
             <Route path="/club" element={<ClubHomeComponent />} />
+            <Route path="/training-center" element={<TrainingCenterHomeComponent/>} />
 
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />
@@ -96,6 +99,8 @@ function App() {
               <Route path="admin/players/create" element={<AdminCreatePlayerComponent />} />
               <Route path="admin/players/:id" element={<AdminDetailPlayerComponent />} />
               <Route path="admin/players/:id/edit" element={<AdminEditPlayerComponent />} />
+
+              <Route path="admin/players-proposals" element={<AdminListPlayerProposalComponent />} />
 
               <Route path="admin/clubs" element={<AdminListClubComponent />} />
               <Route path="admin/clubs/create" element={<AdminCreateClubComponent />} />

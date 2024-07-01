@@ -32,10 +32,15 @@ function A2FVerificationComponent() {
             const result = await response.json();
 
             localStorage.setItem('token', result.token);
-            if (user.role === 'ADMIN_CLUB') {
-                navigate('/club/home');
-            } else {
-                navigate('/admin/home');
+            const role = user.role.role;
+            if (role === 'ADMIN') {
+                navigate('/admin');
+            } else if (role === 'CLUB' || role === 'ADMIN_CLUB') {
+                navigate('/club');
+            } else if (role === 'ADMIN_FORMATIONCENTER' || role === 'FORMATIONCENTER') {
+                navigate('/training-center');
+            } else if (role === 'PLAYER') {
+                navigate('/player');
             }
 
         } catch (error) {
