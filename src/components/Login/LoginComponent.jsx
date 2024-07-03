@@ -4,12 +4,15 @@ import Swal from 'sweetalert2';
 import './LoginComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 function LoginComponent() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -64,6 +67,24 @@ function LoginComponent() {
         }
     };
 
+    const handleForgotPassword = async () => {
+        try {
+            await fetch('http://localhost:4000/users/auth/lost-password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: forgotEmail })
+            });
+
+            Swal.fire('Succès', 'Un email vient d\'être envoyé au mail renseigné si un utilisateur existe.', 'success');
+        } catch (error) {
+            Swal.fire('Succès', 'Un email vient d\'être envoyé au mail renseigné si un utilisateur existe.', 'success');
+        } finally {
+            setShowModal(false);
+        }
+    };
+
     return (
         <div>
             <HeaderComponent />
@@ -93,8 +114,35 @@ function LoginComponent() {
                     </div>
                     <button type="submit" className="login-button">Log In</button>
                 </form>
+                <p className="forgot-password" onClick={() => setShowModal(true)}>Mot de passe oublié ?</p>
             </div>
             <FooterComponent />
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Mot de passe oublié</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group controlId="forgotEmail">
+                        <Form.Label>Adresse email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            value={forgotEmail}
+                            onChange={(e) => setForgotEmail(e.target.value)}
+                            placeholder="Entrez votre adresse email"
+                            required
+                        />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Annuler
+                    </Button>
+                    <Button variant="primary" onClick={handleForgotPassword}>
+                        Envoyer
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

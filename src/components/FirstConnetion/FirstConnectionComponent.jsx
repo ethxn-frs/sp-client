@@ -73,7 +73,7 @@ function FirstConnectionComponent() {
             <div className="update-password-container">
                 <h2>Mettre à jour le mot de passe</h2>
                 <form onSubmit={handleSubmit} className="update-password-form">
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="newPassword">Nouveau mot de passe</label>
                         <input
                             type="password"
@@ -83,7 +83,7 @@ function FirstConnectionComponent() {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
                         <input
                             type="password"
