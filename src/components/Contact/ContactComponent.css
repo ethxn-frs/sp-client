@@ -1,4 +1,3 @@
-/* src/components/contactPageStyle.css */
 .contact-page {
     display: flex;
     justify-content: center;
@@ -28,6 +27,17 @@ h2 {
 .form-group {
     margin-bottom: 15px;
     text-align: left;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    height: 0;
+    overflow: hidden;
+}
+
+.form-group.visible {
+    opacity: 1;
+    transform: translateY(0);
+    height: auto;
 }
 
 label {
@@ -35,7 +45,7 @@ label {
     margin-bottom: 5px;
 }
 
-input, textarea {
+input, textarea, select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -61,7 +71,6 @@ textarea {
     background-color: #444;
 }
 
-/* Styles réactifs */
 @media (max-width: 768px) {
     .contact-container {
         padding: 10px;

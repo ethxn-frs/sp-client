@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './DonationComponent.css';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import HeaderComponent from '../Header/HeaderComponent';
@@ -18,9 +18,6 @@ function DonationComponent() {
         setAmount(parseFloat(e.target.value));
     };
 
-    console.log(amount);    
-
-
     return (
         <div>
             <HeaderComponent />
@@ -35,7 +32,7 @@ function DonationComponent() {
                     <input
                         type="number"
                         id="amount"
-                        value={amount || ''}
+                        value={amount}
                         onChange={handleAmountChange}
                         placeholder="Entrez le montant en EUR"
                         min="1"
