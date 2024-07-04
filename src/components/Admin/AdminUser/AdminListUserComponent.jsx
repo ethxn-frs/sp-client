@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, Form, Container, Row, Col, Table, Spinner } from 'react-bootstrap';
+import Select from 'react-select';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminListUserComponent() {
     const [data, setData] = useState([]);
+    const [roles, setRoles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [filters, setFilters] = useState({
+        deleted: false,
+        firstName: '',
+        lastName: '',
+        email: '',
+        roleId: null,
+        page: 1,
+        limit: 5
+    });
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const getAllUsers = async () => {
+    useEffect(() => {
+        fetchUsers();
+        fetchRoles();
+    }, [searchParams]);
+
+    const fetchUsers = async () => {
+        setLoading(true);
         try {
-            const response = await fetch('http://localhost:4000/users', {
+            const query = new URLSearchParams(searchParams).toString();
+            const response = await fetch(`http://localhost:4000/users?${query}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -21,25 +42,65 @@ function AdminListUserComponent() {
                 throw new Error(`Échec de la récupération des utilisateurs: ${response.status} (${response.statusText})`);
             }
 
-            const users = await response.json();
-            return users.user;
+            const data = await response.json();
+            setData(data.user);
+            setTotalUsers(data.total);
         } catch (error) {
             console.error('Erreur lors de la récupération des rôles:', error);
             Swal.fire('Erreur', "Erreur lors de la récupération des utilisateurs. Veuillez réessayer.", 'error');
-            return null;
+        } finally {
+            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const users = await getAllUsers();
-            if (users) {
-                setData(users);
-            }
-        };
+    const fetchRoles = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/roles', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        fetchUsers();
-    }, []);
+            if (!response.ok) {
+                throw new Error(`Échec de la récupération des rôles: ${response.status} (${response.statusText})`);
+            }
+
+            const rolesData = await response.json();
+            setRoles(rolesData.roles)
+        } catch (error) {
+            console.error('Erreur lors de la récupération des rôles:', error);
+            Swal.fire('Erreur', "Erreur lors de la récupération des rôles. Veuillez réessayer.", 'error');
+        }
+    };
+
+    const handleFilterChange = (name, value) => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value
+        }));
+    };
+
+    const handleFilterSubmit = (event) => {
+        event.preventDefault();
+        const filteredFilters = Object.fromEntries(
+            Object.entries(filters).filter(([_, value]) => value !== '' && value !== null)
+        );
+        setSearchParams(filteredFilters);
+    };
+
+    const handleResetFilters = () => {
+        setFilters({
+            deleted: false,
+            firstName: '',
+            lastName: '',
+            email: '',
+            roleId: null,
+            page: 1,
+            limit: 5
+        });
+        setSearchParams({});
+    };
 
     const handleDelete = async (id) => {
         Swal.fire({
@@ -81,12 +142,94 @@ function AdminListUserComponent() {
         navigate(`/admin/users/${id}`);
     };
 
+    const handlePageChange = (newPage) => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            page: newPage
+        }));
+        setSearchParams({
+            ...Object.fromEntries(searchParams.entries()),
+            page: newPage
+        });
+    };
+
+    if (loading) {
+        return <Spinner animation="border" />;
+    }
+
     return (
-        <div>
-            <div className='Card-title'><h2>Liste des Utilisateurs</h2></div>
-            <table className="table table-borderless">
-                <thead className='table-light'>
+        <Container className="mt-5">
+            <h2>Liste des Utilisateurs</h2>
+            <Form onSubmit={handleFilterSubmit}>
+                <Row>
+                    <Col md={3}>
+                        <Form.Group controlId="deleted">
+                            <Form.Check
+                                type="checkbox"
+                                label="Actifs"
+                                checked={!filters.deleted}
+                                onChange={(e) => handleFilterChange('deleted', !e.target.checked)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group controlId="firstName">
+                            <Form.Label>Prénom</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="firstName"
+                                value={filters.firstName}
+                                onChange={(e) => handleFilterChange('firstName', e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group controlId="lastName">
+                            <Form.Label>Nom</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="lastName"
+                                value={filters.lastName}
+                                onChange={(e) => handleFilterChange('lastName', e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group controlId="email">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={filters.email}
+                                onChange={(e) => handleFilterChange('email', e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group controlId="roleId">
+                            <Form.Label>Rôle</Form.Label>
+                            <Select
+                                options={roles}
+                                value={roles.find(role => role.value === filters.roleId)}
+                                onChange={(selectedOption) => handleFilterChange('roleId', selectedOption ? selectedOption.role : null)}
+                                isClearable
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={6} className="d-flex align-items-end">
+                        <Button type="submit" variant="primary" className="me-2">
+                            Filtrer
+                        </Button>
+                        <Button type="button" variant="secondary" onClick={handleResetFilters}>
+                            Réinitialiser
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
+            <Table striped bordered hover responsive className="mt-4">
+                <thead>
                     <tr>
+                        <th>ACTIF</th>
                         <th>NOM</th>
                         <th>PRENOMS</th>
                         <th>EMAIL</th>
@@ -99,6 +242,7 @@ function AdminListUserComponent() {
                 <tbody>
                     {data && data.map((item, index) => (
                         <tr key={index}>
+                            <td>{item.deleted ? '❌' : '✅'}</td>
                             <td>{item.firstname}</td>
                             <td>{item.lastname}</td>
                             <td>{item.email}</td>
@@ -112,8 +256,23 @@ function AdminListUserComponent() {
                         </tr>
                     ))}
                 </tbody>
-            </table>
-        </div>
+            </Table>
+            <div className="pagination-controls">
+                <Button
+                    disabled={filters.page === 1}
+                    onClick={() => handlePageChange(filters.page - 1)}
+                >
+                    Previous
+                </Button>
+                <span>Page {filters.page}</span>
+                <Button
+                    disabled={filters.page * filters.limit >= totalUsers}
+                    onClick={() => handlePageChange(filters.page + 1)}
+                >
+                    Next
+                </Button>
+            </div>
+        </Container>
     );
 }
 

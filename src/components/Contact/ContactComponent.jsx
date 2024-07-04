@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import './ContactComponent.css';
 import HeaderComponent from '../Header/HeaderComponent';
 import FooterComponent from '../Footer/FooterComponent';
@@ -35,19 +36,50 @@ const ContactComponent = () => {
         }
     }, [subject]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Role:', role);
-        console.log('Name:', name);
-        console.log('Email:', email);
-        console.log('Subject:', subject);
-        console.log('Message:', message);
-        setRole('');
-        setName('');
-        setEmail('');
-        setSubject('');
-        setMessage('');
-        setVisibleFields({ role: true });
+
+        try {
+            const response = await fetch('http://localhost:4000/contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    role,
+                    name,
+                    email,
+                    subject,
+                    content: message
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'On dirait bien que quelque chose s\'est mal passé... Réessayer plus tard.');
+            }
+
+            Swal.fire({
+                title: 'Success',
+                text: 'Votre message nous a été parvenu avec succès! Nous reviendrons vers vous dès que possible.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+
+            setRole('');
+            setName('');
+            setEmail('');
+            setSubject('');
+            setMessage('');
+            setVisibleFields({ role: true });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+        }
     };
 
     return (

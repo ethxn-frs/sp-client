@@ -48,6 +48,7 @@ import AdminListTransactionsComponent from './components/Admin/AdminTransaction/
 import AdminToolsComponent from './components/Admin/AdminTools/AdminToolsComponent';
 import TrainingCenterHomeComponent from './components/TrainingCenter/TrainingCenterHomeComponent';
 import AdminListPlayerProposalComponent from './components/Admin/AdminPlayerProposal/AdminListPlayerProposalComponent';
+import AdminListEmailComponent from './components/Admin/AdminEmail/AdminListEmailComponent';
 
 function App() {
   return (
@@ -117,6 +118,8 @@ function App() {
               <Route path="admin/newsletter/create" element={<AdminCreateNewsletterComponent />} />
 
               <Route path="admin/transactions" element={<AdminListTransactionsComponent />} />
+
+              <Route path="admin/emails" element={<AdminListEmailComponent/>} />
 
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>

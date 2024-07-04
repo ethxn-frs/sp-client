@@ -75,6 +75,7 @@ function AdminCreatePlanningComponent() {
     setShowModal(false);
     setShowDetailsModal(false);
     setSlotInfo({ start: null, end: null });
+    fetchEvents();
   };
 
   const handleSaveEvent = async (newEvent) => {

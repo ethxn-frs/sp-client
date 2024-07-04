@@ -12,6 +12,7 @@ function AdminDetailUserComponent() {
     const [entity, setEntity] = useState(null);
     const [emails, setEmails] = useState([]);
     const [loadingEmails, setLoadingEmails] = useState(true);
+    const [cotisation, setCotisation] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -87,7 +88,29 @@ function AdminDetailUserComponent() {
             }
         };
 
+        const fetchCotisation = async () => {
+            try {
+                let response, data;
+                response = await fetch(`http://localhost:4000/users/${id}/cotisation`)
+                if (response && response.ok) {
+                    data = await response.json();
+                    setCotisation(data);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de cotisation:', error);
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération de la cotisation.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
+
+            fetchUser();
+        };
+
         fetchUser();
+        fetchCotisation();
     }, [id]);
 
     const handleDeactivateUser = async () => {
@@ -142,6 +165,7 @@ function AdminDetailUserComponent() {
                                     <Card.Text><strong>Adresse:</strong> {user.address}</Card.Text>
                                     <Card.Text><strong>Date de naissance:</strong> {new Date(user.birthDate).toLocaleDateString()}</Card.Text>
                                     <Card.Text><strong>Date d'ancienneté:</strong> {new Date(user.createDate).toLocaleDateString()}</Card.Text>
+                                    <Card.Text><strong>Paiment cotisation:</strong> {cotisation?.paymentDate ? `✅ - ${cotisation.paymentDate}` : '❌'}</Card.Text>
                                     {user.role && <Card.Text><strong>Rôle:</strong> {user.role.role}</Card.Text>}
                                 </Col>
                             </Row>
@@ -177,29 +201,7 @@ function AdminDetailUserComponent() {
                                 </>
                             )}
                             <hr />
-                            <h5>Emails envoyés</h5>
-                            {loadingEmails ? (
-                                <Spinner animation="border" />
-                            ) : (
-                                <Table striped bordered hover responsive>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Statut</th>
-                                            <th>Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {emails.map(email => (
-                                            <tr key={email.id}>
-                                                <td>{email.id}</td>
-                                                <td>{email.status}</td>
-                                                <td>{email.type}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            )}
+                            <Button variant="info" onClick={() => navigate(`/admin/tools?userId=${id}`)}>Voir ses infos</Button>                            <Button>Voir ses mails</Button>
                         </Card.Body>
                         <Card.Footer className="text-center">
                             <Button variant="danger" className="mt-3" onClick={handleDeactivateUser}>
