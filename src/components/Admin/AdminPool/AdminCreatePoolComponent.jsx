@@ -55,7 +55,7 @@ const AdminCreatePoolComponent = () => {
         <div className="create-sondage-container">
             <h2>Créer un Sondage</h2>
             <form className="create-sondage-form" onSubmit={handleSubmit}>
-                <div className="form-group">
+                <div className="form-group visible">
                     <label>Question du sondage</label>
                     <input
                         type="text"
@@ -64,7 +64,7 @@ const AdminCreatePoolComponent = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-group visible">
                     <label>Date de début</label>
                     <input
                         type="date"
@@ -73,7 +73,7 @@ const AdminCreatePoolComponent = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-group visible">
                     <label>Date de fin</label>
                     <input
                         type="date"

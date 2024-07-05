@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
 
 function AdminListDocumentComponent() {
+    const [folders, setFolders] = useState([]);
     const [documents, setDocuments] = useState([]);
+    const [currentFolder, setCurrentFolder] = useState(null);
 
     useEffect(() => {
         fetchDocuments();
-    }, []);
+    }, [currentFolder]);
 
     const fetchDocuments = async () => {
         try {
@@ -23,10 +26,10 @@ function AdminListDocumentComponent() {
             }
 
             const data = await response.json();
+            setFolders(data.folders);
             setDocuments(data.documents);
         } catch (error) {
-            console.error('Erreur lors de la récupération des documents:', error);
-            alert("Erreur lors de la récupération des documents. Veuillez réessayer.");
+            Swal.fire('Erreur', 'Erreur lors de la récupération des documents. Veuillez réessayer.', 'error');
         }
     };
 
@@ -52,8 +55,7 @@ function AdminListDocumentComponent() {
             a.click();
             a.remove();
         } catch (error) {
-            console.error('Erreur lors du téléchargement du document:', error);
-            alert("Erreur lors du téléchargement du document. Veuillez réessayer.");
+            Swal.fire('Erreur', 'Erreur lors du téléchargement du document. Veuillez réessayer.', 'error');
         }
     };
 
@@ -70,19 +72,30 @@ function AdminListDocumentComponent() {
                 throw new Error(`Échec de la suppression du document: ${response.status} (${response.statusText})`);
             }
 
-            fetchDocuments(); // Refresh the list after deletion
+            fetchDocuments();
         } catch (error) {
-            console.error('Erreur lors de la suppression du document:', error);
-            alert("Erreur lors de la suppression du document. Veuillez réessayer.");
+            Swal.fire('Erreur', 'Erreur lors de la suppression du document. Veuillez réessayer.', 'error');
         }
     };
+
+    const handleFolderClick = (folderId) => {
+        setCurrentFolder(folderId);
+    };
+
+    const handleBackClick = () => {
+        setCurrentFolder(null);
+    };
+
+    const currentDocuments = documents.filter(doc => doc.folder && doc.folder.id === currentFolder);
+    const currentFolders = folders.filter(folder => !currentFolder || folder.id === currentFolder);
 
     return (
         <Container className="mt-5">
             <Row className="justify-content-md-center">
                 <Col md={10}>
                     <h2>Liste des Documents</h2>
-                    <Table striped bordered hover>
+                    {currentFolder && <Button variant="secondary" onClick={handleBackClick}>Retour</Button>}
+                    <Table striped bordered hover className="mt-3">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -92,7 +105,44 @@ function AdminListDocumentComponent() {
                             </tr>
                         </thead>
                         <tbody>
-                            {documents.map((document) => (
+                            {currentFolders.map((folder) => (
+                                <tr key={folder.id}>
+                                    <td>{folder.id}</td>
+                                    <td>{folder.name}</td>
+                                    <td>Dossier</td>
+                                    <td>
+                                        <Button
+                                            variant="info"
+                                            onClick={() => handleFolderClick(folder.id)}
+                                        >
+                                            Ouvrir
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {currentDocuments.map((document) => (
+                                <tr key={document.id}>
+                                    <td>{document.id}</td>
+                                    <td>{document.name}</td>
+                                    <td>{document.type}</td>
+                                    <td>
+                                        <Button
+                                            variant="primary"
+                                            className="me-2"
+                                            onClick={() => handleDownload(document.id)}
+                                        >
+                                            Télécharger
+                                        </Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => handleDelete(document.id)}
+                                        >
+                                            Supprimer
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {!currentFolder && documents.filter(doc => !doc.folder).map((document) => (
                                 <tr key={document.id}>
                                     <td>{document.id}</td>
                                     <td>{document.name}</td>
