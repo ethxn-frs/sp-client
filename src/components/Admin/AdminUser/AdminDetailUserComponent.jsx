@@ -143,6 +143,37 @@ function AdminDetailUserComponent() {
             });
         }
     };
+    
+    const handleReactivateUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/users/${id}/reactivate`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la réactivation de l\'utilisateur');
+            }
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Utilisateur réactivé avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate('/admin/users');
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
 
     if (!user) {
         return <Spinner animation="border" />;
@@ -204,9 +235,16 @@ function AdminDetailUserComponent() {
                             <Button variant="info" onClick={() => navigate(`/admin/tools?userId=${id}`)}>Voir ses infos</Button>                            <Button>Voir ses mails</Button>
                         </Card.Body>
                         <Card.Footer className="text-center">
-                            <Button variant="danger" className="mt-3" onClick={handleDeactivateUser}>
-                                Désactiver l'utilisateur
-                            </Button>
+
+                            {user.deleted ?
+                                <Button variant="danger" className="mt-3" onClick={handleReactivateUser}>
+                                    Réactiver l'utilisateur
+                                </Button>
+                                :
+                                <Button variant="danger" className="mt-3" onClick={handleDeactivateUser}>
+                                    Désactiver l'utilisateur
+                                </Button>}
+
                             <Button variant="secondary" className="mt-3 ml-2" onClick={() => navigate('/admin/users')}>
                                 Retour à la liste
                             </Button>
