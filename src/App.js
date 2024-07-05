@@ -49,6 +49,8 @@ import AdminToolsComponent from './components/Admin/AdminTools/AdminToolsCompone
 import TrainingCenterHomeComponent from './components/TrainingCenter/TrainingCenterHomeComponent';
 import AdminListPlayerProposalComponent from './components/Admin/AdminPlayerProposal/AdminListPlayerProposalComponent';
 import AdminListEmailComponent from './components/Admin/AdminEmail/AdminListEmailComponent';
+import AdminListMessageComponent from './components/Admin/AdminMessage/AdminListMessageComponent';
+import AdminDetailMessageComponent from './components/Admin/AdminMessage/AdminDetailMessageComponent';
 
 function App() {
   return (
@@ -120,6 +122,9 @@ function App() {
               <Route path="admin/transactions" element={<AdminListTransactionsComponent />} />
 
               <Route path="admin/emails" element={<AdminListEmailComponent/>} />
+
+              <Route path="admin/messages" element={<AdminListMessageComponent/>}/>
+              <Route path="admin/messages/:id" element={<AdminDetailMessageComponent/>}/>
 
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>

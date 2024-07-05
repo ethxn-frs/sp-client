@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './LoginComponent.css';
@@ -13,6 +13,31 @@ function LoginComponent() {
     const [errorMessage, setErrorMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [forgotEmail, setForgotEmail] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const role = user.role.role;
+            switch (role) {
+                case 'ADMIN':
+                    navigate('/admin');
+                    break;
+                case 'CLUB':
+                case 'ADMIN_CLUB':
+                    navigate('/club');
+                    break;
+                case 'FORMATIONCENTER':
+                case 'ADMIN_FORMATIONCENTER':
+                    navigate('/training-center');
+                    break;
+                case 'PLAYER':
+                    navigate('/player');
+                    break;
+                default:
+                    navigate('/dashboard');
+            }
+        }
+    }, [navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -39,25 +64,33 @@ function LoginComponent() {
 
             if (result.token) {
                 localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+                localStorage.setItem('user', JSON.stringify(result.user));
 
                 if (!result.user.firstConnection) {
                     navigate('/login/first-connection');
                 } else {
                     const role = result.user.role.role;
-                    if (role === 'ADMIN') {
-                        navigate('/admin');
-                    } else if (role === 'CLUB' || role === 'ADMIN_CLUB') {
-                        navigate('/club');
-                    } else if (role === 'ADMIN_FORMATIONCENTER' || role === 'FORMATIONCENTER') {
-                        navigate('/training-center');
-                    } else if (role === 'PLAYER') {
-                        navigate('/player');
+                    switch (role) {
+                        case 'ADMIN':
+                            navigate('/admin');
+                            break;
+                        case 'CLUB':
+                        case 'ADMIN_CLUB':
+                            navigate('/club');
+                            break;
+                        case 'FORMATIONCENTER':
+                        case 'ADMIN_FORMATIONCENTER':
+                            navigate('/training-center');
+                            break;
+                        case 'PLAYER':
+                            navigate('/player');
+                            break;
+                        default:
+                            navigate('/dashboard');
                     }
                 }
             } else {
-                // Si A2F est activé, redirige vers la page de vérification du code A2F
-                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+                localStorage.setItem('user', JSON.stringify(result.user));
                 navigate('/login/a2f');
             }
 

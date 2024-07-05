@@ -14,7 +14,7 @@ const AboutUsComponent = () => {
             <div className="main-home-page">
                 <div className="about-page">
                     <div className="about-container">
-                        <h2>About Us</h2>
+                        <h2>A propos de nous</h2>
                         <p>SportVision est une organisation non gouvernementale dédiée à l'amélioration de la vie des jeunes
                             défavorisés par le pouvoir transformateur du sport. Fondée en 2010, notre mission est de
                             promouvoir l'inclusion sociale, l'éducation et le développement personnel à travers des
