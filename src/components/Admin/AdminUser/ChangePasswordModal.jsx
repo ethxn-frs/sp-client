@@ -24,7 +24,7 @@ const ChangePasswordModal = ({ show, handleClose, userId }) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:4000/users/${userId}/change-password`, {
+            const response = await fetch(`http://localhost:3030/users/${userId}/change-password`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

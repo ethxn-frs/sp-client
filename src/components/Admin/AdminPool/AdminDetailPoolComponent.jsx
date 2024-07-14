@@ -19,7 +19,7 @@ function AdminDetailPoolComponent() {
     useEffect(() => {
         const fetchSondage = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/sondages/${id}`);
+                const response = await fetch(`http://localhost:3030/sondages/${id}`);
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération du sondage');
                 }
@@ -33,7 +33,7 @@ function AdminDetailPoolComponent() {
 
         const fetchAnswers = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/sondages/${id}/answers`);
+                const response = await fetch(`http://localhost:3030/sondages/${id}/answers`);
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des réponses');
                 }

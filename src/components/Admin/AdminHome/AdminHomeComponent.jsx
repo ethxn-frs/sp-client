@@ -18,19 +18,19 @@ function AdminHome() {
     }, []);
 
     const fetchStats = async () => {
-        const response = await fetch('http://localhost:4000/stats');
+        const response = await fetch('http://localhost:3030/stats');
         const data = await response.json();
         setStats(data);
     };
 
     const fetchRecentUsers = async () => {
-        const response = await fetch('http://localhost:4000/users/recents');
+        const response = await fetch('http://localhost:3030/users/recents');
         const data = await response.json();
         setRecentUsers(data);
     };
 
     const fetchRecentEvents = async () => {
-        const response = await fetch('http://localhost:4000/events/recents');
+        const response = await fetch('http://localhost:3030/events/recents');
         const data = await response.json();
         setRecentEvents(data);
     };

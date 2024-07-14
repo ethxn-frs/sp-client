@@ -17,7 +17,7 @@ const AdminInvitationComponent = () => {
     useEffect(() => {
         const fetchInvitations = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userId}/event-invitations`, {
+                const response = await fetch(`http://localhost:3030/users/${userId}/event-invitations`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -46,7 +46,7 @@ const AdminInvitationComponent = () => {
 
     const handleInvitationResponse = async (invitationId, status) => {
         try {
-            const response = await fetch(`http://localhost:4000/invitations/${invitationId}/${status}`, {
+            const response = await fetch(`http://localhost:3030/invitations/${invitationId}/${status}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

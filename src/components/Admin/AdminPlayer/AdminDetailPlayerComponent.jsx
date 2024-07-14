@@ -12,7 +12,7 @@ function AdminDetailPlayerComponent() {
     useEffect(() => {
         const fetchPlayer = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/players/${id}`);
+                const response = await fetch(`http://localhost:3030/players/${id}`);
                 const data = await response.json();
                 setPlayer(data);
             } catch (error) {
@@ -83,6 +83,12 @@ function AdminDetailPlayerComponent() {
                             </ListGroup>
                         </Card.Body>
                         <Card.Footer className="text-center">
+                            <Button variant="warning" className="mt-3" onClick={() => navigate('/admin/players')}>
+                                Regénérer sa fiche
+                            </Button>
+                            <Button variant="danger" className="mt-3" onClick={() => navigate('/admin/players')}>
+                                Désactiver
+                            </Button>
                             <Button variant="secondary" className="mt-3" onClick={() => navigate('/admin/players')}>
                                 Retour à la liste
                             </Button>

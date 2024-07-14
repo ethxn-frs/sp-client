@@ -4,13 +4,11 @@ import React, { useCallback, useEffect } from 'react';
 
 const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }) => {
     useEffect(() => {
-        console.log("Updated amount in PaypalPaymentComponent: ", amount);
     }, [amount]);
 
     const createOrder = useCallback(async (data, actions) => {
         try {
-            console.log(amount)
-            const response = await fetch("http://localhost:4000/transactions/create-paypal-order", {
+            const response = await fetch("http://localhost:3030/transactions/create-paypal-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -28,7 +26,7 @@ const PaypalPaymentComponent = ({ amount, type, cotisationId, onPaymentSuccess }
 
     const onApprove = async (data, actions) => {
         try {
-            const response = await fetch("http://localhost:4000/transactions/capture-paypal-order", {
+            const response = await fetch("http://localhost:3030/transactions/capture-paypal-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

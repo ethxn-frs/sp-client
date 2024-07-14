@@ -9,7 +9,7 @@ function AdminListFormationCenterComponent() {
 
     const fetchFormationCenters = async () => {
         try {
-            const response = await fetch('http://localhost:4000/formations-centers');
+            const response = await fetch('http://localhost:3030/formations-centers');
             if (!response.ok) {
                 throw new Error(`Échec de la récupération des centres de formation: ${response.status} (${response.statusText})`);
             }
@@ -28,7 +28,7 @@ function AdminListFormationCenterComponent() {
     const handleDelete = async (id) => {
         if (window.confirm("Êtes-vous sûr de vouloir supprimer ce centre de formation ?")) {
             try {
-                const response = await fetch(`http://localhost:4000/formations-centers/${id}`, {
+                const response = await fetch(`http://localhost:3030/formations-centers/${id}`, {
                     method: 'DELETE',
                 });
 

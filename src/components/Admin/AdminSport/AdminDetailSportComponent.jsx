@@ -15,7 +15,7 @@ function AdminDetailSportComponent() {
     useEffect(() => {
         const fetchSport = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/sports/${id}`);
+                const response = await fetch(`http://localhost:3030/sports/${id}`);
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération du sport');
                 }
@@ -23,17 +23,17 @@ function AdminDetailSportComponent() {
                 setSport(data);
 
                 // Fetch associated players
-                const playersResponse = await fetch(`http://localhost:4000/sports/${id}/players`);
+                const playersResponse = await fetch(`http://localhost:3030/sports/${id}/players`);
                 const playersData = await playersResponse.json();
                 setPlayers(playersData);
 
                 // Fetch associated formation centers
-                const formationCentersResponse = await fetch(`http://localhost:4000/sports/${id}/formations-centers`);
+                const formationCentersResponse = await fetch(`http://localhost:3030/sports/${id}/formations-centers`);
                 const formationCentersData = await formationCentersResponse.json();
                 setFormationCenters(formationCentersData);
 
                 // Fetch associated clubs (assuming there's an endpoint for clubs)
-                const clubsResponse = await fetch(`http://localhost:4000/sports/${id}/clubs`);
+                const clubsResponse = await fetch(`http://localhost:3030/sports/${id}/clubs`);
                 const clubsData = await clubsResponse.json();
                 setClubs(clubsData);
             } catch (error) {

@@ -9,6 +9,7 @@ import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
 import UserInfoAlertComponent from '../Admin/AdminUser/AdminUserInfoAlertComponent';
 import CotisationWarning from '../Cotisation/CotisationWarning';
 import DocumentsModal from '../Document/DocumentsModal';
+import UploadDialogComponent from '../UploadDialog/UploadDialogComponent';
 
 const TrainingCenterAccountComponent = ({ setActiveTab }) => {
     const [user, setUser] = useState(null);
@@ -17,9 +18,10 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
     const [cotisation, setCotisation] = useState(null);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
     const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-    const [showDocumentsModal, setShowDocumentsModal] = useState(false); 
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false);
     const [showPaypal, setShowPaypal] = useState(false);
     const [amount, setAmount] = useState(0);
+    const [showUploadDialog, setShowUploadDialog] = useState(false);
 
     const userStorage = JSON.parse(localStorage.getItem('user'));
     const userId = userStorage.id;
@@ -36,7 +38,7 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userId}`, {
+                const response = await fetch(`http://localhost:3030/users/${userId}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -57,7 +59,7 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
 
         const fetchCotisation = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userId}/cotisation`, {
+                const response = await fetch(`http://localhost:3030/users/${userId}/cotisation`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -99,7 +101,7 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
 
     const handlePaymentSuccess = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${userId}/cotisation`, {
+            const response = await fetch(`http://localhost:3030/users/${userId}/cotisation`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -138,9 +140,11 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
                             <Row>
                                 <Col md={4} className="text-center">
                                     <Image
-                                        src={user.image ? user.image : 'https://via.placeholder.com/150'}
+                                        src={user.image ? user.image.path : 'https://via.placeholder.com/150'}
                                         roundedCircle
                                         className="profile-img mb-3"
+                                        onClick={() => setShowUploadDialog(true)}
+                                        style={{ cursor: 'pointer' }}
                                     />
                                     <Dropdown>
                                         <Dropdown.Toggle variant="secondary" id="dropdown-basic">
@@ -181,7 +185,7 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
                             <Row>
                                 <Col xs={6}>
                                     <p><strong>Montant:</strong> {cotisation ? `${cotisation.amount} EUR` : 'Chargement...'}</p>
-                                    <p><strong>Date limite de paiement:</strong> {cotisation ? new Date(cotisation.dueDate).toLocaleDateString() : 'Chargement...'}</p>
+                                    <p><strong>Date limite de paiement:</strong> {cotisation ? new Date(cotisation.limitDate).toLocaleDateString() : 'Chargement...'}</p>
                                 </Col>
                                 <Col xs={6}>
                                     <p><strong>Status:</strong> {cotisation ? (cotisation.status === 'paid' ? <span className="text-success">Payé</span> : <span className="text-danger">Non payé</span>) : 'Chargement...'}</p>
@@ -225,7 +229,14 @@ const TrainingCenterAccountComponent = ({ setActiveTab }) => {
             <DocumentsModal
                 show={showDocumentsModal}
                 handleClose={() => setShowDocumentsModal(false)}
-                userId={userId}
+                userId
+                ={userId}
+            />
+            <UploadDialogComponent
+                open={showUploadDialog}
+                handleClose={() => setShowUploadDialog(false)}
+                entityType="user"
+                id={userId}
             />
         </Container>
     );

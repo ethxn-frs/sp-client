@@ -11,7 +11,7 @@ const ParticipantsModal = ({ isOpen, onRequestClose, eventId }) => {
         const fetchParticipants = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`http://localhost:4000/events/${eventId}/invitations`);
+                const response = await fetch(`http://localhost:3030/events/${eventId}/invitations`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch participants');
                 }

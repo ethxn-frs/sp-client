@@ -14,7 +14,7 @@ const AdminListEventProposalComponent = () => {
     useEffect(() => {
         const fetchEventProposals = async () => {
             try {
-                const response = await fetch('http://localhost:4000/eventproposals', {
+                const response = await fetch('http://localhost:3030/eventproposals', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -36,7 +36,7 @@ const AdminListEventProposalComponent = () => {
 
     const handleAcceptProposal = async (proposalId) => {
         try {
-            const response = await fetch(`http://localhost:4000/events/create-from/proposal/${proposalId}`, {
+            const response = await fetch(`http://localhost:3030/events/create-from/proposal/${proposalId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -68,7 +68,7 @@ const AdminListEventProposalComponent = () => {
 
     const handleRefuseProposal = async (proposalId) => {
         try {
-            const response = await fetch(`http://localhost:4000/eventproposals/${proposalId}`, {
+            const response = await fetch(`http://localhost:3030/eventproposals/${proposalId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

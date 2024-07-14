@@ -55,7 +55,7 @@ const ClubProposeMeetingModal = ({ show, handleClose, players, selectedPlayer, c
         };
 
         try {
-            const response = await fetch('http://localhost:4000/eventproposals', {
+            const response = await fetch('http://localhost:3030/eventproposals', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,7 +68,6 @@ const ClubProposeMeetingModal = ({ show, handleClose, players, selectedPlayer, c
             }
 
             const result = await response.json();
-            console.log('Event proposal created:', result);
             Swal.fire({
                 title: 'Proposition envoyée!',
                 text: 'Votre proposition a bien été reçue. Nous reviendrons vers vous dès que possible.',
@@ -77,7 +76,6 @@ const ClubProposeMeetingModal = ({ show, handleClose, players, selectedPlayer, c
             });
             handleClose();
         } catch (error) {
-            console.error('Error creating event proposal:', error);
             Swal.fire({
                 title: 'Erreur',
                 text: 'Impossible de créer cette proposition. Veuillez réessayer plus tard.',

@@ -25,7 +25,7 @@ function AdminEditPlayerComponent() {
     useEffect(() => {
         const fetchFormationCenters = async () => {
             try {
-                const response = await fetch('http://localhost:4000/formations-centers');
+                const response = await fetch('http://localhost:3030/formations-centers');
                 const data = await response.json();
                 setFormationCenters(data.formationsCenters || []);
             } catch (error) {
@@ -36,7 +36,7 @@ function AdminEditPlayerComponent() {
 
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports || []);
             } catch (error) {
@@ -47,7 +47,7 @@ function AdminEditPlayerComponent() {
 
         const fetchPlayer = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/players/${id}`);
+                const response = await fetch(`http://localhost:3030/players/${id}`);
                 const data = await response.json();
                 const playerInitialData = {
                     id: data.id,
@@ -116,7 +116,7 @@ function AdminEditPlayerComponent() {
         }, {});
 
         try {
-            const response = await fetch(`http://localhost:4000/players/${id}`, {
+            const response = await fetch(`http://localhost:3030/players/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

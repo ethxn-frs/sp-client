@@ -9,7 +9,6 @@ import TrainingCenterManageComponent from './TrainingCenterManageComponent';
 const TrainingCenterHomeComponent = () => {
     const [activeTab, setActiveTab] = useState('Compte');
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.role);
 
     const renderTabContent = () => {
         switch (activeTab) {

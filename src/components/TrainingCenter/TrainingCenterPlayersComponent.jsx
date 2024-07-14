@@ -26,7 +26,7 @@ const TrainingCenterPlayersComponent = () => {
     useEffect(() => {
         const fetchFormationCenter = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userStorage.id}/formation-center`, {
+                const response = await fetch(`http://localhost:3030/users/${userStorage.id}/formation-center`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -47,7 +47,7 @@ const TrainingCenterPlayersComponent = () => {
 
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports);
             } catch (error) {
@@ -61,7 +61,7 @@ const TrainingCenterPlayersComponent = () => {
 
     const fetchPlayers = async (formationCenterId) => {
         try {
-            const response = await fetch(`http://localhost:4000/formation-centers/${formationCenterId}/players`);
+            const response = await fetch(`http://localhost:3030/formation-centers/${formationCenterId}/players`);
             const data = await response.json();
             setPlayers(data);
             setLoading(false);
@@ -83,7 +83,7 @@ const TrainingCenterPlayersComponent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/playerProposals', {
+            const response = await fetch('http://localhost:3030/playerProposals', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const TrainingCenterPlayersComponent = () => {
                 {filteredPlayers.map(player => (
                     <Col md={4} key={player.id} className="mb-4">
                         <Card className="player-card shadow-sm">
-                            <Card.Img variant="top" src={`https://via.placeholder.com/150`} />
+                            <Card.Img variant="top" src={player.image ? player.image.path : `https://via.placeholder.com/150`} />
                             <Card.Body>
                                 <Card.Title>{player.firstName} {player.lastName}</Card.Title>
                                 <Card.Text>

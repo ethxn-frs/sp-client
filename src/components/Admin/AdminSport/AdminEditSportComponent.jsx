@@ -11,7 +11,7 @@ function AdminEditSportComponent() {
     useEffect(() => {
         const fetchSport = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/sports/${id}`);
+                const response = await fetch(`http://localhost:3030/sports/${id}`);
                 const data = await response.json();
                 setSport(data);
             } catch (error) {
@@ -29,7 +29,7 @@ function AdminEditSportComponent() {
     const handleSaveChanges = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:4000/sports/${id}`, {
+            const response = await fetch(`http://localhost:3030/sports/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

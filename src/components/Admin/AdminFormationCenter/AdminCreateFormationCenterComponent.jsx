@@ -30,7 +30,7 @@ function AdminCreateFormationCenterComponent() {
 
     const fetchSports = async () => {
         try {
-            const response = await fetch('http://localhost:4000/sports');
+            const response = await fetch('http://localhost:3030/sports');
             const sportData = await response.json();
             setSports(sportData.sports);
         } catch (error) {
@@ -64,7 +64,7 @@ function AdminCreateFormationCenterComponent() {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/formations-centers', {
+            const response = await fetch('http://localhost:3030/formations-centers', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

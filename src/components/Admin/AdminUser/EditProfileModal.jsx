@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import ChangePasswordModal from './ChangePasswordModal';
 import Swal from 'sweetalert2';
+import UploadDialogComponent from '../../UploadDialog/UploadDialogComponent';
 
 const EditProfileModal = ({ show, handleClose, user }) => {
     const [formData, setFormData] = useState({
@@ -12,19 +13,24 @@ const EditProfileModal = ({ show, handleClose, user }) => {
         newsletter: user.newsletter,
         a2fEnabled: user.a2fEnabled,
     });
-
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+    const [showUploadDialog, setShowUploadDialog] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({ 
-            ...formData, 
-            [name]: type === 'checkbox' ? checked : value 
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value
         });
     };
 
     const openChangePasswordModal = (open) => {
         setShowChangePasswordModal(open);
+        handleClose();
+    }
+
+    const openUploadDialog = (open) => {
+        setShowUploadDialog(open);
         handleClose();
     }
 
@@ -39,7 +45,7 @@ const EditProfileModal = ({ show, handleClose, user }) => {
         if (formData.a2fEnabled !== user.a2fEnabled) updatedFields.a2fEnabled = formData.a2fEnabled;
 
         try {
-            const response = await fetch(`http://localhost:4000/users/${user.id}`, {
+            const response = await fetch(`http://localhost:3030/users/${user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,21 +139,21 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                             />
                         </Form.Group>
                         <Form.Group controlId="formNewsletter">
-                            <Form.Check 
-                                type="checkbox" 
-                                name="newsletter" 
-                                label="S'abonner à la newsletter" 
-                                checked={formData.newsletter} 
-                                onChange={handleChange} 
+                            <Form.Check
+                                type="checkbox"
+                                name="newsletter"
+                                label="S'abonner à la newsletter"
+                                checked={formData.newsletter}
+                                onChange={handleChange}
                             />
                         </Form.Group>
                         <Form.Group controlId="formA2FEnabled">
-                            <Form.Check 
-                                type="checkbox" 
-                                name="a2fEnabled" 
-                                label="Activer l'authentification à deux facteurs" 
-                                checked={formData.a2fEnabled} 
-                                onChange={handleChange} 
+                            <Form.Check
+                                type="checkbox"
+                                name="a2fEnabled"
+                                label="Activer l'authentification à deux facteurs"
+                                checked={formData.a2fEnabled}
+                                onChange={handleChange}
                             />
                         </Form.Group>
                         <div className="d-flex justify-content-end">
@@ -160,6 +166,9 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                             <Button variant="link" onClick={() => openChangePasswordModal(true)} className="text-decoration-none">
                                 Modifier le mot de passe
                             </Button>
+                            <Button variant="warning" onClick={() => openUploadDialog(true)} className="text-decoration-none">
+                                Modifier photo de profil
+                            </Button>
                         </div>
                     </Form>
                 </Modal.Body>
@@ -168,6 +177,12 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                 show={showChangePasswordModal}
                 handleClose={() => setShowChangePasswordModal(false)}
                 userId={user.id}
+            />
+            <UploadDialogComponent
+                open={showUploadDialog}
+                handleClose={() => setShowUploadDialog(false)}
+                entityType={"user"}
+                id={user.id}
             />
         </>
     );

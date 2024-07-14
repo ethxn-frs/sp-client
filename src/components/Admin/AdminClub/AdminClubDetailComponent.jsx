@@ -13,7 +13,7 @@ function AdminDetailClubComponent() {
     useEffect(() => {
         const fetchClub = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/clubs/${id}`);
+                const response = await fetch(`http://localhost:3030/clubs/${id}`);
                 const data = await response.json();
                 setClub(data);
             } catch (error) {

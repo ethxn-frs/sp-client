@@ -14,7 +14,7 @@ const AdminCreatePoolComponent = () => {
         const userId = 1;
 
         try {
-            const response = await fetch('http://localhost:4000/sondages', {
+            const response = await fetch('http://localhost:3030/sondages', {
                 method: 'POST',
                 body: JSON.stringify({
                     name,
@@ -32,7 +32,6 @@ const AdminCreatePoolComponent = () => {
             }
 
             const createdSondage = await response.json();
-            console.log(createdSondage)
             alert('Sondage créé avec succès!');
             // Reset form
             setName('');

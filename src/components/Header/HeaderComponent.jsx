@@ -28,6 +28,8 @@ const HeaderComponent = ({ handleLogout }) => {
             case 'FORMATIONCENTER':
             case 'ADMIN_FORMATIONCENTER':
                 return '/training-center';
+            case 'PLAYER':
+                return '/player'
             default:
                 return '/dashboard';
         }

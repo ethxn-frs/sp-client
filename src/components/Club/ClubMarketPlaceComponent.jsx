@@ -19,7 +19,7 @@ const ClubMarketPlaceComponent = () => {
     useEffect(() => {
         const fetchClub = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userStorage.id}/club`, {
+                const response = await fetch(`http://localhost:3030/users/${userStorage.id}/club`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -39,7 +39,7 @@ const ClubMarketPlaceComponent = () => {
 
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports);
             } catch (error) {
@@ -49,7 +49,7 @@ const ClubMarketPlaceComponent = () => {
 
         const fetchPlayers = async () => {
             try {
-                const response = await fetch('http://localhost:4000/players');
+                const response = await fetch('http://localhost:3030/players');
                 const data = await response.json();
                 setPlayers(data.players);
                 setLoading(false);

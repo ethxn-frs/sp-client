@@ -8,7 +8,7 @@ const TrainingCenterInviteUserComponent = ({ show, handleClose, hostId }) => {
     const handleInviteUser = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:4000/formation-centers/${hostId}/invite`, {
+            const response = await fetch(`http://localhost:3030/formation-centers/${hostId}/invite`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

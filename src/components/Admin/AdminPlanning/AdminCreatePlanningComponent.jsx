@@ -24,7 +24,7 @@ function AdminCreatePlanningComponent() {
     setLoading(true);
     setErrorMessage('');  // Clear any previous error message
     try {
-      const response = await fetch('http://localhost:4000/events', {
+      const response = await fetch('http://localhost:3030/events', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -80,7 +80,7 @@ function AdminCreatePlanningComponent() {
 
   const handleSaveEvent = async (newEvent) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/${newEvent.id}`, {
+      const response = await fetch(`http://localhost:3030/events/${newEvent.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newEvent),
@@ -96,7 +96,7 @@ function AdminCreatePlanningComponent() {
 
   const handleDelete = async (eventId) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/${eventId}`, {
+      const response = await fetch(`http://localhost:3030/events/${eventId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });

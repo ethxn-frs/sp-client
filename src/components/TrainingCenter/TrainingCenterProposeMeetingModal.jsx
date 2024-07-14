@@ -9,7 +9,7 @@ const TrainingCenterProposeMeetingModal = ({ show, handleClose, players, selecte
     const handleProposeMeeting = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:4000/meetings`, {
+            const response = await fetch(`http://localhost:3030/meetings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

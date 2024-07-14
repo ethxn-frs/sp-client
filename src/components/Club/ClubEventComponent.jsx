@@ -28,7 +28,7 @@ const ClubEventComponent = () => {
 
     const fetchClub = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${userId}/club`, {
+            const response = await fetch(`http://localhost:3030/users/${userId}/club`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -51,7 +51,7 @@ const ClubEventComponent = () => {
         setLoading(true);
         setErrorMessage('');
         try {
-            const response = await fetch('http://localhost:4000/events', {
+            const response = await fetch('http://localhost:3030/events', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -83,7 +83,7 @@ const ClubEventComponent = () => {
 
     const fetchInvitations = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${userId}/event-invitations`);
+            const response = await fetch(`http://localhost:3030/users/${userId}/event-invitations`);
             if (!response.ok) {
                 throw new Error(`Error fetching invitations: ${response.status} (${response.statusText})`);
             }
@@ -96,7 +96,7 @@ const ClubEventComponent = () => {
 
     const fetchPlayers = async () => {
         try {
-            const response = await fetch('http://localhost:4000/players');
+            const response = await fetch('http://localhost:3030/players');
             const data = await response.json();
             setPlayers(data.players);
         } catch (error) {
@@ -129,7 +129,7 @@ const ClubEventComponent = () => {
 
     const handleInvitationResponse = async (invitationId, status) => {
         try {
-            const response = await fetch(`http://localhost:4000/invitations/${invitationId}/${status}`, {
+            const response = await fetch(`http://localhost:3030/invitations/${invitationId}/${status}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

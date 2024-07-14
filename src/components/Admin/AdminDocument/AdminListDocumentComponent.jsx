@@ -14,7 +14,7 @@ function AdminListDocumentComponent() {
 
     const fetchDocuments = async () => {
         try {
-            const response = await fetch('http://localhost:4000/documents', {
+            const response = await fetch('http://localhost:3030/documents', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function AdminListDocumentComponent() {
 
     const handleDownload = async (documentId) => {
         try {
-            const response = await fetch(`http://localhost:4000/documents/${documentId}/download`, {
+            const response = await fetch(`http://localhost:3030/documents/${documentId}/download`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function AdminListDocumentComponent() {
 
     const handleDelete = async (documentId) => {
         try {
-            const response = await fetch(`http://localhost:4000/documents/${documentId}`, {
+            const response = await fetch(`http://localhost:3030/documents/${documentId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

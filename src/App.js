@@ -51,6 +51,7 @@ import AdminListPlayerProposalComponent from './components/Admin/AdminPlayerProp
 import AdminListEmailComponent from './components/Admin/AdminEmail/AdminListEmailComponent';
 import AdminListMessageComponent from './components/Admin/AdminMessage/AdminListMessageComponent';
 import AdminDetailMessageComponent from './components/Admin/AdminMessage/AdminDetailMessageComponent';
+import PlayerHomeComponent from './components/Player/PlayerHomeComponent';
 
 function App() {
   return (
@@ -68,7 +69,8 @@ function App() {
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
             <Route path="/club" element={<ClubHomeComponent />} />
-            <Route path="/training-center" element={<TrainingCenterHomeComponent/>} />
+            <Route path="/training-center" element={<TrainingCenterHomeComponent />} />
+            <Route path="/player" element={<PlayerHomeComponent />} />
 
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />
@@ -121,10 +123,10 @@ function App() {
 
               <Route path="admin/transactions" element={<AdminListTransactionsComponent />} />
 
-              <Route path="admin/emails" element={<AdminListEmailComponent/>} />
+              <Route path="admin/emails" element={<AdminListEmailComponent />} />
 
-              <Route path="admin/messages" element={<AdminListMessageComponent/>}/>
-              <Route path="admin/messages/:id" element={<AdminDetailMessageComponent/>}/>
+              <Route path="admin/messages" element={<AdminListMessageComponent />} />
+              <Route path="admin/messages/:id" element={<AdminDetailMessageComponent />} />
 
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>

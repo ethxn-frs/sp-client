@@ -14,7 +14,7 @@ function AdminDetailMessageComponent() {
     useEffect(() => {
         const fetchMessage = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/contacts/${id}`);
+                const response = await fetch(`http://localhost:3030/contacts/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch message');
                 }

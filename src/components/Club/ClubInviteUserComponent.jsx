@@ -19,7 +19,7 @@ const ClubInviteUserComponent = ({ show, handleClose, hostId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:4000/users/${hostId}/invite-user`, {
+            const response = await fetch(`http://localhost:3030/users/${hostId}/invite-user`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

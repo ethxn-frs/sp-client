@@ -10,7 +10,7 @@ function AdminListMessageComponent() {
     
     const fetchMessages = async () => {
         try {
-            const response = await fetch('http://localhost:4000/contacts');
+            const response = await fetch('http://localhost:3030/contacts');
             const data = await response.json();
             setMessages(data.contacts);
         } catch (error) {
@@ -24,7 +24,7 @@ function AdminListMessageComponent() {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:4000/contacts/${id}`, {
+            await fetch(`http://localhost:3030/contacts/${id}`, {
                 method: 'DELETE',
             });
             fetchMessages();

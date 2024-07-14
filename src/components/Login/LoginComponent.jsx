@@ -43,7 +43,7 @@ function LoginComponent() {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/users/auth/login', {
+            const response = await fetch('http://localhost:3030/users/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ function LoginComponent() {
 
     const handleForgotPassword = async () => {
         try {
-            await fetch('http://localhost:4000/users/auth/lost-password', {
+            await fetch('http://localhost:3030/users/auth/lost-password', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

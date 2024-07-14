@@ -6,6 +6,7 @@ import TrainingCenterInviteUserComponent from './TrainingCenterInviteUserCompone
 import Swal from 'sweetalert2';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
+import UploadDialogComponent from '../UploadDialog/UploadDialogComponent';
 
 const TrainingCenterManageComponent = () => {
     const userStorage = JSON.parse(localStorage.getItem('user'));
@@ -27,11 +28,12 @@ const TrainingCenterManageComponent = () => {
         email: '',
         image: null
     });
+    const [showUploadDialog, setShowUploadDialog] = useState(false);
 
     useEffect(() => {
         const fetchFormationCenterId = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userStorage.id}/formation-center`, {
+                const response = await fetch(`http://localhost:3030/users/${userStorage.id}/formation-center`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -54,7 +56,7 @@ const TrainingCenterManageComponent = () => {
         if (formationCenterId) {
             const fetchFormationCenter = async () => {
                 try {
-                    const response = await fetch(`http://localhost:4000/formation-centers/${formationCenterId}`, {
+                    const response = await fetch(`http://localhost:3030/formation-centers/${formationCenterId}`, {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
@@ -79,7 +81,7 @@ const TrainingCenterManageComponent = () => {
 
             const fetchUsers = async () => {
                 try {
-                    const response = await fetch(`http://localhost:4000/formation-centers/${formationCenterId}/users`, {
+                    const response = await fetch(`http://localhost:3030/formation-centers/${formationCenterId}/users`, {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
@@ -98,7 +100,7 @@ const TrainingCenterManageComponent = () => {
 
             const fetchCotisation = async () => {
                 try {
-                    const response = await fetch(`http://localhost:4000/formation-centers/${formationCenterId}/cotisations`, {
+                    const response = await fetch(`http://localhost:3030/formation-centers/${formationCenterId}/cotisations`, {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
@@ -130,7 +132,7 @@ const TrainingCenterManageComponent = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:4000/users/${userId}/delete`, {
+                    const response = await fetch(`http://localhost:3030/users/${userId}/delete`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -181,7 +183,7 @@ const TrainingCenterManageComponent = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:4000/formation-centers/${formationCenterId}`, {
+            const response = await fetch(`http://localhost:3030/formation-centers/${formationCenterId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -224,7 +226,7 @@ const TrainingCenterManageComponent = () => {
 
     const handlePaymentSuccess = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/cotisations/${cotisation.id}/paid`, {
+            const response = await fetch(`http://localhost:3030/cotisations/${cotisation.id}/paid`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -260,9 +262,11 @@ const TrainingCenterManageComponent = () => {
                                 <Row>
                                     <Col md={4} className="text-center">
                                         <Image
-                                            src={formationCenter.image ? formationCenter.image : 'https://via.placeholder.com/150'}
+                                            src={formationCenter.image ? formationCenter.image.path : 'https://via.placeholder.com/150'}
                                             roundedCircle
                                             className="profile-img mb-3"
+                                            onClick={() => setShowUploadDialog(true)}
+                                            style={{ cursor: 'pointer' }}
                                         />
                                         <Row>
                                             <Button variant="secondary" onClick={() => setShowEditFormationCenterModal(true)}>
@@ -333,7 +337,7 @@ const TrainingCenterManageComponent = () => {
                             <Row>
                                 <Col xs={6}>
                                     <p><strong>Montant:</strong> {cotisation ? `${cotisation.amount} EUR` : 'Chargement...'}</p>
-                                    <p><strong>Date limite de paiement:</strong> {cotisation ? new Date(cotisation.dueDate).toLocaleDateString() : 'Chargement...'}</p>
+                                    <p><strong>Date limite de paiement:</strong> {cotisation ? new Date(cotisation.limitDate).toLocaleDateString() : 'Chargement...'}</p>
                                 </Col>
                                 <Col xs={6}>
                                     <p><strong>Status:</strong> {cotisation ? (cotisation.status === 'paid' ? <span className="text-success">Payé</span> : <span className="text-danger">Non payé</span>) : 'Chargement...'}</p>
@@ -347,11 +351,11 @@ const TrainingCenterManageComponent = () => {
 
                     {showPaypal && (
                         <PayPalScriptProvider options={initialOptions}>
-                            <PaypalPaymentComponent 
-                                amount={amount} 
-                                type={'COTISATION'} 
-                                cotisationId={cotisation ? cotisation.id : null} 
-                                onPaymentSuccess={handlePaymentSuccess} 
+                            <PaypalPaymentComponent
+                                amount={amount}
+                                type={'COTISATION'}
+                                cotisationId={cotisation ? cotisation.id : null}
+                                onPaymentSuccess={handlePaymentSuccess}
                             />
                         </PayPalScriptProvider>
                     )}
@@ -419,6 +423,12 @@ const TrainingCenterManageComponent = () => {
                     </Modal.Body>
                 </Modal>
             )}
+            <UploadDialogComponent
+                open={showUploadDialog}
+                handleClose={() => setShowUploadDialog(false)}
+                entityType="formation-center"
+                id={formationCenterId}
+            />
         </Container>
     );
 };

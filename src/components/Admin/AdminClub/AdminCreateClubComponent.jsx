@@ -20,7 +20,7 @@ function AdminCreateClubComponent() {
     useEffect(() => {
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports);
             } catch (error) {
@@ -32,7 +32,7 @@ function AdminCreateClubComponent() {
         const fetchClub = async () => {
             if (id) {
                 try {
-                    const response = await fetch(`http://localhost:4000/clubs/${id}`);
+                    const response = await fetch(`http://localhost:3030/clubs/${id}`);
                     const data = await response.json();
                     setClub({
                         ...data,
@@ -87,7 +87,7 @@ function AdminCreateClubComponent() {
         e.preventDefault();
         try {
             const method = id ? 'PUT' : 'POST';
-            const url = id ? `http://localhost:4000/clubs/${id}` : 'http://localhost:4000/clubs';
+            const url = id ? `http://localhost:3030/clubs/${id}` : 'http://localhost:3030/clubs';
             const formData = new FormData();
             formData.append('name', club.name);
             formData.append('address', club.address);

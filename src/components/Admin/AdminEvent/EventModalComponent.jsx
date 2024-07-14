@@ -34,9 +34,9 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
     const fetchOptions = async () => {
         try {
             const [clubsResponse, trainingCentersResponse, usersResponse] = await Promise.all([
-                fetch('http://localhost:4000/clubs'),
-                fetch('http://localhost:4000/formations-centers'),
-                fetch('http://localhost:4000/users')
+                fetch('http://localhost:3030/clubs'),
+                fetch('http://localhost:3030/formations-centers'),
+                fetch('http://localhost:3030/users')
             ]);
 
             if (!clubsResponse.ok || !trainingCentersResponse.ok || !usersResponse.ok) {
@@ -100,7 +100,7 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/events', {
+            const response = await fetch('http://localhost:3030/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

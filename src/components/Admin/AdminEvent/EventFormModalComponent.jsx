@@ -58,15 +58,15 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
     const getAllData = async () => {
         try {
             const [clubResponse, participantsResponse, trainingCentersResponse] = await Promise.all([
-                fetch('http://localhost:4000/clubs', {
+                fetch('http://localhost:3030/clubs', {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 }),
-                fetch('http://localhost:4000/users', {
+                fetch('http://localhost:3030/users', {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 }),
-                fetch('http://localhost:4000/formations-centers', {
+                fetch('http://localhost:3030/formations-centers', {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 })
@@ -102,8 +102,7 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
             eventData.participants = participants;
             eventData.clubs =clubs;
             eventData.trainingCenters = trainingCenters
-            console.log("savedata",eventData)
-            const response = await fetch('http://localhost:4000/events', {
+            const response = await fetch('http://localhost:3030/events', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -116,10 +115,8 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
             }
 
             const result = await response.json();
-            console.log(result);
             alert("Inscription réussie !");
         }catch(error){
-            console.log("la sauvegarde n'a pas pu être fait")
         }
     }
 
@@ -127,17 +124,11 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
     const fetchOptions = async () => {
         const data = await getAllData();
         if (data) {
-
-            console.log("data", data)
             setParticipantsOptions(data.participants);
             setClubsOptions(data.clubs);
             setTrainingCentersOptions(data.trainingCenters);
         }
     };
-
-    console.log("participants",participants);
-    console.log("trainingCenters",trainingCenters);
-    console.log("clubs",clubs)
 
     /**
      * ici nous récupérons une list d'option {clé, valeur } afin de pourvoir 
@@ -166,30 +157,23 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
      */
     const handleChangeuser = (selectedOptions) => {
         const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeuser", values);
         setParticipants(values);
     };
 
     const handleChangeclub = (selectedOptions) => {
         const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeclub", values);
         setClubs(values);
     };
 
     const handleChangeformation = (selectedOptions) => {
         const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeformation", values);
-
         setTrainingCenters(values);
     };
 
 /**--------------------------------------------------------------------------------------------- */
     const [error, setError] = useState('');
     const handleChange =(event)=>{
-        const { name, value } = event.target;
-        console.log("event.target",event.target.value); 
-       
-        
+        const { name, value } = event.target;    
         let newEventData = { ...eventData, [name]: value };
 
         if (name === 'startDate' || name === 'endDate') {

@@ -40,7 +40,7 @@ const ContactComponent = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/contacts', {
+            const response = await fetch('http://localhost:3030/contacts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

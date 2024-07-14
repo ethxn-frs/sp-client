@@ -4,12 +4,11 @@ import moment from 'moment';
 import { Button, Container, Table, Spinner } from 'react-bootstrap';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Swal from 'sweetalert2';
-import TrainingCenterProposeMeetingModal from './TrainingCenterProposeMeetingModal';
 import EventModalDetails from '../Admin/AdminEvent/EventModalDetailsComponent';
 
 const localizer = momentLocalizer(moment);
 
-const TrainingCenterEventComponent = () => {
+const PlayerEventComponent = () => {
     const [events, setEvents] = useState([]);
     const [invitations, setInvitations] = useState([]);
     const [slotInfo, setSlotInfo] = useState({ start: null, end: null });
@@ -18,34 +17,9 @@ const TrainingCenterEventComponent = () => {
     const [showModal, setShowModal] = useState(false);
     const [showDetailModal, setShowDetailsModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [showProposeMeetingModal, setShowProposeMeetingModal] = useState(false);
-    const [players, setPlayers] = useState([]);
-    const [selectedPlayer, setSelectedPlayer] = useState(null);
-    const [formationCenterId, setFormationCenterId] = useState(null);
 
     const userStorage = JSON.parse(localStorage.getItem('user'));
     const userId = userStorage.id;
-
-    const fetchFormationCenter = async () => {
-        try {
-            const response = await fetch(`http://localhost:3030/users/${userId}/formation-center`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error fetching events: ${response.status} (${response.statusText})`);
-            }
-
-            const formationCenterResponse = await response.json();
-            setFormationCenterId(formationCenterResponse.id)
-        } catch (error) {
-            console.error('Error fetching events:', error);
-            setErrorMessage('Error fetching events. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const fetchEvents = async () => {
         setLoading(true);
@@ -94,21 +68,9 @@ const TrainingCenterEventComponent = () => {
         }
     };
 
-    const fetchPlayers = async () => {
-        try {
-            const response = await fetch('http://localhost:3030/players');
-            const data = await response.json();
-            setPlayers(data.players);
-        } catch (error) {
-            console.error('Error fetching players:', error);
-        }
-    };
-
     useEffect(() => {
-        fetchFormationCenter();
         fetchEvents();
         fetchInvitations();
-        fetchPlayers();
     }, []);
 
     const handleSelectSlot = useCallback(({ start, end }) => {
@@ -162,10 +124,6 @@ const TrainingCenterEventComponent = () => {
         }
     };
 
-    const handleProposeMeeting = () => {
-        setShowProposeMeetingModal(true);
-    };
-
     const { defaultDate, scrollToTime } = useMemo(() => ({
         defaultDate: new Date(),
         scrollToTime: new Date(1970, 1, 1, 6),
@@ -178,9 +136,6 @@ const TrainingCenterEventComponent = () => {
     return (
         <Container className="mt-5">
             <h2>Événements</h2>
-            <Button variant="primary" onClick={handleProposeMeeting} className="mb-3">
-                Proposer un événement
-            </Button>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             <Fragment>
                 <Calendar
@@ -261,15 +216,6 @@ const TrainingCenterEventComponent = () => {
                     </tbody>
                 </Table>
             )}
-            {showProposeMeetingModal && (
-                <TrainingCenterProposeMeetingModal
-                    show={showProposeMeetingModal}
-                    handleClose={() => setShowProposeMeetingModal(false)}
-                    players={players}
-                    formationCenterId={formationCenterId}
-                    createdById={userId}
-                />
-            )}
             {modalContent && (
                 <EventModalDetails
                     isOpen={showDetailModal}
@@ -281,4 +227,4 @@ const TrainingCenterEventComponent = () => {
     );
 };
 
-export default TrainingCenterEventComponent;
+export default PlayerEventComponent;

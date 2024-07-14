@@ -9,7 +9,6 @@ import ClubManageComponent from './ClubManageComponent';
 const ClubHomeComponent = () => {
     const [activeTab, setActiveTab] = useState('Compte');
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.role);
 
     const renderTabContent = () => {
         switch (activeTab) {

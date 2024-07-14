@@ -31,7 +31,7 @@ const AdminListTransactionsComponent = () => {
         setLoading(true);
         try {
             const query = new URLSearchParams(searchParams).toString();
-            const response = await fetch(`http://localhost:4000/transactions?${query}`);
+            const response = await fetch(`http://localhost:3030/transactions?${query}`);
             const data = await response.json();
             setTransactions(data.transactions);
             setTotalTransactions(data.total);

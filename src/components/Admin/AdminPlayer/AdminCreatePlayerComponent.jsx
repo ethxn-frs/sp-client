@@ -20,7 +20,7 @@ function AdminCreatePlayerComponent() {
     useEffect(() => {
         const fetchFormationCenters = async () => {
             try {
-                const response = await fetch('http://localhost:4000/formations-centers');
+                const response = await fetch('http://localhost:3030/formations-centers');
                 const data = await response.json();
                 setFormationCenters(data.formationsCenters);
             } catch (error) {
@@ -36,7 +36,7 @@ function AdminCreatePlayerComponent() {
 
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports);
             } catch (error) {
@@ -65,7 +65,7 @@ function AdminCreatePlayerComponent() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/players', {
+            const response = await fetch('http://localhost:3030/players', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

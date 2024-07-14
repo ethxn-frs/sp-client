@@ -26,7 +26,7 @@ function FirstConnectionComponent() {
         const user = JSON.parse(localStorage.getItem('user'));
 
         try {
-            const response = await fetch(`http://localhost:4000/users/${user.id}/first-connection`, {
+            const response = await fetch(`http://localhost:3030/users/${user.id}/first-connection`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

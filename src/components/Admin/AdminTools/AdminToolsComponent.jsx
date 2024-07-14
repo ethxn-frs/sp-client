@@ -52,7 +52,7 @@ const AdminToolsComponent = () => {
             setLoading(true);
             try {
                 const query = new URLSearchParams(searchParams).toString();
-                const response = await fetch(`http://localhost:4000/infos?${query}`, {
+                const response = await fetch(`http://localhost:3030/infos?${query}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -86,7 +86,7 @@ const AdminToolsComponent = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://localhost:4000/users', {
+                const response = await fetch('http://localhost:3030/users', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -137,7 +137,7 @@ const AdminToolsComponent = () => {
 
     const handleManageCotisations = async () => {
         try {
-            const response = await fetch('http://localhost:4000/cotisations/manage', {
+            const response = await fetch('http://localhost:3030/cotisations/manage', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -166,7 +166,7 @@ const AdminToolsComponent = () => {
 
     const handleGenerateCards = async () => {
         try {
-            const response = await fetch('http://localhost:4000/cotisations/generate-card', {
+            const response = await fetch('http://localhost:3030/cotisations/generate-card', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -195,7 +195,7 @@ const AdminToolsComponent = () => {
 
     const handleReindexDatabase = async () => {
         try {
-            const response = await fetch('http://localhost:4000/admin/tools/reindex-database', {
+            const response = await fetch('http://localhost:3030/admin/tools/reindex-database', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

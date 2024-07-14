@@ -18,7 +18,7 @@ function AdminCreateDocument() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:4000/users');
+            const response = await fetch('http://localhost:3030/users');
             const data = await response.json();
             setUsers(data.user);
         } catch (error) {
@@ -29,7 +29,7 @@ function AdminCreateDocument() {
 
     const fetchFolders = async () => {
         try {
-            const response = await fetch('http://localhost:4000/folders');
+            const response = await fetch('http://localhost:3030/folders');
             const data = await response.json();
             setFolders(data);
         } catch (error) {
@@ -39,9 +39,8 @@ function AdminCreateDocument() {
     };
 
     const onCreateFolderSubmit = async (data) => {
-        console.log('Submitting data:', data);
         try {
-            const response = await fetch(`http://localhost:4000/create-folder/${data.userId}`, {
+            const response = await fetch(`http://localhost:3030/create-folder/${data.userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +75,7 @@ function AdminCreateDocument() {
         formData.append('file', data.file[0]);
 
         try {
-            const response = await fetch(`http://localhost:4000/folders/${selectedFolder.googleId}/upload/${selectedFolder.user.id}/files`, {
+            const response = await fetch(`http://localhost:3030/folders/${selectedFolder.googleId}/upload/${selectedFolder.user.id}/files`, {
                 method: 'POST',
                 body: formData,
             });

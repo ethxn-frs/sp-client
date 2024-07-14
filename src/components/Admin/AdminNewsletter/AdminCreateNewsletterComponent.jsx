@@ -11,7 +11,7 @@ function AdminCreateNewsletterComponent() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/newsletter/send', {
+            const response = await fetch('http://localhost:3030/newsletter/send', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

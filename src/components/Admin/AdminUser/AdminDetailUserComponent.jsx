@@ -17,7 +17,7 @@ function AdminDetailUserComponent() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${id}`);
+                const response = await fetch(`http://localhost:3030/users/${id}`);
                 if (!response.ok) {
                     throw new Error(`Échec de la récupération de l'utilisateur: ${response.status} (${response.statusText})`);
                 }
@@ -40,11 +40,11 @@ function AdminDetailUserComponent() {
             try {
                 let response, data;
                 if (user.role?.role === 'CLUB') {
-                    response = await fetch(`http://localhost:4000/clubs/${user.club.id}`);
+                    response = await fetch(`http://localhost:3030/clubs/${user.club.id}`);
                 } else if (user.role?.role === 'FORMATIONCENTER') {
-                    response = await fetch(`http://localhost:4000/formations-centers/${user.formationCenter.id}`);
+                    response = await fetch(`http://localhost:3030/formations-centers/${user.formationCenter.id}`);
                 } else if (user.role?.role === 'PLAYER') {
-                    response = await fetch(`http://localhost:4000/players/${user.player.id}`);
+                    response = await fetch(`http://localhost:3030/players/${user.player.id}`);
                 }
 
                 if (response && response.ok) {
@@ -64,7 +64,7 @@ function AdminDetailUserComponent() {
 
         const fetchUserEmails = async (userId) => {
             try {
-                const response = await fetch(`http://localhost:4000/users/${userId}/emails`, {
+                const response = await fetch(`http://localhost:3030/users/${userId}/emails`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -73,7 +73,6 @@ function AdminDetailUserComponent() {
                     throw new Error(`Échec de la récupération des emails: ${response.status} (${response.statusText})`);
                 }
                 const data = await response.json();
-                console.log(data);
                 setEmails(data);
             } catch (error) {
                 console.error('Erreur lors de la récupération des emails:', error);
@@ -91,7 +90,7 @@ function AdminDetailUserComponent() {
         const fetchCotisation = async () => {
             try {
                 let response, data;
-                response = await fetch(`http://localhost:4000/users/${id}/cotisation`)
+                response = await fetch(`http://localhost:3030/users/${id}/cotisation`)
                 if (response && response.ok) {
                     data = await response.json();
                     setCotisation(data);
@@ -115,7 +114,7 @@ function AdminDetailUserComponent() {
 
     const handleDeactivateUser = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${id}/delete`, {
+            const response = await fetch(`http://localhost:3030/users/${id}/delete`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -143,10 +142,41 @@ function AdminDetailUserComponent() {
             });
         }
     };
-    
+
+    const recreateCotisation = async () => {
+        try {
+            const response = await fetch(`http://localhost:3030/users/${id}/recreate-cotisation`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la recréation de la cotisation');
+            }
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Cotisation recréée avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate(`/admin/users/${id}`);
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
     const handleReactivateUser = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${id}/reactivate`, {
+            const response = await fetch(`http://localhost:3030/users/${id}/reactivate`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -188,6 +218,15 @@ function AdminDetailUserComponent() {
                             <Card.Title className="mb-0">Détails de l'Utilisateur</Card.Title>
                         </Card.Header>
                         <Card.Body>
+                            <Row className="justify-content-center mb-4">
+                                <Col xs={6} md={4}>
+                                    <img
+                                        src={user.image.path}
+                                        alt="Profile"
+                                        className="img-fluid rounded-circle"
+                                    />
+                                </Col>
+                            </Row>
                             <Row>
                                 <Col xs={12}>
                                     <Card.Text><strong>Prénom:</strong> {user.firstname}</Card.Text>
@@ -232,7 +271,9 @@ function AdminDetailUserComponent() {
                                 </>
                             )}
                             <hr />
-                            <Button variant="info" onClick={() => navigate(`/admin/tools?userId=${id}`)}>Voir ses infos</Button>                            <Button>Voir ses mails</Button>
+                            <Button variant="info" onClick={() => navigate(`/admin/tools?userId=${id}`)}>Voir ses infos</Button>
+                            <Button>Voir ses mails</Button>
+                            <Button onClick={recreateCotisation}>Recréer sa cotisation</Button>
                         </Card.Body>
                         <Card.Footer className="text-center">
 

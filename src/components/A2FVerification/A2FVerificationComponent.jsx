@@ -14,7 +14,7 @@ function A2FVerificationComponent() {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/users/auth/verify-a2f', {
+            const response = await fetch('http://localhost:3030/users/auth/verify-a2f', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ function A2FVerificationComponent() {
 
     const handleRegenerateCode = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${user.id}/regenerate-a2f`, {
+            const response = await fetch(`http://localhost:3030/users/${user.id}/regenerate-a2f`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

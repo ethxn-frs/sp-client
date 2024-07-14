@@ -29,7 +29,7 @@ const AdminListEmailComponent = () => {
         setLoading(true);
         try {
             const query = new URLSearchParams(searchParams).toString();
-            const response = await fetch(`http://localhost:4000/emails?${query}`);
+            const response = await fetch(`http://localhost:3030/emails?${query}`);
             const data = await response.json();
             setEmails(data.emails);
             setTotalEmails(data.count);

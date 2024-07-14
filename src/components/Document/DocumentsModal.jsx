@@ -15,7 +15,7 @@ const DocumentsModal = ({ show, handleClose, userId }) => {
 
     const fetchDocumentsAndFolders = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/files/${userId}`, {
+            const response = await fetch(`http://localhost:3030/files/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -37,7 +37,7 @@ const DocumentsModal = ({ show, handleClose, userId }) => {
 
     const handleDownload = async (documentId) => {
         try {
-            const response = await fetch(`http://localhost:4000/documents/${documentId}/download`, {
+            const response = await fetch(`http://localhost:3030/documents/${documentId}/download`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

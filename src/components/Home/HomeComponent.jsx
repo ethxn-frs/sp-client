@@ -34,7 +34,7 @@ function HomeComponent() {
 
     const fetchRecentClubs = async () => {
         try {
-            const response = await fetch('http://localhost:4000/clubs/recents');
+            const response = await fetch('http://localhost:3030/clubs/recents');
             const data = await response.json();
             setRecentClubs(data);
         } catch (error) {
@@ -53,7 +53,7 @@ function HomeComponent() {
     const handleContactFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/contacts', {
+            const response = await fetch('http://localhost:3030/contacts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

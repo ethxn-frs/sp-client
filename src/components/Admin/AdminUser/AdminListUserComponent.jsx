@@ -31,7 +31,7 @@ function AdminListUserComponent() {
         setLoading(true);
         try {
             const query = new URLSearchParams(searchParams).toString();
-            const response = await fetch(`http://localhost:4000/users?${query}`, {
+            const response = await fetch(`http://localhost:3030/users?${query}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ function AdminListUserComponent() {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('http://localhost:4000/roles', {
+            const response = await fetch('http://localhost:3030/roles', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ function AdminListUserComponent() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:4000/users/${id}/delete`, {
+                    const response = await fetch(`http://localhost:3030/users/${id}/delete`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

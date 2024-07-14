@@ -36,7 +36,7 @@ function AdminCreateUserComponent() {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('http://localhost:4000/roles');
+            const response = await fetch('http://localhost:3030/roles');
             const data = await response.json();
             setRoles(data.roles);
         } catch (error) {
@@ -57,15 +57,15 @@ function AdminCreateUserComponent() {
         setPlayers([]);
         try {
             if (roleId === 2) {
-                const response = await fetch('http://localhost:4000/clubs');
+                const response = await fetch('http://localhost:3030/clubs');
                 const data = await response.json();
                 setClubs(data.clubs);
             } else if (roleId === 3) {
-                const response = await fetch('http://localhost:4000/formations-centers');
+                const response = await fetch('http://localhost:3030/formations-centers');
                 const data = await response.json();
                 setFormationCenters(data.formationsCenters);
             } else if (roleId === 4) {
-                const response = await fetch('http://localhost:4000/players');
+                const response = await fetch('http://localhost:3030/players');
                 const data = await response.json();
                 setPlayers(data.players);
             }
@@ -103,7 +103,7 @@ function AdminCreateUserComponent() {
             if (userData.playerId) formData.append('playerId', userData.playerId);
             if (file) formData.append('image', file);
 
-            const response = await fetch('http://localhost:4000/users/auth/signup', {
+            const response = await fetch('http://localhost:3030/users/auth/signup', {
                 method: 'POST',
                 body: formData,
             });

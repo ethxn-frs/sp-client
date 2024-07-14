@@ -12,7 +12,7 @@ const AdminListPlayerProposalComponent = () => {
     useEffect(() => {
         const fetchPlayerProposals = async () => {
             try {
-                const response = await fetch('http://localhost:4000/playerProposals', {
+                const response = await fetch('http://localhost:3030/playerProposals', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -34,7 +34,7 @@ const AdminListPlayerProposalComponent = () => {
 
     const handleAcceptProposal = async (proposalId) => {
         try {
-            const response = await fetch(`http://localhost:4000/playerProposals/${proposalId}/create`, {
+            const response = await fetch(`http://localhost:3030/playerProposals/${proposalId}/create`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -65,7 +65,7 @@ const AdminListPlayerProposalComponent = () => {
 
     const handleRefuseProposal = async (proposalId) => {
         try {
-            const response = await fetch(`http://localhost:4000/playerProposals/${proposalId}`, {
+            const response = await fetch(`http://localhost:3030/playerProposals/${proposalId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
