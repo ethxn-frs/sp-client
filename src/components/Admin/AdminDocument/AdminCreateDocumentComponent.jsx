@@ -71,6 +71,7 @@ function AdminCreateDocument() {
             return;
         }
 
+    const onSubmit = async (data) => {
         const formData = new FormData();
         formData.append('file', data.file[0]);
 

@@ -6,6 +6,8 @@ import './HomeComponent.css';
 import { useNavigate } from 'react-router-dom';
 import HeaderComponent from '../Header/HeaderComponent';
 import FooterComponent from '../Footer/FooterComponent';
+import Chatbot from '../ChatBot/Chatbot';
+import ChatButton from '../ChatBot/ChatButton';
 import Swal from 'sweetalert2';
 
 function HomeComponent() {
@@ -228,6 +230,7 @@ function HomeComponent() {
                     <button type="submit">Envoyer</button>
                 </form>
             </section>
+            <ChatButton/>
             <FooterComponent />
         </div>
     );
