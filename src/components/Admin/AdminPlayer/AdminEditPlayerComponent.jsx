@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminEditPlayerComponent() {
@@ -22,6 +23,10 @@ function AdminEditPlayerComponent() {
     const [sports, setSports] = useState([]);
     const [sportStats, setSportStats] = useState([]);
 
+    const handleBack = () => {
+        navigate('/admin/players');
+    };
+
     useEffect(() => {
         const fetchFormationCenters = async () => {
             try {
@@ -30,7 +35,7 @@ function AdminEditPlayerComponent() {
                 setFormationCenters(data.formationsCenters || []);
             } catch (error) {
                 console.error('Erreur lors de la récupération des centres de formation:', error);
-                alert("Erreur lors de la récupération des centres de formation.");
+                Swal.fire('Erreur', 'Erreur lors de la récupération des centres de formation.', 'error');
             }
         };
 
@@ -41,7 +46,7 @@ function AdminEditPlayerComponent() {
                 setSports(data.sports || []);
             } catch (error) {
                 console.error('Erreur lors de la récupération des sports:', error);
-                alert("Erreur lors de la récupération des sports.");
+                Swal.fire('Erreur', 'Erreur lors de la récupération des sports.', 'error');
             }
         };
 
@@ -65,7 +70,7 @@ function AdminEditPlayerComponent() {
                 updateSportStats(data.sport.id);
             } catch (error) {
                 console.error('Erreur lors de la récupération du joueur:', error);
-                alert('Erreur lors de la récupération du joueur.');
+                Swal.fire('Erreur', 'Erreur lors de la récupération du joueur.', 'error');
             }
         };
 
@@ -106,6 +111,21 @@ function AdminEditPlayerComponent() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        const confirmed = await Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez enregistrer les modifications!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, enregistrer!',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (!confirmed.isConfirmed) {
+            return;
+        }
+
         // Construire l'objet de données mis à jour
         const updatedData = Object.keys(playerData).reduce((acc, key) => {
             if (JSON.stringify(playerData[key]) !== JSON.stringify(initialPlayerData[key])) {
@@ -128,11 +148,11 @@ function AdminEditPlayerComponent() {
                 throw new Error('Échec de la modification du joueur');
             }
 
-            alert('Joueur modifié avec succès!');
+            Swal.fire('Succès', 'Joueur modifié avec succès!', 'success');
             navigate('/admin/players');
         } catch (error) {
             console.error('Erreur lors de la modification du joueur:', error);
-            alert('Erreur lors de la modification du joueur.');
+            Swal.fire('Erreur', 'Erreur lors de la modification du joueur.', 'error');
         }
     };
 
@@ -274,8 +294,11 @@ function AdminEditPlayerComponent() {
                             </Card.Body>
                         </Card>
 
-                        <Button type="submit" variant="success" className="w-100">
-                            Enregistrer les modifications
+                        <Button onClick={handleBack} variant="warning" className="w-25 mb-5">
+                            Retour
+                        </Button>
+                        <Button type="submit" variant="success" className="w-25 mb-5">
+                            Enregistrer
                         </Button>
                     </Form>
                 </Col>

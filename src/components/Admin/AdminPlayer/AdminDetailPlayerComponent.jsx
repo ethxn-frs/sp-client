@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Button, Container, Row, Col, ListGroup } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './AdminDetailPlayerComponent.css'; // Assurez-vous de créer ce fichier CSS
+import './AdminDetailPlayerComponent.css';
 
 function AdminDetailPlayerComponent() {
     const { id } = useParams();
@@ -23,6 +24,50 @@ function AdminDetailPlayerComponent() {
 
         fetchPlayer();
     }, [id]);
+
+    const handleRegenerate = () => {
+        Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez régénérer la fiche du joueur!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, régénérer!',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Ajouter la logique pour régénérer la fiche du joueur ici
+                Swal.fire(
+                    'Régénéré!',
+                    'La fiche du joueur a été régénérée.',
+                    'success'
+                );
+            }
+        });
+    };
+
+    const handleDeactivate = () => {
+        Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez désactiver ce joueur!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, désactiver!',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Ajouter la logique pour désactiver le joueur ici
+                Swal.fire(
+                    'Désactivé!',
+                    'Le joueur a été désactivé.',
+                    'success'
+                );
+            }
+        });
+    };
 
     if (!player) {
         return <div>Chargement...</div>;
@@ -83,10 +128,10 @@ function AdminDetailPlayerComponent() {
                             </ListGroup>
                         </Card.Body>
                         <Card.Footer className="text-center">
-                            <Button variant="warning" className="mt-3" onClick={() => navigate('/admin/players')}>
-                                Regénérer sa fiche
+                            <Button variant="warning" className="mt-3" onClick={handleRegenerate}>
+                                Régénérer sa fiche
                             </Button>
-                            <Button variant="danger" className="mt-3" onClick={() => navigate('/admin/players')}>
+                            <Button variant="danger" className="mt-3" onClick={handleDeactivate}>
                                 Désactiver
                             </Button>
                             <Button variant="secondary" className="mt-3" onClick={() => navigate('/admin/players')}>

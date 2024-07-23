@@ -221,7 +221,7 @@ function AdminDetailUserComponent() {
                             <Row className="justify-content-center mb-4">
                                 <Col xs={6} md={4}>
                                     <img
-                                        src={user.image.path}
+                                        src={user.image ? user.image.path : '/path/to/default/image.jpg'} 
                                         alt="Profile"
                                         className="img-fluid rounded-circle"
                                     />

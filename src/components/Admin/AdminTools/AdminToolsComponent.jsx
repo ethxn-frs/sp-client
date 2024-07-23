@@ -136,89 +136,128 @@ const AdminToolsComponent = () => {
     };
 
     const handleManageCotisations = async () => {
-        try {
-            const response = await fetch('http://localhost:3030/cotisations/manage', {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+        const confirmed = await Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez lancer la vérification des cotisations!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, lancer!',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (confirmed.isConfirmed) {
+            try {
+                const response = await fetch('http://localhost:3030/cotisations/manage', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to manage cotisations');
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error('Failed to manage cotisations');
+                Swal.fire({
+                    title: 'Succès',
+                    text: 'Vérification des cotisations effectuée avec succès.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
-
-            Swal.fire({
-                title: 'Succès',
-                text: 'Vérification des cotisations effectuée avec succès.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        } catch (error) {
-            Swal.fire({
-                title: 'Erreur',
-                text: error.message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
         }
     };
 
     const handleGenerateCards = async () => {
-        try {
-            const response = await fetch('http://localhost:3030/cotisations/generate-card', {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+        const confirmed = await Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez lancer la génération des cartes d'adhérent!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, lancer!',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (confirmed.isConfirmed) {
+            try {
+                const response = await fetch('http://localhost:3030/cotisations/generate-card', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate cards');
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error('Failed to generate cards');
+                Swal.fire({
+                    title: 'Succès',
+                    text: 'Génération des cartes d\'adhérent effectuée avec succès.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
-
-            Swal.fire({
-                title: 'Succès',
-                text: 'Génération des cartes d\'adhérent effectuée avec succès.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        } catch (error) {
-            Swal.fire({
-                title: 'Erreur',
-                text: error.message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
         }
     };
 
     const handleReindexDatabase = async () => {
-        try {
-            const response = await fetch('http://localhost:3030/admin/tools/reindex-database', {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+        const confirmed = await Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Vous allez lancer la réindexation de la base de données!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, lancer!',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (confirmed.isConfirmed) {
+            try {
+                const response = await fetch('http://localhost:3030/admin/tools/reindex-database', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to reindex database');
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error('Failed to reindex database');
+                Swal.fire({
+                    title: 'Succès',
+                    text: 'Réindexation de la base de données effectuée avec succès.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } catch (error) {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
-
-            Swal.fire({
-                title: 'Succès',
-                text: 'Réindexation de la base de données effectuée avec succès.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        } catch (error) {
-            Swal.fire({
-                title: 'Erreur',
-                text: error.message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
         }
     };
 

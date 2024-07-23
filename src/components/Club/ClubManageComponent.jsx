@@ -46,6 +46,12 @@ const ClubManageComponent = () => {
                 setClubId(clubResponse.id);
             } catch (error) {
                 console.error('Error fetching club ID:', error);
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération de l\'ID du club.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         };
 
@@ -74,6 +80,12 @@ const ClubManageComponent = () => {
                     });
                 } catch (error) {
                     setError(error.message);
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Erreur lors de la récupération du club.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 } finally {
                     setLoading(false);
                 }
@@ -93,6 +105,12 @@ const ClubManageComponent = () => {
                     setUsers(data);
                 } catch (error) {
                     setError(error.message);
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Erreur lors de la récupération des utilisateurs du club.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 } finally {
                     setLoading(false);
                 }
@@ -112,6 +130,12 @@ const ClubManageComponent = () => {
                     setCotisation(data);
                 } catch (error) {
                     setError(error.message);
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Erreur lors de la récupération des cotisations du club.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             };
 
@@ -248,10 +272,6 @@ const ClubManageComponent = () => {
         return <Spinner animation="border" />;
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
     return (
         <Container className="mt-5 club-manage">
             <Row className="justify-content-center">
@@ -271,9 +291,6 @@ const ClubManageComponent = () => {
                                         <Row>
                                             <Button variant="secondary" onClick={() => setShowEditClubModal(true)}>
                                                 ⚙️
-                                            </Button>
-                                            <Button variant="warning" onClick={() => setShowEditClubModal(true)}>
-                                                🗂️
                                             </Button>
                                         </Row>
                                     </Col>

@@ -36,7 +36,6 @@ import AboutUsComponent from './components/AboutUs/AboutUsComponent';
 import BlogComponent from './components/Blog/BlogComponent';
 import DonationComponent from './components/Donate/DonationComponent';
 import LogoutComponent from './components/Logout/LogoutComponent';
-import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
 import A2FVerificationComponent from './components/A2FVerification/A2FVerificationComponent';
