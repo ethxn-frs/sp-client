@@ -1,25 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './LoginComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 function LoginComponent() {
     const navigate = useNavigate();
-    const [loginData, setLoginData] = useState({
-        Email: '',
-        Password: ''
-    });
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState('');
 
-    // Soumettre la Connexion 
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const role = user.role.role;
+            switch (role) {
+                case 'ADMIN':
+                    navigate('/admin');
+                    break;
+                case 'CLUB':
+                case 'ADMIN_CLUB':
+                    navigate('/club');
+                    break;
+                case 'FORMATIONCENTER':
+                case 'ADMIN_FORMATIONCENTER':
+                    navigate('/training-center');
+                    break;
+                case 'PLAYER':
+                    navigate('/player');
+                    break;
+                default:
+                    navigate('/dashboard');
+            }
+        }
+    }, [navigate]);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/users/auth/login', {
+            const response = await fetch('http://localhost:3030/users/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,29 +54,67 @@ function LoginComponent() {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error('Échec de la connexion');
-            }
-
             const result = await response.json();
+
+            if (!response.ok) {
+                setErrorMessage(result.message || 'Échec de la connexion');
+                Swal.fire('Erreur', result.message || 'Échec de la connexion', 'error');
+                return;
+            }
 
             if (result.token) {
                 localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+                localStorage.setItem('user', JSON.stringify(result.user));
 
                 if (!result.user.firstConnection) {
                     navigate('/login/first-connection');
                 } else {
-                    navigate('/admin/home');
+                    const role = result.user.role.role;
+                    switch (role) {
+                        case 'ADMIN':
+                            navigate('/admin');
+                            break;
+                        case 'CLUB':
+                        case 'ADMIN_CLUB':
+                            navigate('/club');
+                            break;
+                        case 'FORMATIONCENTER':
+                        case 'ADMIN_FORMATIONCENTER':
+                            navigate('/training-center');
+                            break;
+                        case 'PLAYER':
+                            navigate('/player');
+                            break;
+                        default:
+                            navigate('/dashboard');
+                    }
                 }
             } else {
-                // Si A2F est activé, redirige vers la page de vérification du code A2F
-                localStorage.setItem('user', JSON.stringify(result.user)); // Sérialiser l'objet user
+                localStorage.setItem('user', JSON.stringify(result.user));
                 navigate('/login/a2f');
             }
 
         } catch (error) {
-            alert("Erreur lors de la connexion.");
+            setErrorMessage("Erreur lors de la connexion.");
+            Swal.fire('Erreur', "Erreur lors de la connexion.", 'error');
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        try {
+            await fetch('http://localhost:3030/users/auth/lost-password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: forgotEmail })
+            });
+
+            Swal.fire('Succès', 'Un email vient d\'être envoyé au mail renseigné si un utilisateur existe.', 'success');
+        } catch (error) {
+            Swal.fire('Succès', 'Un email vient d\'être envoyé au mail renseigné si un utilisateur existe.', 'success');
+        } finally {
+            setShowModal(false);
         }
     };
 
@@ -62,7 +124,7 @@ function LoginComponent() {
             <div className="login-container">
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit} className="login-form">
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="email">Email</label>
                         <input
                             type="email"
@@ -72,7 +134,7 @@ function LoginComponent() {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="password">Password</label>
                         <input
                             type="password"
@@ -81,11 +143,39 @@ function LoginComponent() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
                     </div>
                     <button type="submit" className="login-button">Log In</button>
                 </form>
+                <p className="forgot-password" onClick={() => setShowModal(true)}>Mot de passe oublié ?</p>
             </div>
             <FooterComponent />
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Mot de passe oublié</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group controlId="forgotEmail">
+                        <Form.Label>Adresse email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            value={forgotEmail}
+                            onChange={(e) => setForgotEmail(e.target.value)}
+                            placeholder="Entrez votre adresse email"
+                            required
+                        />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Annuler
+                    </Button>
+                    <Button variant="primary" onClick={handleForgotPassword}>
+                        Envoyer
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

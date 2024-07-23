@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom
 import AdminHomeComponent from './components/Admin/AdminHome/AdminHomeComponent';
 import AdminListFormationCenterComponent from './components/Admin/AdminFormationCenter/AdminListFormationCenterComponent';
 import AdminCreateFormationCenterComponent from './components/Admin/AdminFormationCenter/AdminCreateFormationCenterComponent';
-import AdminListPlanningComponent from './components/Admin/AdminPlanning/AdminListPlanningComponent';
 import AdminCreatePlanningComponent from './components/Admin/AdminPlanning/AdminCreatePlanningComponent';
 import AdminCreatePlayerComponent from './components/Admin/AdminPlayer/AdminCreatePlayerComponent';
 import AdminListPlayerComponent from './components/Admin/AdminPlayer/AdminListPlayerComponent';
@@ -37,10 +36,21 @@ import AboutUsComponent from './components/AboutUs/AboutUsComponent';
 import BlogComponent from './components/Blog/BlogComponent';
 import DonationComponent from './components/Donate/DonationComponent';
 import LogoutComponent from './components/Logout/LogoutComponent';
-import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
 import FirstConnectionComponent from './components/FirstConnetion/FirstConnectionComponent';
 import A2FVerificationComponent from './components/A2FVerification/A2FVerificationComponent';
+import AdminCreateNewsletterComponent from './components/Admin/AdminNewsletter/AdminCreateNewsletterComponent';
+import ClubHomeComponent from './components/Club/ClubHomeComponent';
+import AdminInvitationComponent from './components/Admin/AdminInvitation/AdminInvitationComponent';
+import AdminListEventProposalComponent from './components/Admin/AdminEventProposal/AdminListEventProposalComponent';
+import AdminListTransactionsComponent from './components/Admin/AdminTransaction/AdminListTransactionsComponent';
+import AdminToolsComponent from './components/Admin/AdminTools/AdminToolsComponent';
+import TrainingCenterHomeComponent from './components/TrainingCenter/TrainingCenterHomeComponent';
+import AdminListPlayerProposalComponent from './components/Admin/AdminPlayerProposal/AdminListPlayerProposalComponent';
+import AdminListEmailComponent from './components/Admin/AdminEmail/AdminListEmailComponent';
+import AdminListMessageComponent from './components/Admin/AdminMessage/AdminListMessageComponent';
+import AdminDetailMessageComponent from './components/Admin/AdminMessage/AdminDetailMessageComponent';
+import PlayerHomeComponent from './components/Player/PlayerHomeComponent';
 
 function App() {
   return (
@@ -57,39 +67,66 @@ function App() {
             <Route path="/don" element={<DonationComponent />} />
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
+            <Route path="/club" element={<ClubHomeComponent />} />
+            <Route path="/training-center" element={<TrainingCenterHomeComponent />} />
+            <Route path="/player" element={<PlayerHomeComponent />} />
+
             <Route element={<Layout />}>
               <Route path="admin" element={<AdminHomeComponent />} />
               <Route path="admin/logout" element={<LogoutComponent />} />
               <Route path="admin/analyse" element={<AdminAnalyseComponent />} />
+              <Route path="admin/tools" element={<AdminToolsComponent />} />
+
               <Route path="admin/formations-centers" element={<AdminListFormationCenterComponent />} />
               <Route path="admin/formations-centers/:id/edit" element={<AdminEditFormationCenterComponent />} />
               <Route path="admin/formations-centers/create" element={<AdminCreateFormationCenterComponent />} />
               <Route path="admin/formations-centers/:id" element={<AdminDetailFormationCenterComponent />} />
-              <Route path="admin/planning" element={<AdminListPlanningComponent />} />
-              <Route path="admin/planning/create" element={<AdminCreatePlanningComponent />} />
+
+              <Route path="admin/events/planning" element={<AdminCreatePlanningComponent />} />
+              <Route path="/admin/events/proposals" element={<AdminListEventProposalComponent />} />
+              <Route path="admin/events/invitations" element={<AdminInvitationComponent />} />
+
               <Route path="admin/players" element={<AdminListPlayerComponent />} />
               <Route path="admin/players/create" element={<AdminCreatePlayerComponent />} />
+
               <Route path="admin/pools" element={<AdminListPoolComponent />} />
               <Route path="admin/pools/create" element={<AdminCreatePoolComponent />} />
               <Route path="admin/pools/:id/edit" element={<AdminEditSondageComponent />} />
               <Route path="admin/pools/:id" element={<AdminDetailPoolComponent />} />
+
               <Route path="admin/sports" element={<AdminListSportComponent />} />
               <Route path="admin/sports/create" element={<AdminCreateSportComponent />} />
               <Route path="admin/sports/:id" element={<AdminDetailSportComponent />} />
               <Route path="admin/sports/:id/edit" element={<AdminEditSportComponent />} />
+
               <Route path="admin/players" element={<AdminListPlayerComponent />} />
               <Route path="admin/players/create" element={<AdminCreatePlayerComponent />} />
               <Route path="admin/players/:id" element={<AdminDetailPlayerComponent />} />
               <Route path="admin/players/:id/edit" element={<AdminEditPlayerComponent />} />
+
+              <Route path="admin/players-proposals" element={<AdminListPlayerProposalComponent />} />
+
               <Route path="admin/clubs" element={<AdminListClubComponent />} />
               <Route path="admin/clubs/create" element={<AdminCreateClubComponent />} />
               <Route path="admin/clubs/:id" element={<AdminDetailClubComponent />} />
               <Route path="admin/clubs/:id/edit" element={<AdminEditClubComponent />} />
+
               <Route path="admin/users" element={<AdminListUserComponent />} />
               <Route path="admin/users/:id" element={<AdminDetailUserComponent />} />
               <Route path="admin/users/create" element={<AdminCreateUserComponent />} />
+
               <Route path="admin/documents" element={<AdminListDocumentComponent />} />
               <Route path="admin/documents/create" element={<AdminCreateDocument />} />
+
+              <Route path="admin/newsletter/create" element={<AdminCreateNewsletterComponent />} />
+
+              <Route path="admin/transactions" element={<AdminListTransactionsComponent />} />
+
+              <Route path="admin/emails" element={<AdminListEmailComponent />} />
+
+              <Route path="admin/messages" element={<AdminListMessageComponent />} />
+              <Route path="admin/messages/:id" element={<AdminDetailMessageComponent />} />
+
               <Route path="*" element={<AdminHomeComponent />} />
             </Route>
             <Route path="/logout" element={<LogoutComponent />} />

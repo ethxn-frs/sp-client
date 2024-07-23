@@ -1,0 +1,25 @@
+.club-manage .profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.club-manage .card {
+    border-radius: 10px;
+}
+
+.club-manage .card-body {
+    padding: 2rem;
+}
+
+.club-manage h3 {
+    font-weight: bold;
+}
+
+.club-manage p {
+    margin-bottom: 0.5rem;
+}
+
+.club-manage .table {
+    margin-top: 1rem;
+}

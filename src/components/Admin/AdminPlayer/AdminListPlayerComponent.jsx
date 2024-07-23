@@ -9,7 +9,7 @@ function AdminListPlayerComponent() {
 
     const fetchPlayers = async () => {
         try {
-            const response = await fetch('http://localhost:4000/players');
+            const response = await fetch('http://localhost:3030/players');
             const data = await response.json();
             setPlayers(data.players);
         } catch (error) {
@@ -24,7 +24,7 @@ function AdminListPlayerComponent() {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:4000/players/${id}`, {
+            await fetch(`http://localhost:3030/players/${id}`, {
                 method: 'DELETE',
             });
             fetchPlayers(); // Refresh the list after deletion

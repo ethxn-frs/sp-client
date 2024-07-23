@@ -1,0 +1,55 @@
+/* AdminDetailMessageComponent.css */
+
+.container {
+    margin-top: 50px;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+
+.card-title {
+    margin-bottom: 0;
+    font-size: 1.5rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card-text {
+    margin-bottom: 1.5rem;
+}
+
+.card-text strong {
+    font-weight: bold;
+}
+
+.message-detail {
+    font-size: 1rem;
+}
+
+.card-footer {
+    text-align: center;
+}
+
+.button {
+    margin-top: 1rem;
+}
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.spinner p {
+    margin-top: 10px;
+}

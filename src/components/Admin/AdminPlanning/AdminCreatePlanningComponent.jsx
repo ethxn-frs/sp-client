@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'reac
 import { useNavigate } from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import { Button } from 'react-bootstrap';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import EventModalDetails from '../AdminEvent/EventModalDetailsComponent';
 import EventFormModal from '../AdminEvent/EventModalComponent';
@@ -23,7 +24,7 @@ function AdminCreatePlanningComponent() {
     setLoading(true);
     setErrorMessage('');  // Clear any previous error message
     try {
-      const response = await fetch('http://localhost:4000/events', {
+      const response = await fetch('http://localhost:3030/events', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -74,17 +75,18 @@ function AdminCreatePlanningComponent() {
     setShowModal(false);
     setShowDetailsModal(false);
     setSlotInfo({ start: null, end: null });
+    fetchEvents();
   };
 
   const handleSaveEvent = async (newEvent) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/${newEvent.id}`, {
+      const response = await fetch(`http://localhost:3030/events/${newEvent.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newEvent),
       });
       await fetchEvents();
-      await navigate('/planning/create')
+      await navigate('/planning/create');
     } catch (error) {
       console.error('Error updating event:', error);
     } finally {
@@ -94,7 +96,7 @@ function AdminCreatePlanningComponent() {
 
   const handleDelete = async (eventId) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/${eventId}`, {
+      const response = await fetch(`http://localhost:3030/events/${eventId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -123,6 +125,12 @@ function AdminCreatePlanningComponent() {
   return (
     <div className='projet-register-container-schuelder'>
       <h2>Planning</h2>
+      <Button variant="primary" onClick={() => navigate('/admin/events/invitations')} className="mb-3">
+        Voir mes invitations
+      </Button>
+      <Button variant="primary" onClick={() => navigate('/admin/events/proposals')} className="mb-3">
+        Voir les propositions
+      </Button>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       <Fragment>
         <Calendar
@@ -148,7 +156,6 @@ function AdminCreatePlanningComponent() {
           isOpen={showDetailModal}
           event={modalContent}
           onRequestClose={handleCloseModal}
-          onSave={handleSaveEvent}
           onDelete={handleDelete}
         />
       )}

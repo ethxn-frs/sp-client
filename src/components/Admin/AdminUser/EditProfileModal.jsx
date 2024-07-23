@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import ChangePasswordModal from './ChangePasswordModal'; // Importez le composant de la nouvelle modale
+import ChangePasswordModal from './ChangePasswordModal';
+import Swal from 'sweetalert2';
+import UploadDialogComponent from '../../UploadDialog/UploadDialogComponent';
 
 const EditProfileModal = ({ show, handleClose, user }) => {
     const [formData, setFormData] = useState({
         firstname: user.firstname,
         lastname: user.lastname,
         address: user.address,
-        email: user.email
+        email: user.email,
+        newsletter: user.newsletter,
+        a2fEnabled: user.a2fEnabled,
     });
-
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+    const [showUploadDialog, setShowUploadDialog] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value
+        });
     };
 
     const openChangePasswordModal = (open) => {
@@ -22,11 +29,59 @@ const EditProfileModal = ({ show, handleClose, user }) => {
         handleClose();
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Implémentez la logique de soumission ici
-        console.log(formData);
+    const openUploadDialog = (open) => {
+        setShowUploadDialog(open);
         handleClose();
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const updatedFields = {};
+        if (formData.firstname !== user.firstname) updatedFields.firstName = formData.firstname;
+        if (formData.lastname !== user.lastname) updatedFields.lastName = formData.lastname;
+        if (formData.address !== user.address) updatedFields.address = formData.address;
+        if (formData.newsletter !== user.newsletter) updatedFields.newsletter = formData.newsletter;
+        if (formData.a2fEnabled !== user.a2fEnabled) updatedFields.a2fEnabled = formData.a2fEnabled;
+
+        try {
+            const response = await fetch(`http://localhost:3030/users/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(updatedFields)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Erreur lors de la mise à jour du profil');
+            }
+
+            const result = await response.json();
+
+            // Mise à jour du localStorage avec les nouvelles informations utilisateur
+            const updatedUser = { ...user, ...updatedFields };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+
+            handleClose();
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Votre profil a été mis à jour avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+        } catch (error) {
+            Swal.fire({
+                title: 'Erreur',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     };
 
     return (
@@ -83,6 +138,24 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                                 placeholder="Votre email"
                             />
                         </Form.Group>
+                        <Form.Group controlId="formNewsletter">
+                            <Form.Check
+                                type="checkbox"
+                                name="newsletter"
+                                label="S'abonner à la newsletter"
+                                checked={formData.newsletter}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formA2FEnabled">
+                            <Form.Check
+                                type="checkbox"
+                                name="a2fEnabled"
+                                label="Activer l'authentification à deux facteurs"
+                                checked={formData.a2fEnabled}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
                         <div className="d-flex justify-content-end">
                             <Button variant="secondary" onClick={handleClose} className="me-2">
                                 Fermer
@@ -93,6 +166,9 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                             <Button variant="link" onClick={() => openChangePasswordModal(true)} className="text-decoration-none">
                                 Modifier le mot de passe
                             </Button>
+                            <Button variant="warning" onClick={() => openUploadDialog(true)} className="text-decoration-none">
+                                Modifier photo de profil
+                            </Button>
                         </div>
                     </Form>
                 </Modal.Body>
@@ -101,6 +177,12 @@ const EditProfileModal = ({ show, handleClose, user }) => {
                 show={showChangePasswordModal}
                 handleClose={() => setShowChangePasswordModal(false)}
                 userId={user.id}
+            />
+            <UploadDialogComponent
+                open={showUploadDialog}
+                handleClose={() => setShowUploadDialog(false)}
+                entityType={"user"}
+                id={user.id}
             />
         </>
     );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 function AdminCreateSportComponent() {
     const [name, setName] = useState('');
@@ -9,7 +10,7 @@ function AdminCreateSportComponent() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/sports', {
+            const response = await fetch('http://localhost:3030/sports', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,15 +18,16 @@ function AdminCreateSportComponent() {
                 body: JSON.stringify({ name: name }),
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error('Erreur lors de la création du sport');
+                throw new Error(result.message || 'Erreur lors de la création du sport');
             }
 
-            alert('Sport créé avec succès!');
+            Swal.fire('Succès', 'Sport créé avec succès!', 'success');
             navigate('/admin/sports');
         } catch (error) {
-            console.error('Erreur lors de la création du sport:', error);
-            alert('Erreur lors de la création du sport.');
+            Swal.fire('Erreur', error.message || 'Erreur lors de la création du sport.', 'error');
         }
     };
 

@@ -23,7 +23,7 @@ function AdminEditClubComponent() {
     useEffect(() => {
         const fetchSports = async () => {
             try {
-                const response = await fetch('http://localhost:4000/sports');
+                const response = await fetch('http://localhost:3030/sports');
                 const data = await response.json();
                 setSports(data.sports);
             } catch (error) {
@@ -35,7 +35,7 @@ function AdminEditClubComponent() {
         const fetchClub = async () => {
             if (id) {
                 try {
-                    const response = await fetch(`http://localhost:4000/clubs/${id}`);
+                    const response = await fetch(`http://localhost:3030/clubs/${id}`);
                     const data = await response.json();
                     setClub(data);
                 } catch (error) {
@@ -96,7 +96,7 @@ function AdminEditClubComponent() {
                 formData.append('image', file);
             }
 
-            const response = await fetch(`http://localhost:4000/clubs/${id}`, {
+            const response = await fetch(`http://localhost:3030/clubs/${id}`, {
                 method: 'PUT',
                 body: formData,
             });

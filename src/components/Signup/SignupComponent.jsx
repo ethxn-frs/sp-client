@@ -24,7 +24,7 @@ function SignUpComponent() {
 
   const getRole = async () => {
     try {
-      const response = await fetch('http://localhost:4000/roles', {
+      const response = await fetch('http://localhost:3030/roles', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -61,7 +61,6 @@ function SignUpComponent() {
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
     signupData.roles = selectedRole
-    console.log(signupData)
     // Valider que les mots de passe correspondent
     if (signupData.password !== signupData.confirmpassword) {
       alert("Les mots de passe ne correspondent pas.");
@@ -82,12 +81,10 @@ function SignUpComponent() {
       formData.append('image', file);
     }
 
-    console.log("formData",formData)
-
     try {
 
 
-      const response = await fetch('http://localhost:4000/users/auth/signup', {
+      const response = await fetch('http://localhost:3030/users/auth/signup', {
         method: 'POST',
         body: formData
       });
@@ -97,7 +94,6 @@ function SignUpComponent() {
       }
 
       const result = await response.json();
-      console.log(result);
       alert("Inscription réussie !");
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
@@ -108,13 +104,11 @@ function SignUpComponent() {
   const handleInputRole = (selectedOptions) => {
     const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
     // const role = JSON.parse(event.target.value);
-    console.log("role", values);
     setSelectedRole(values);
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log("event.target", event.target.value);
     //setSignupData(event.target.value);
     setSignupData(prevState => ({
       ...prevState,
@@ -123,8 +117,7 @@ function SignUpComponent() {
   };
 
   const handleInputFile = (event) => {
-    const File = event.target.files[0];
-    console.log("File", File);
+    const File = event.target.files[0];s
     setFile(File);
   };
 

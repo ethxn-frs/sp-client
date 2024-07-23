@@ -31,7 +31,7 @@ function AdminHeaderComponent() {
                     <MenuItem component={<Link to="/admin" />}>Accueil</MenuItem>
                     <MenuItem component={<Link to="/admin/analyse" />}>Analyse</MenuItem>
                 </SubMenu>
-                <MenuItem component={<Link to="/admin/planning/create" />}>
+                <MenuItem component={<Link to="/admin/events/planning" />}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-calendar2-week-fill" viewBox="0 0 16 16">
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5M8.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM3 10.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5z" />
                     </svg>
@@ -40,6 +40,9 @@ function AdminHeaderComponent() {
                 <SubMenu label="UTILISATEURS">
                     <MenuItem component={<Link to="/admin/users/create" />}>Créer un utilisateur</MenuItem>
                     <MenuItem component={<Link to="/admin/users" />}>Liste des utilisateurs</MenuItem>
+                </SubMenu>
+                <SubMenu label="NEWSLETTER">
+                    <MenuItem component={<Link to="/admin/newsletter/create" />}>Créer une newsletter</MenuItem>
                 </SubMenu>
                 <SubMenu label="DOCUMENTS">
                     <MenuItem component={<Link to="/admin/documents/create" />}>Créer un document</MenuItem>
@@ -60,6 +63,19 @@ function AdminHeaderComponent() {
                 <SubMenu label="JOUEURS">
                     <MenuItem component={<Link to="/admin/players/create" />}>Créer un joueur</MenuItem>
                     <MenuItem component={<Link to="/admin/players" />}>Liste des joueurs</MenuItem>
+                    <MenuItem component={<Link to="/admin/players-proposals"/>}>Liste des propositions</MenuItem>
+                </SubMenu>
+                <SubMenu label="TRANSACTIONS">
+                    <MenuItem component={<Link to="/admin/transactions" />}>Voir les transactions</MenuItem>
+                </SubMenu>
+                <SubMenu label="MESSAGES">
+                    <MenuItem component={<Link to="/admin/messages" />}>Voir les messages</MenuItem>
+                </SubMenu>
+                <SubMenu label="TOOLS">
+                    <MenuItem component={<Link to="/admin/tools" />}>Acceder aux tools</MenuItem>
+                </SubMenu>
+                <SubMenu label="EMAILS">
+                    <MenuItem component={<Link to="/admin/emails" />}>Acceder aux emails</MenuItem>
                 </SubMenu>
                 <SubMenu label="SPORTS">
                     <MenuItem component={<Link to="/admin/sports/create" />}>Créer un sport</MenuItem>

@@ -1,4 +1,4 @@
-/* src/components/loginPageStyle.css */
+/* src/components/LoginComponent.css */
 .login-container {
     width: 90%;
     max-width: 400px;
@@ -36,6 +36,8 @@ input {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: white; /* Assurez-vous que le fond des inputs est blanc */
+    color: black; /* Assurez-vous que le texte des inputs est noir */
 }
 
 .login-button {
@@ -52,6 +54,22 @@ input {
     background-color: #444;
 }
 
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.forgot-password {
+    color: #007bff;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
 /* Styles réactifs */
 @media (max-width: 768px) {
     .login-container {
@@ -64,13 +82,3 @@ input {
     }
 }
 
-@media (max-width: 480px) {
-    .login-container {
-        padding: 5px;
-    }
-
-    .login-button {
-        font-size: 12px;
-        padding: 6px;
-    }
-}

@@ -13,7 +13,7 @@ function AdminEditSondageComponent() {
     useEffect(() => {
         const fetchSondage = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/sondages/${id}`);
+                const response = await fetch(`http://localhost:3030/sondages/${id}`);
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération du sondage');
                 }
@@ -34,7 +34,7 @@ function AdminEditSondageComponent() {
 
     const handleSaveChanges = async () => {
         try {
-            await fetch(`http://localhost:4000/sondages/${id}`, {
+            await fetch(`http://localhost:3030/sondages/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function AdminEditSondageComponent() {
 
     const handleAddQuestion = async () => {
         try {
-            const response = await fetch('http://localhost:4000/questions', {
+            const response = await fetch('http://localhost:3030/questions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

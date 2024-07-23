@@ -11,7 +11,7 @@ function AdminListClubComponent() {
     useEffect(() => {
         const fetchClubs = async () => {
             try {
-                const response = await fetch('http://localhost:4000/clubs');
+                const response = await fetch('http://localhost:3030/clubs');
                 const data = await response.json();
                 setClubs(data.clubs);
             } catch (error) {
@@ -25,7 +25,7 @@ function AdminListClubComponent() {
 
     const deleteClub = async (id) => {
         try {
-            const response = await fetch(`http://localhost:4000/clubs/${id}`, {
+            const response = await fetch(`http://localhost:3030/clubs/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {

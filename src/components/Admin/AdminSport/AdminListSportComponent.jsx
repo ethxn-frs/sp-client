@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function AdminListSportComponent() {
     const [sports, setSports] = useState([]);
@@ -8,25 +9,42 @@ function AdminListSportComponent() {
 
     const fetchSports = async () => {
         try {
-            const response = await fetch('http://localhost:4000/sports');
+            const response = await fetch('http://localhost:3030/sports');
             const data = await response.json();
             setSports(data.sports);
         } catch (error) {
-            console.error('Erreur lors de la récupération des sports:', error);
-            alert('Erreur lors de la récupération des sports.');
+            Swal.fire('Erreur', 'Erreur lors de la récupération des sports.', 'error');
         }
     };
 
     const handleDelete = async (id) => {
-        try {
-            await fetch(`http://localhost:4000/sports/${id}`, {
-                method: 'DELETE',
-            });
-            fetchSports(); // Refresh the list after deletion
-        } catch (error) {
-            console.error('Erreur lors de la suppression du sport:', error);
-            alert('Erreur lors de la suppression du sport.');
-        }
+        Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Cette action est irréversible!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui, supprimer!',
+            cancelButtonText: 'Non, annuler'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`http://localhost:3030/sports/${id}`, {
+                        method: 'DELETE',
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.message || 'Erreur lors de la suppression du sport');
+                    }
+
+                    fetchSports();
+                    Swal.fire('Supprimé!', 'Le sport a été supprimé.', 'success');
+                } catch (error) {
+                    Swal.fire('Erreur', error.message || 'Erreur lors de la suppression du sport.', 'error');
+                }
+            }
+        });
     };
 
     useEffect(() => {

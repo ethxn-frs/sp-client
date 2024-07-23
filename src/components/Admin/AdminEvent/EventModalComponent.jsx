@@ -1,207 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
-
+import Swal from 'sweetalert2';
+import './EventFormModal.css'; // Ajoutez cette ligne pour importer le fichier CSS
 
 const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultEnd }) => {
     const [eventData, setEventData] = useState({
-        title:'',
-        startDate:'',
-        endDate:'',
-        lieu:'',
-        activity:'',
-        recurrence:'',
-        statut:'',
-        description:'',
-        capacity:'',
+        title: '',
+        startDate: '',
+        endDate: '',
+        lieu: '',
+        description: '',
         type: '',
-        participants: [],
         clubs: [],
-        trainingCenters: []
-    })
-  
-    const [participants, setParticipants] = useState([]);
-    const [clubs, setClubs] = useState([]);
-    const [trainingCenters, setTrainingCenters] = useState([]);
+        trainingCenters: [],
+        users: []
+    });
 
-    /**
-     * on récupère la liste des users, clubs et centre de formations
-     * chaque liste est un objet
-     */
     const [participantsOptions, setParticipantsOptions] = useState([]);
     const [clubsOptions, setClubsOptions] = useState([]);
     const [trainingCentersOptions, setTrainingCentersOptions] = useState([]);
-
-
-
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
-
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-        //onSave({ title, description, start: defaultStart, end: defaultEnd });
-        await saveData()
-        onRequestClose();
-    };
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        setStart(defaultStart ? defaultStart.toISOString().substring(0, 16) : '');
-        setEnd(defaultEnd ? defaultEnd.toISOString().substring(0, 16) : '');
-        fetchOptions()
+        setEventData(prevState => ({
+            ...prevState,
+            startDate: defaultStart ? defaultStart.toISOString().substring(0, 16) : '',
+            endDate: defaultEnd ? defaultEnd.toISOString().substring(0, 16) : ''
+        }));
+        fetchOptions();
     }, [defaultStart, defaultEnd]);
 
-    /**
-     * cette fonction fait appelle à trois api 
-     * 
-     * @returns trois objets des clubs,participants, et centre de formation
-     */
-    const getAllData = async () => {
-        try {
-            const [clubResponse, participantsResponse, trainingCentersResponse] = await Promise.all([
-                fetch('http://localhost:4000/clubs', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                }),
-                fetch('http://localhost:4000/formations-centers', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                })
-            ]);
-
-            if (!clubResponse.ok || !participantsResponse.ok || !trainingCentersResponse.ok) {
-                throw new Error('Échec de la récupération des données');
-            }
-
-            const [clubData, participantsData, trainingCentersData] = await Promise.all([
-                clubResponse.json(),
-                participantsResponse.json(),
-                trainingCentersResponse.json()
-            ]);
-
-            return {
-                clubs: clubData.club,
-                participants: participantsData.user,
-                trainingCenters: trainingCentersData.formation
-            };
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données:', error);
-            return null;
-        }
-    };
-
-    /**
-     * Cette fonction est utiliser pour enrégister les informations du formulaire 
-     * en base de données
-     */
-    const saveData = async () =>{
-        try{
-            eventData.participants = participants;
-            eventData.clubs =clubs;
-            eventData.trainingCenters = trainingCenters
-            console.log("savedata",eventData)
-            const response = await fetch('http://localhost:4000/events', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(eventData)
-            });
-        
-            if (!response.ok) {
-                throw new Error('Échec de l\'inscription');
-            }
-
-            const result = await response.json();
-            console.log(result);
-            alert("Inscription réussie !");
-        }catch(error){
-            console.log("la sauvegarde n'a pas pu être fait")
-        }
-    }
-
-
     const fetchOptions = async () => {
-        const data = await getAllData();
-        if (data) {
+        try {
+            const [clubsResponse, trainingCentersResponse, usersResponse] = await Promise.all([
+                fetch('http://localhost:3030/clubs'),
+                fetch('http://localhost:3030/formations-centers'),
+                fetch('http://localhost:3030/users')
+            ]);
 
-            console.log("data", data)
-            setParticipantsOptions(data.participants);
-            setClubsOptions(data.clubs);
-            setTrainingCentersOptions(data.trainingCenters);
+            if (!clubsResponse.ok || !trainingCentersResponse.ok || !usersResponse.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const [clubsData, trainingCentersData, usersData] = await Promise.all([
+                clubsResponse.json(),
+                trainingCentersResponse.json(),
+                usersResponse.json()
+            ]);
+
+            setClubsOptions(clubsData.clubs);
+            setTrainingCentersOptions(trainingCentersData.formationsCenters);
+            setParticipantsOptions(usersData.user);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
     };
 
-    console.log("participants",participants);
-    console.log("trainingCenters",trainingCenters);
-    console.log("clubs",clubs)
-
-    /**
-     * ici nous récupérons une list d'option {clé, valeur } afin de pourvoir 
-     * l'afficher dans un selecteur
-     */
-    const optionsclube = clubsOptions.map(club => ({
-        value: JSON.stringify(club),
-        label: club.Name
-    }));
-
-    const optionsusers = participantsOptions.map(participant => ({
-        value: JSON.stringify(participant),
-        label: participant.firstname + ' ' + participant.lastname
-    }));
-
-    const optionsformation = trainingCentersOptions.map(formationcenter => ({
-        value: JSON.stringify(formationcenter),
-        label: formationcenter.Name
-    }));
-
-    /**
-     * cette fonction est utiliser pour affecter les valeurs des participants sélectionner 
-     * dans le select.
-     * il est de même pour handleChangeclub,handleChangeformation et handleChange
-     * @param {*} selectedOptions 
-     */
-    const handleChangeuser = (selectedOptions) => {
-        const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeuser", values);
-        setParticipants(values);
-    };
-
-    const handleChangeclub = (selectedOptions) => {
-        const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeclub", values);
-        setClubs(values);
-    };
-
-    const handleChangeformation = (selectedOptions) => {
-        const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
-        console.log("handleChangeformation", values);
-
-        setTrainingCenters(values);
-    };
-
-/**--------------------------------------------------------------------------------------------- */
-    const [error, setError] = useState('');
-    const handleChange =(event)=>{
-        const { name, value } = event.target;
-        console.log("event.target",event.target.value); 
-       
-        
-        let newEventData = { ...eventData, [name]: value };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEventData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
 
         if (name === 'startDate' || name === 'endDate') {
-            
-            const startDateValid = Date.parse(newEventData.startDate);
-            const endDateValid = Date.parse(newEventData.endDate);
+            const startDateValid = Date.parse(eventData.startDate);
+            const endDateValid = Date.parse(eventData.endDate);
 
             if (startDateValid && endDateValid) {
-                const startDate = new Date(newEventData.startDate);
-                const endDate = new Date(newEventData.endDate);
+                const startDate = new Date(eventData.startDate);
+                const endDate = new Date(eventData.endDate);
 
                 if (startDate > endDate) {
                     setError('La date de fin doit être supérieure ou égale à la date de début');
                 } else if (startDate.toISOString().split('T')[0] === endDate.toISOString().split('T')[0] && startDate >= endDate) {
                     setError('L\'heure de fin doit être supérieure à l\'heure de début si les dates sont égales');
-                    newEventData.endDate = '';
+                    setEventData(prevState => ({
+                        ...prevState,
+                        endDate: ''
+                    }));
                 } else {
                     setError('');
                 }
@@ -209,168 +87,183 @@ const EventFormModal = ({ isOpen, onRequestClose, onSave, defaultStart, defaultE
                 setError('');
             }
         }
+    };
 
+    const handleSelectChange = (selectedOptions, field) => {
+        const values = selectedOptions ? selectedOptions.map(option => JSON.parse(option.value)) : [];
         setEventData(prevState => ({
             ...prevState,
-            [name]: value
+            [field]: values
         }));
-    
-    }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3030/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save event');
+            }
+
+            const result = await response.json();
+            Swal.fire({
+                title: 'Succès',
+                text: 'Événement créé avec succès!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            onRequestClose();
+        } catch (error) {
+            console.error("Error saving event:", error);
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Échec de la création de l\'événement.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
+    const optionsClubs = clubsOptions.map(club => ({
+        value: JSON.stringify(club),
+        label: club.name
+    }));
+
+    const optionsUsers = participantsOptions.map(participant => ({
+        value: JSON.stringify(participant),
+        label: participant.firstname + ' ' + participant.lastname + ' (' + participant.email + ')'
+    }));
+
+    const optionsFormationCenters = trainingCentersOptions.map(formationcenter => ({
+        value: JSON.stringify(formationcenter),
+        label: formationcenter.name
+    }));
 
     return (
-
-        <div>
-            <Modal show={isOpen} onHide={onRequestClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create New Event</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-
-                        <Form.Control 
-                            className="mb-3"
+        <Modal show={isOpen} onHide={onRequestClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Créer un Nouvel Événement</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Titre</Form.Label>
+                        <Form.Control
                             type="text"
                             name="title"
                             value={eventData.title}
                             onChange={handleChange}
                             required
-                            placeholder='titre'
+                            placeholder='Titre'
                         />
-
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Date de Début</Form.Label>
                         <Form.Control
-                            className="mb-3"
                             type="datetime-local"
                             name="startDate"
                             value={eventData.startDate}
                             onChange={handleChange}
                             required
-                            placeholder='titre'
                         />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Date de Fin</Form.Label>
                         <Form.Control
-                            className="mb-3"
                             type="datetime-local"
                             name='endDate'
                             value={eventData.endDate}
                             onChange={handleChange}
                             required
-                            placeholder='titre'
                         />
-
-                        {error && <div className="text-danger">{error}</div>}
-
+                    </Form.Group>
+                    {error && <div className="text-danger mb-3">{error}</div>}
+                    <Form.Group className="mb-3">
+                        <Form.Label>Lieu</Form.Label>
                         <Form.Control
-                            className="mb-3"
-                            type="test"
+                            type="text"
                             name='lieu'
                             value={eventData.lieu}
                             onChange={handleChange}
                             required
-                            placeholder='lieu'
+                            placeholder='Lieu'
                         />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Type d'Événement</Form.Label>
                         <Form.Control
-                            className="mb-3"
-                            type="test"
-                            name='activity'
-                            value={eventData.activity}
-                            onChange={handleChange}
-                            required
-                            placeholder="type d'activté"
-                        />
-                        <Form.Control
-                            className="mb-3"
-                            type="test"
-                            value={eventData.recurrence}
-                            onChange={handleChange}
-                            required
-                            name='recurrence'
-                            placeholder='recurrence'
-                        />
-
-                        <Form.Control
-                            className="mb-3"
-                            type="test"
-                            value={eventData.statut}
-                            onChange={handleChange}
-                            required
-                            name='statut'
-                            placeholder='statut'
-                        />
-
-                        <Form.Control
-                            className="mb-3"
-                            type="number"
-                            value={eventData.capacity}
-                            onChange={handleChange}
-                            required
-                            name='capacity'
-                            placeholder='capacité'
-                        />
-
-                        <Form.Control
-                            className="mb-3"
                             type="text"
+                            name='type'
                             value={eventData.type}
                             onChange={handleChange}
                             required
-                            name='type'
-                            placeholder="type d'évènement"
+                            placeholder='Type d\’évenement'
                         />
-
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Description</Form.Label>
                         <Form.Control
-                            className="mb-3"
                             as="textarea"
+                            name='description'
                             value={eventData.description}
                             onChange={handleChange}
                             required
-                            name='description'
                             placeholder='Description'
                         />
-
-                         <div className="mb-3">
-                            <Select
-                                placeholder="utilisateurs"
-                                isMulti
-                                name="utilisateurs"
-                                options={optionsusers}
-                                value={optionsusers.filter(option => participants.map(p => JSON.stringify(p)).includes(option.value))}
-                                onChange={handleChangeuser} 
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                            />
-                         </div>
-                            
-                         <div className="mb-3">
-                            <Select
-                                placeholder="clubs"
-                                isMulti
-                                name="clubs"
-                                options={optionsclube}
-                                value={optionsclube.filter(option => clubs.map(c => JSON.stringify(c)).includes(option.value))}
-                                onChange={handleChangeclub} 
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                            />
-                         </div>
-                         <div className="mb-3">
-                            <Select
-                                placeholder="centre de formation"
-                                isMulti
-                                name="formation"
-                                options={optionsformation}
-                                value={optionsformation.filter(option => trainingCenters.map(tc => JSON.stringify(tc)).includes(option.value))}
-                                onChange={handleChangeformation}
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                            />
-                         </div>
-                         
-                        <Button variant="primary" type="submit">
-                            Save
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        </div >
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Utilisateurs</Form.Label>
+                        <Select
+                            placeholder="Sélectionnez les Utilisateurs"
+                            isMulti
+                            name="users"
+                            options={optionsUsers}
+                            value={optionsUsers.filter(option => eventData.users.map(user => JSON.stringify(user)).includes(option.value))}
+                            onChange={(selectedOptions) => handleSelectChange(selectedOptions, 'users')}
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                            isSearchable
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Clubs</Form.Label>
+                        <Select
+                            placeholder="Sélectionnez les Clubs"
+                            isMulti
+                            name="clubs"
+                            options={optionsClubs}
+                            value={optionsClubs.filter(option => eventData.clubs.map(club => JSON.stringify(club)).includes(option.value))}
+                            onChange={(selectedOptions) => handleSelectChange(selectedOptions, 'clubs')}
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Centres de Formation</Form.Label>
+                        <Select
+                            placeholder="Sélectionnez les Centres de Formation"
+                            isMulti
+                            name="trainingCenters"
+                            options={optionsFormationCenters}
+                            value={optionsFormationCenters.filter(option => eventData.trainingCenters.map(tc => JSON.stringify(tc)).includes(option.value))}
+                            onChange={(selectedOptions) => handleSelectChange(selectedOptions, 'trainingCenters')}
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Enregistrer
+                    </Button>
+                </Form>
+            </Modal.Body>
+        </Modal>
     );
 };
 

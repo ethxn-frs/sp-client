@@ -1,0 +1,42 @@
+.player-card {
+    transition: transform 0.2s;
+}
+
+.player-card:hover {
+    transform: scale(1.05);
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.text-primary {
+    color: #007bff;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mt-5 {
+    margin-top: 3rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075);
+}
+
+.block {
+    display: block;
+    width: 100%;
+}

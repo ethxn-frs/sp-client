@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminCreateUserComponent() {
@@ -35,12 +36,12 @@ function AdminCreateUserComponent() {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('http://localhost:4000/roles');
+            const response = await fetch('http://localhost:3030/roles');
             const data = await response.json();
             setRoles(data.roles);
         } catch (error) {
             console.error('Erreur lors de la récupération des rôles:', error);
-            alert('Erreur lors de la récupération des rôles.');
+            Swal.fire('Erreur', 'Erreur lors de la récupération des rôles.', 'error');
         }
     };
 
@@ -56,21 +57,21 @@ function AdminCreateUserComponent() {
         setPlayers([]);
         try {
             if (roleId === 2) {
-                const response = await fetch('http://localhost:4000/clubs');
+                const response = await fetch('http://localhost:3030/clubs');
                 const data = await response.json();
                 setClubs(data.clubs);
             } else if (roleId === 3) {
-                const response = await fetch('http://localhost:4000/formations-centers');
+                const response = await fetch('http://localhost:3030/formations-centers');
                 const data = await response.json();
                 setFormationCenters(data.formationsCenters);
             } else if (roleId === 4) {
-                const response = await fetch('http://localhost:4000/players');
+                const response = await fetch('http://localhost:3030/players');
                 const data = await response.json();
                 setPlayers(data.players);
             }
         } catch (error) {
             console.error('Erreur lors de la récupération des entités:', error);
-            alert('Erreur lors de la récupération des entités.');
+            Swal.fire('Erreur', 'Erreur lors de la récupération des entités.', 'error');
         }
     };
 
@@ -102,18 +103,19 @@ function AdminCreateUserComponent() {
             if (userData.playerId) formData.append('playerId', userData.playerId);
             if (file) formData.append('image', file);
 
-            const response = await fetch('http://localhost:4000/users/auth/signup', {
+            const response = await fetch('http://localhost:3030/users/auth/signup', {
                 method: 'POST',
                 body: formData,
             });
+            const result = await response.json();
             if (!response.ok) {
-                throw new Error('Erreur lors de la création de l\'utilisateur');
+                throw new Error(result.message || 'Erreur lors de la création de l\'utilisateur');
             }
-            alert('Utilisateur créé avec succès!');
+            Swal.fire('Succès', 'Utilisateur créé avec succès!', 'success');
             navigate('/admin/users');
         } catch (error) {
             console.error('Erreur lors de la création de l\'utilisateur:', error);
-            alert('Erreur lors de la création de l\'utilisateur.');
+            Swal.fire('Erreur', error.message || 'Erreur lors de la création de l\'utilisateur.', 'error');
         }
     };
 
@@ -187,8 +189,8 @@ function AdminCreateUserComponent() {
     return (
         <Container className="mt-5">
             <Row className="justify-content-center">
-                <Col>
-                    <Card className=" p-3 mb-5 bg-white rounded">
+                <Col xs={12} md={10} lg={8}>
+                    <Card className="p-4 shadow-sm">
                         <Card.Header className="text-center bg-primary text-white">
                             <Card.Title className="mb-0">Créer un Utilisateur</Card.Title>
                         </Card.Header>
@@ -279,12 +281,14 @@ function AdminCreateUserComponent() {
                                         onChange={handleFileChange}
                                     />
                                 </Form.Group>
-                                <Button variant="primary" type="submit" className="mt-3">
-                                    Créer
-                                </Button>
-                                <Button variant="secondary" className="mt-3 ms-3" onClick={() => navigate('/admin/users')}>
-                                    Annuler
-                                </Button>
+                                <div className="d-flex justify-content-between mt-4">
+                                    <Button variant="primary" type="submit">
+                                        Créer
+                                    </Button>
+                                    <Button variant="secondary" onClick={() => navigate('/admin/users')}>
+                                        Annuler
+                                    </Button>
+                                </div>
                             </Form>
                         </Card.Body>
                     </Card>
@@ -295,4 +299,3 @@ function AdminCreateUserComponent() {
 }
 
 export default AdminCreateUserComponent;
-

@@ -13,7 +13,7 @@ function AdminDetailFormationCenterComponent() {
     useEffect(() => {
         const fetchFormationCenter = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/formations-centers/${id}`);
+                const response = await fetch(`http://localhost:3030/formations-centers/${id}`);
                 if (!response.ok) {
                     throw new Error(`Échec de la récupération du centre de formation: ${response.status} (${response.statusText})`);
                 }
@@ -21,7 +21,7 @@ function AdminDetailFormationCenterComponent() {
                 setFormationCenter(data);
 
                 // Fetch associated players
-                const playersResponse = await fetch(`http://localhost:4000/formations-centers/${id}/players`);
+                const playersResponse = await fetch(`http://localhost:3030/formations-centers/${id}/players`);
                 const playersData = await playersResponse.json();
                 setPlayers(playersData);
             } catch (error) {

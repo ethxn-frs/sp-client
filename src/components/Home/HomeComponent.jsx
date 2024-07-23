@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './HomeComponent.css'
+import './HomeComponent.css';
 import { useNavigate } from 'react-router-dom';
 import HeaderComponent from '../Header/HeaderComponent';
 import FooterComponent from '../Footer/FooterComponent';
 import Chatbot from '../ChatBot/Chatbot';
 import ChatButton from '../ChatBot/ChatButton';
+import Swal from 'sweetalert2';
 
 function HomeComponent() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [recentClubs, setRecentClubs] = useState([]);
+    const [contactForm, setContactForm] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        content: ''
+    });
+
     const settings = {
         dots: true,
         infinite: true,
@@ -21,11 +30,61 @@ function HomeComponent() {
         autoplaySpeed: 3000
     };
 
+    useEffect(() => {
+        fetchRecentClubs();
+    }, []);
+
+    const fetchRecentClubs = async () => {
+        try {
+            const response = await fetch('http://localhost:3030/clubs/recents');
+            const data = await response.json();
+            setRecentClubs(data);
+        } catch (error) {
+            console.error('Erreur lors de la récupération des clubs récents:', error);
+        }
+    };
+
+    const handleContactFormChange = (e) => {
+        const { name, value } = e.target;
+        setContactForm((prevForm) => ({
+            ...prevForm,
+            [name]: value
+        }));
+    };
+
+    const handleContactFormSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3030/contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(contactForm)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'envoi du message.');
+            }
+
+            Swal.fire('Succès', 'Votre message a été envoyé avec succès.', 'success');
+            setContactForm({
+                name: '',
+                email: '',
+                subject: '',
+                content: ''
+            });
+        } catch (error) {
+            Swal.fire('Erreur', error.message, 'error');
+        }
+    };
+
     function handlerLearnMore() {
-        navigate('/aboutus')
+        navigate('/aboutus');
     }
+    
     function handlerContact() {
-        navigate('/contact')
+        navigate('/contact');
     }
 
     return (
@@ -37,10 +96,10 @@ function HomeComponent() {
             <section className="hero-section">
                 <div className="hero-text">
                     <h1>Franchise Club</h1>
-                    <p>Nous construissons un avenir meilleur avec nos clus partenaire dans but d'aider les jeunes passionner du sport
-                        à réaliser leur rêve. Et pour y arriver nous avons mis en place des centres de formations pour accompagner ces
-                        jeunes à se former afin  de rentrer dans le monde professionnel. pour faire un don <a href='/don'>Cliquer ici.</a><br></br>
-                        Votre soutient nous ai utile pour aider d'autre jeunes à réaliser leur rêve.
+                    <p>Nous construisons un avenir meilleur avec nos clubs partenaires dans le but d'aider les jeunes passionnés de sport
+                        à réaliser leur rêve. Et pour y arriver nous avons mis en place des centres de formation pour accompagner ces
+                        jeunes à se former afin de rentrer dans le monde professionnel. Pour faire un don <a href='/don'>cliquez ici.</a><br></br>
+                        Votre soutien nous est utile pour aider d'autres jeunes à réaliser leur rêve.
                     </p>
                     <button onClick={handlerLearnMore}>Apprendre plus</button>
                 </div>
@@ -61,7 +120,7 @@ function HomeComponent() {
                         Notre équipe est composée de professionnels passionnés et d'anciens athlètes qui partagent la conviction
                         que chaque enfant mérite une chance égale de réussir. Grâce à nos partenaires et bénévoles dévoués,
                         nous avons pu étendre notre portée et avoir un impact positif significatif.</p>
-                    <button onClick={handlerContact}> Nous contacter</button>
+                    <button onClick={handlerContact}>Nous contacter</button>
                 </div>
                 <div className="about-image">
                     <img src='/assets/images/professional.jpeg' alt="About us" />
@@ -70,23 +129,15 @@ function HomeComponent() {
 
             {/* Format Section */}
             <section className="format-section">
-                <h2>Informations</h2>
+                <h2>Ils nous ont rejoint récemment</h2>
                 <div className="format-cards">
-                    <div className="card">
-                        <h3>Lyon</h3>
-                        <p>Nouvelle centre de formation </p>
-                        <p>44 rue de la paix</p>
-                    </div>
-                    <div className="card">
-                        <h3>Rouen</h3>
-                        <p>Nouvelle centre de formation</p>
-                        <p>44 rue de la paix</p>
-                    </div>
-                    <div className="card">
-                        <h3>Paris</h3>
-                        <p>Nouvelle centre de formation</p>
-                        <p>44 rue de la paix</p>
-                    </div>
+                    {recentClubs.map((club) => (
+                        <div className="card" key={club.id}>
+                            <h3>{club.name}</h3>
+                            <p>{club.address}</p>
+                            <p>{club.email}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 
@@ -144,11 +195,38 @@ function HomeComponent() {
             {/* Contact Section */}
             <section className="contact-section">
                 <h2>Nous Contacter</h2>
-                <form>
-                    <input type="text" placeholder="Votre nom" required />
-                    <input type="email" placeholder="Votre email" required />
-                    <input type="email" placeholder="Objet" required />
-                    <textarea placeholder="Entrer votre Message" required></textarea>
+                <form onSubmit={handleContactFormSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Votre nom"
+                        name="name"
+                        value={contactForm.name}
+                        onChange={handleContactFormChange}
+                        required
+                    />
+                    <input
+                        type="email"
+                        placeholder="Votre email"
+                        name="email"
+                        value={contactForm.email}
+                        onChange={handleContactFormChange}
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Objet"
+                        name="subject"
+                        value={contactForm.subject}
+                        onChange={handleContactFormChange}
+                        required
+                    />
+                    <textarea
+                        placeholder="Entrer votre message"
+                        name="content"
+                        value={contactForm.content}
+                        onChange={handleContactFormChange}
+                        required
+                    ></textarea>
                     <button type="submit">Envoyer</button>
                 </form>
             </section>

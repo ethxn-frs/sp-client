@@ -1,0 +1,25 @@
+.event-details {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.event-title {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.modal-buttons .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.modal-buttons .btn-danger {
+    background-color: #dc3545;
+    border: none;
+}

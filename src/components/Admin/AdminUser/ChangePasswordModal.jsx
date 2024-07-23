@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 const ChangePasswordModal = ({ show, handleClose, userId }) => {
     const [formData, setFormData] = useState({
@@ -23,8 +24,7 @@ const ChangePasswordModal = ({ show, handleClose, userId }) => {
         }
 
         try {
-
-            const response = await fetch(`http://localhost:4000/users/${userId}/change-password`, {
+            const response = await fetch(`http://localhost:3030/users/${userId}/change-password`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,12 +36,21 @@ const ChangePasswordModal = ({ show, handleClose, userId }) => {
                 })
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error('Erreur lors de la modification du mot de passe');
+                throw new Error(result.message || 'Erreur lors de la modification du mot de passe');
             }
 
-            setErrorMessage(''); // Réinitialiser le message d'erreur en cas de succès
+            setErrorMessage('');
             handleClose();
+
+            Swal.fire({
+                title: 'Succès',
+                text: 'Votre mot de passe a été modifié avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
         } catch (error) {
             setErrorMessage(error.message);
         }

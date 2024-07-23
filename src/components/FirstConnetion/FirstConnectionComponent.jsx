@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './FirstConnectionComponent.css'
+import Swal from 'sweetalert2';
+import './FirstConnectionComponent.css';
 import FooterComponent from '../Footer/FooterComponent';
 import HeaderComponent from '../Header/HeaderComponent';
 
@@ -13,14 +14,19 @@ function FirstConnectionComponent() {
         event.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            alert('Les mots de passe ne correspondent pas');
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Les mots de passe ne correspondent pas',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
         const user = JSON.parse(localStorage.getItem('user'));
 
         try {
-            const response = await fetch(`http://localhost:4000/users/${user.id}/first-connection`, {
+            const response = await fetch(`http://localhost:3030/users/${user.id}/first-connection`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,10 +40,30 @@ function FirstConnectionComponent() {
                 throw new Error('Erreur lors de la mise à jour du mot de passe');
             }
 
-            alert('Mot de passe mis à jour avec succès');
-            navigate('/admin/home');
+            Swal.fire({
+                title: 'Succès',
+                text: 'Mot de passe mis à jour avec succès',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                const role = user.role.role;
+                if (role === 'ADMIN') {
+                    navigate('/admin');
+                } else if (role === 'CLUB' || role === 'ADMIN_CLUB') {
+                    navigate('/club');
+                } else if (role === 'ADMIN_FORMATIONCENTER' || role === 'FORMATIONCENTER') {
+                    navigate('/training-center');
+                } else if (role === 'PLAYER') {
+                    navigate('/player');
+                }
+            });
         } catch (error) {
-            alert("Erreur lors de la mise à jour du mot de passe.");
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Erreur lors de la mise à jour du mot de passe.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -47,7 +73,7 @@ function FirstConnectionComponent() {
             <div className="update-password-container">
                 <h2>Mettre à jour le mot de passe</h2>
                 <form onSubmit={handleSubmit} className="update-password-form">
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="newPassword">Nouveau mot de passe</label>
                         <input
                             type="password"
@@ -57,7 +83,7 @@ function FirstConnectionComponent() {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group visible">
                         <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
                         <input
                             type="password"

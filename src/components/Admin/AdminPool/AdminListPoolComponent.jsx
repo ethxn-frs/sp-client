@@ -9,7 +9,7 @@ function AdminListPoolComponent() {
 
     const fetchSondages = async () => {
         try {
-            const response = await fetch('http://localhost:4000/sondages');
+            const response = await fetch('http://localhost:3030/sondages');
             const data = await response.json();
             setSondages(data.sondages);
         } catch (error) {
@@ -24,7 +24,7 @@ function AdminListPoolComponent() {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:4000/sondages/${id}`, {
+            await fetch(`http://localhost:3030/sondages/${id}`, {
                 method: 'DELETE',
             });
             fetchSondages(); // Refresh the list after deletion
