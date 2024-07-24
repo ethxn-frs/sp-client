@@ -55,7 +55,7 @@ const DocumentsModal = ({ show, handleClose, userId }) => {
             document.body.appendChild(a);
             a.click();
             a.remove();
-            window.URL.revokeObjectURL(url); // Clean up
+            window.URL.revokeObjectURL(url);
         } catch (error) {
             Swal.fire({
                 title: 'Erreur',

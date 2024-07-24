@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import UploadDialogComponent from '../UploadDialog/UploadDialogComponent';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import PaypalPaymentComponent from '../Paypal/PaypalPaymentComponent';
+import DocumentsModal from '../Document/DocumentsModal';
 
 const PlayerAccountComponent = () => {
     const [cotisation, setCotisation] = useState(null);
@@ -12,6 +13,7 @@ const PlayerAccountComponent = () => {
     const [showUploadDialog, setShowUploadDialog] = useState(false);
     const [showPaypal, setShowPaypal] = useState(false);
     const [amount, setAmount] = useState(0);
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false);
 
     const userStorage = JSON.parse(localStorage.getItem('user'));
     const userId = userStorage.id;
@@ -132,7 +134,7 @@ const PlayerAccountComponent = () => {
                         </PayPalScriptProvider>
                     )}
 
-                    <Button variant="primary">Modifier les informations</Button>
+                    <Button variant="primary" onClick={() => setShowDocumentsModal(true)}>Voir mes documents</Button> {/* Ajouter le bouton pour afficher les documents */}
                 </Card.Body>
             </Card>
             <UploadDialogComponent
@@ -141,6 +143,11 @@ const PlayerAccountComponent = () => {
                 entityType="user"
                 id={user.id}
             />
+            <DocumentsModal
+                show={showDocumentsModal}
+                handleClose={() => setShowDocumentsModal(false)}
+                userId={userId}
+            /> {/* Ajouter le modal de documents */}
         </Col >
     );
 }

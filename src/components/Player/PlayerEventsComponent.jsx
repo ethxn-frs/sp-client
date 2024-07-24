@@ -25,7 +25,7 @@ const PlayerEventComponent = () => {
         setLoading(true);
         setErrorMessage('');
         try {
-            const response = await fetch('http://localhost:3030/events', {
+            const response = await fetch(`http://localhost:3030/events/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });

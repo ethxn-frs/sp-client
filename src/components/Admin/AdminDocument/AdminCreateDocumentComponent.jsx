@@ -71,115 +71,116 @@ function AdminCreateDocument() {
             return;
         }
 
-    const onSubmit = async (data) => {
-        const formData = new FormData();
-        formData.append('file', data.file[0]);
+        const onSubmit = async (data) => {
+            const formData = new FormData();
+            formData.append('file', data.file[0]);
 
-        try {
-            const response = await fetch(`http://localhost:3030/folders/${selectedFolder.googleId}/upload/${selectedFolder.user.id}/files`, {
-                method: 'POST',
-                body: formData,
-            });
+            try {
+                const response = await fetch(`http://localhost:3030/folders/${selectedFolder.googleId}/upload/${selectedFolder.user.id}/files`, {
+                    method: 'POST',
+                    body: formData,
+                });
 
-            if (response.ok) {
-                Swal.fire('Succès', 'Document téléchargé avec succès', 'success');
-                resetDocument();
-                navigate('/admin/documents');
-            } else {
-                Swal.fire('Erreur', 'Échec du téléchargement du document', 'error');
+                if (response.ok) {
+                    Swal.fire('Succès', 'Document téléchargé avec succès', 'success');
+                    resetDocument();
+                    navigate('/admin/documents');
+                } else {
+                    Swal.fire('Erreur', 'Échec du téléchargement du document', 'error');
+                }
+            } catch (error) {
+                console.error('Erreur lors du téléchargement du document:', error);
+                Swal.fire('Erreur', 'Erreur lors du téléchargement du document', 'error');
             }
-        } catch (error) {
-            console.error('Erreur lors du téléchargement du document:', error);
-            Swal.fire('Erreur', 'Erreur lors du téléchargement du document', 'error');
-        }
-    };
+        };
 
-    return (
-        <Container fluid className="mt-5">
-            <Row className="justify-content-md-center">
-                <Col md={6}>
-                    <Card className="mb-4">
-                        <Card.Body>
-                            <Card.Title>Créer un dossier</Card.Title>
-                            <Form onSubmit={handleSubmitFolder(onCreateFolderSubmit)}>
-                                <Form.Group controlId="formFolderName">
-                                    <Form.Label>Nom du dossier</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        {...registerFolder('foldername', { required: true })}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formUserId" className="mt-3">
-                                    <Form.Label>Utilisateur</Form.Label>
-                                    <Form.Control
-                                        as="select"
-                                        {...registerFolder('userId', { required: true })}
-                                    >
-                                        <option value="">Sélectionner un utilisateur</option>
-                                        {users.map(user => (
-                                            <option key={user.id} value={user.id}>
-                                                {user.firstname} {user.lastname}
-                                            </option>
-                                        ))}
-                                    </Form.Control>
-                                </Form.Group>
-                                <Button variant="primary" type="submit" className="mt-3">
-                                    Créer le dossier
-                                </Button>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={6}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Insérer un document</Card.Title>
-                            <Form onSubmit={handleSubmitDocument(onUploadDocumentSubmit)}>
-                                <Form.Group controlId="formFile">
-                                    <Form.Label>Sélectionner votre document</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        {...registerDocument('file', { required: true })}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formFolderId" className="mt-3">
-                                    <Form.Label>Dossier</Form.Label>
-                                    <Form.Control
-                                        as="select"
-                                        {...registerDocument('folderId', { required: true })}
-                                    >
-                                        <option value="">Sélectionner un dossier</option>
-                                        {folders.map(folder => (
-                                            <option key={folder.id} value={folder.id}>
-                                                {folder.name}
-                                            </option>
-                                        ))}
-                                    </Form.Control>
-                                </Form.Group>
-                                <Form.Group controlId="formUserId" className="mt-3">
-                                    <Form.Label>Utilisateur</Form.Label>
-                                    <Form.Control
-                                        as="select"
-                                        {...registerDocument('userId', { required: true })}
-                                    >
-                                        <option value="">Sélectionner un utilisateur</option>
-                                        {users.map(user => (
-                                            <option key={user.id} value={user.id}>
-                                                {user.firstname} {user.lastname}
-                                            </option>
-                                        ))}
-                                    </Form.Control>
-                                </Form.Group>
-                                <Button variant="primary" type="submit" className="mt-3">
-                                    Upload
-                                </Button>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
-    );
+        return (
+            <Container fluid className="mt-5">
+                <Row className="justify-content-md-center">
+                    <Col md={6}>
+                        <Card className="mb-4">
+                            <Card.Body>
+                                <Card.Title>Créer un dossier</Card.Title>
+                                <Form onSubmit={handleSubmitFolder(onCreateFolderSubmit)}>
+                                    <Form.Group controlId="formFolderName">
+                                        <Form.Label>Nom du dossier</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            {...registerFolder('foldername', { required: true })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="formUserId" className="mt-3">
+                                        <Form.Label>Utilisateur</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            {...registerFolder('userId', { required: true })}
+                                        >
+                                            <option value="">Sélectionner un utilisateur</option>
+                                            {users.map(user => (
+                                                <option key={user.id} value={user.id}>
+                                                    {user.firstname} {user.lastname}
+                                                </option>
+                                            ))}
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit" className="mt-3">
+                                        Créer le dossier
+                                    </Button>
+                                </Form>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={6}>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>Insérer un document</Card.Title>
+                                <Form onSubmit={handleSubmitDocument(onUploadDocumentSubmit)}>
+                                    <Form.Group controlId="formFile">
+                                        <Form.Label>Sélectionner votre document</Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            {...registerDocument('file', { required: true })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="formFolderId" className="mt-3">
+                                        <Form.Label>Dossier</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            {...registerDocument('folderId', { required: true })}
+                                        >
+                                            <option value="">Sélectionner un dossier</option>
+                                            {folders.map(folder => (
+                                                <option key={folder.id} value={folder.id}>
+                                                    {folder.name}
+                                                </option>
+                                            ))}
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Form.Group controlId="formUserId" className="mt-3">
+                                        <Form.Label>Utilisateur</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            {...registerDocument('userId', { required: true })}
+                                        >
+                                            <option value="">Sélectionner un utilisateur</option>
+                                            {users.map(user => (
+                                                <option key={user.id} value={user.id}>
+                                                    {user.firstname} {user.lastname}
+                                                </option>
+                                            ))}
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit" className="mt-3">
+                                        Upload
+                                    </Button>
+                                </Form>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+
 }
-
 export default AdminCreateDocument;

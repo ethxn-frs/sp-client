@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
+import Slider from "react-slick";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ClubMarketPlaceComponent.css';
 import ClubProposeMeetingModal from './ClubProposeMeetingModal';
@@ -23,11 +24,11 @@ const ClubMarketPlaceComponent = () => {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
-    
+
                 if (!response.ok) {
                     throw new Error(`Error fetching events: ${response.status} (${response.statusText})`);
                 }
-    
+
                 const clubResponse = await response.json();
                 setClubId(clubResponse.id)
             } catch (error) {
@@ -77,6 +78,14 @@ const ClubMarketPlaceComponent = () => {
         ? players.filter(player => player.sport.name === selectedSport)
         : players;
 
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+
     if (loading) {
         return <Spinner animation="border" />;
     }
@@ -97,8 +106,18 @@ const ClubMarketPlaceComponent = () => {
                 {filteredPlayers.map(player => (
                     <Col md={4} key={player.id} className="mb-4">
                         <Card className="player-card shadow-sm">
-                            <Card.Img variant="top" src={`https://via.placeholder.com/150`} />
                             <Card.Body>
+                                {player.image && player.image.length > 0 ? (
+                                    <Slider {...settings}>
+                                        {player.image.map(img => (
+                                            <div key={img.id}>
+                                                <Card.Img variant="top" src={img.path} />
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                ) : (
+                                    <Card.Img variant="top" src={`https://via.placeholder.com/150`} />
+                                )}
                                 <Card.Title>{player.firstName} {player.lastName}</Card.Title>
                                 <Card.Text>
                                     <strong>Sport:</strong> {player.sport.name} <br />
