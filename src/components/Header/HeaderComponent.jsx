@@ -41,7 +41,6 @@ const HeaderComponent = ({ handleLogout }) => {
                 <div className="logo"><a href="/">Logo</a></div>
                 <div className={`navList ${isOpen ? 'open' : ''}`}>
                     <a href="/" className="navItem">Accueil</a>
-                    <a href="/blog" className="navItem">Blog</a>
                     <a href="/aboutus" className="navItem">L'Association</a>
                     <a href="/don" className="navItem">Donation</a>
                     <a href="/contact" className="navItem">Nous contacter</a>

@@ -45,7 +45,6 @@ function AdminHeaderComponent() {
                     <MenuItem component={<Link to="/admin/newsletter/create" />}>Créer une newsletter</MenuItem>
                 </SubMenu>
                 <SubMenu label="DOCUMENTS">
-                    <MenuItem component={<Link to="/admin/documents/create" />}>Créer un document</MenuItem>
                     <MenuItem component={<Link to="/admin/documents" />}>Liste des documents</MenuItem>
                 </SubMenu>
                 <SubMenu label="SONDAGES">

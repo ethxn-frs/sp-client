@@ -133,7 +133,6 @@ const ClubMarketPlaceComponent = () => {
                                         PAS: {player.stats.PAS}, PHY: {player.stats.PHY}, SHO: {player.stats.SHO}
                                     </Card.Text>
                                 )}
-                                <Button variant="primary" className="mb-2" block>Télécharger la fiche</Button>
                                 <Button variant="secondary" block onClick={() => handleProposeMeeting(player)}>Proposer un rendez-vous</Button>
                             </Card.Body>
                         </Card>

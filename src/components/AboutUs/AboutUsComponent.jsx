@@ -34,11 +34,11 @@ const AboutUsComponent = () => {
                         </p>
                         <h3>Nos valeurs</h3>
                         <ul>
-                            <li>Customer Focus: We put our customers at the center of everything we do.</li>
-                            <li>Integrity: We conduct our business with honesty and integrity.</li>
-                            <li>Excellence: We are committed to excellence in everything we do.</li>
-                            <li>Innovation: We embrace innovation to deliver the best solutions.</li>
-                            <li>Teamwork: We work together to achieve our goals.</li>
+                            <li>Concentration sur le client : Nous plaçons nos clients au centre de tout ce que nous faisons.</li>
+                            <li>Intégrité : Nous menons nos activités avec honnêteté et intégrité.</li>
+                            <li>Excellence : Nous nous engageons à l'excellence dans tout ce que nous faisons.</li>
+                            <li>Innovation : Nous accueillons l'innovation pour offrir les meilleures solutions.</li>
+                            <li>Esprit d'équipe : Nous travaillons ensemble pour atteindre nos objectifs.</li>
                         </ul>
                         <br></br>
 

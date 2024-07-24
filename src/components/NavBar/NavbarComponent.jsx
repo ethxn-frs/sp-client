@@ -12,11 +12,6 @@ function Navbar() {
           </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <LinkContainer to="/blog">
-            <Nav.Link>BLOG</Nav.Link>
-          </LinkContainer>
-        </Nav.Item>
-        <Nav.Item>
           <LinkContainer to="/contact">
             <Nav.Link>NOUS CONTACTER</Nav.Link>
           </LinkContainer>

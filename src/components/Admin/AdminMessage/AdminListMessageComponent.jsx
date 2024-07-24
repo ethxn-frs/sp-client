@@ -3,11 +3,10 @@ import { Button, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 function AdminListMessageComponent() {
     const [messages, setMessages] = useState([]);
     const navigate = useNavigate();
-    
+
     const fetchMessages = async () => {
         try {
             const response = await fetch('http://localhost:3030/contacts');
@@ -23,13 +22,27 @@ function AdminListMessageComponent() {
     }, []);
 
     const handleDelete = async (id) => {
-        try {
-            await fetch(`http://localhost:3030/contacts/${id}`, {
-                method: 'DELETE',
-            });
-            fetchMessages();
-        } catch (error) {
-            Swal.fire('Erreur', error.message || 'Erreur lors de la suprresion du message.', 'error');
+        const result = await Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Cette action est irréversible!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, supprimer!',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`http://localhost:3030/contacts/${id}`, {
+                    method: 'DELETE',
+                });
+                fetchMessages();
+                Swal.fire('Supprimé!', 'Le message a été supprimé.', 'success');
+            } catch (error) {
+                Swal.fire('Erreur', error.message || 'Erreur lors de la suppression du message.', 'error');
+            }
         }
     };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Form, Table } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminEditSondageComponent() {
@@ -21,7 +22,11 @@ function AdminEditSondageComponent() {
                 setUpdatedSondage(data);
             } catch (error) {
                 console.error('Erreur lors de la récupération du sondage:', error);
-                alert('Erreur lors de la récupération du sondage.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Erreur lors de la récupération du sondage.',
+                });
             }
         };
         fetchSondage();
@@ -41,11 +46,20 @@ function AdminEditSondageComponent() {
                 },
                 body: JSON.stringify(updatedSondage),
             });
-            alert('Sondage mis à jour avec succès.');
-            navigate('/admin/pools'); // Change the view back to the list after saving changes
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès',
+                text: 'Sondage mis à jour avec succès.',
+            }).then(() => {
+                navigate('/admin/pools'); // Change the view back to the list after saving changes
+            });
         } catch (error) {
             console.error('Erreur lors de la modification du sondage:', error);
-            alert('Erreur lors de la modification du sondage.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Erreur lors de la modification du sondage.',
+            });
         }
     };
 
@@ -67,12 +81,21 @@ function AdminEditSondageComponent() {
                 setUpdatedSondage({ ...updatedSondage, questions: [...updatedSondage.questions, question] });
                 setNewQuestion('');
                 setAddingQuestion(false);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Succès',
+                    text: 'Question ajoutée avec succès.',
+                });
             } else {
                 throw new Error('Erreur lors de la création de la question');
             }
         } catch (error) {
             console.error('Erreur lors de la création de la question:', error);
-            alert('Erreur lors de la création de la question.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Erreur lors de la création de la question.',
+            });
         }
     };
 

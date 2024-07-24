@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form, Spinner, Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Swal from 'sweetalert2';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import './TrainingCenterPlayersComponent.css';
 
 const TrainingCenterPlayersComponent = () => {
@@ -131,9 +134,17 @@ const TrainingCenterPlayersComponent = () => {
         return <Spinner animation="border" />;
     }
 
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+
     return (
         <Container className="mt-5">
-            <h2 className="text-center">Mes Joueurs</h2>
+            <h2 className="text-center">Mes Jkoueurs</h2>
             <Button variant="primary" className="mb-3" onClick={() => setShowModal(true)}>
                 Proposer un joueur
             </Button>
@@ -150,7 +161,17 @@ const TrainingCenterPlayersComponent = () => {
                 {filteredPlayers.map(player => (
                     <Col md={4} key={player.id} className="mb-4">
                         <Card className="player-card shadow-sm">
-                            <Card.Img variant="top" src={player.image ? player.image.path : `https://via.placeholder.com/150`} />
+                            {player.images && player.images.length > 0 ? (
+                                <Slider {...sliderSettings}>
+                                    {player.images.map((image, index) => (
+                                        <div key={index}>
+                                            <img src={image.path} alt={`${player.firstName} ${player.lastName}`} className="img-fluid" />
+                                        </div>
+                                    ))}
+                                </Slider>
+                            ) : (
+                                <Card.Img variant="top" src={`https://via.placeholder.com/150`} />
+                            )}
                             <Card.Body>
                                 <Card.Title>{player.firstName} {player.lastName}</Card.Title>
                                 <Card.Text>
@@ -166,7 +187,6 @@ const TrainingCenterPlayersComponent = () => {
                                         PAS: {player.stats.PAS}, PHY: {player.stats.PHY}, SHO: {player.stats.SHO}
                                     </Card.Text>
                                 )}
-                                <Button variant="primary" className="mb-2" block>Télécharger la fiche</Button>
                             </Card.Body>
                         </Card>
                     </Col>

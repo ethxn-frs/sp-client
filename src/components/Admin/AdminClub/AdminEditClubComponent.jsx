@@ -1,9 +1,9 @@
-// src/components/AdminEditClubComponent.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Form, Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminClubComponent.css';
+import Swal from 'sweetalert2';
 
 function AdminEditClubComponent() {
     const { id } = useParams();
@@ -28,7 +28,7 @@ function AdminEditClubComponent() {
                 setSports(data.sports);
             } catch (error) {
                 console.error('Erreur lors de la récupération des sports:', error);
-                alert('Erreur lors de la récupération des sports.');
+                Swal.fire('Erreur', 'Erreur lors de la récupération des sports.', 'error');
             }
         };
 
@@ -40,7 +40,7 @@ function AdminEditClubComponent() {
                     setClub(data);
                 } catch (error) {
                     console.error('Erreur lors de la récupération du club:', error);
-                    alert('Erreur lors de la récupération du club.');
+                    Swal.fire('Erreur', 'Erreur lors de la récupération du club.', 'error');
                 }
             }
         };
@@ -104,10 +104,12 @@ function AdminEditClubComponent() {
             if (!response.ok) {
                 throw new Error('Erreur lors de la mise à jour du club');
             }
+
+            Swal.fire('Succès', 'Le club a été mis à jour avec succès.', 'success');
             navigate('/admin/clubs');
         } catch (error) {
             console.error('Erreur lors de la mise à jour du club:', error);
-            alert('Erreur lors de la mise à jour du club.');
+            Swal.fire('Erreur', 'Erreur lors de la mise à jour du club.', 'error');
         }
     };
 

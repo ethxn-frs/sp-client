@@ -33,7 +33,6 @@ import AdminCreateDocument from './components/Admin/AdminDocument/AdminCreateDoc
 import HomeComponent from './components/Home/HomeComponent';
 import ContactComponent from './components/Contact/ContactComponent';
 import AboutUsComponent from './components/AboutUs/AboutUsComponent';
-import BlogComponent from './components/Blog/BlogComponent';
 import DonationComponent from './components/Donate/DonationComponent';
 import LogoutComponent from './components/Logout/LogoutComponent';
 import AdminEditClubComponent from './components/Admin/AdminClub/AdminEditClubComponent';
@@ -63,7 +62,6 @@ function App() {
             <Route path="/login/a2f" element={<A2FVerificationComponent />} />
             <Route path="/contact" element={<ContactComponent />} />
             <Route path="/aboutus" element={<AboutUsComponent />} />
-            <Route path="/blog" element={<BlogComponent />} />
             <Route path="/don" element={<DonationComponent />} />
             <Route path="/login/first-connection" element={<FirstConnectionComponent />} />
 
